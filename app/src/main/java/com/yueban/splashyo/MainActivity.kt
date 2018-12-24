@@ -1,8 +1,8 @@
 package com.yueban.splashyo
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.yueban.splashyo.data.model.UnSplashKeys
 
 class MainActivity : AppCompatActivity() {
