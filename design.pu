@@ -1,0 +1,39 @@
+@startuml SplashYo design diagram
+
+start
+partition MainActivity(NavigationDrawer/BottomNavigation) {
+  fork
+    :Main (Featured);
+    :photo list;
+  fork again
+    :Collections / FeaturedCollections;
+    note right
+      switch by option menu
+    end note
+    :go into a collection;
+    :photo list;
+  end fork
+}
+partition DetailActivity {
+  :photo detail;
+  partition actions {
+    fork
+      :download;
+      note right
+        Track a photo download
+        GET /photos/:id/download
+      end note
+    fork again
+      :share;
+    fork again
+      :photographer profile;
+      note right
+        ACTION_VIEW
+      end note
+    end fork
+  }
+}
+
+end
+
+@enduml
