@@ -1,0 +1,576 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "4acee9816539bcb5af7562023edec6e9",
+    "entities": [
+      {
+        "tableName": "Photo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`color` TEXT NOT NULL, `created_at` TEXT NOT NULL, `description` TEXT, `sponsored` INTEGER NOT NULL, `sponsored_impressions_id` TEXT, `liked_by_user` INTEGER NOT NULL, `updated_at` TEXT NOT NULL, `width` INTEGER NOT NULL, `id` TEXT NOT NULL, `height` INTEGER NOT NULL, `likes` INTEGER NOT NULL, `sponsor_total_photos` INTEGER, `sponsor_accepted_tos` INTEGER, `sponsor_twitter_username` TEXT, `sponsor_last_name` TEXT, `sponsor_bio` TEXT, `sponsor_total_likes` INTEGER, `sponsor_portfolio_url` TEXT, `sponsor_updated_at` TEXT, `sponsor_name` TEXT, `sponsor_location` TEXT, `sponsor_total_collections` INTEGER, `sponsor_id` TEXT, `sponsor_first_name` TEXT, `sponsor_instagram_username` TEXT, `sponsor_username` TEXT, `sponsor_profile_image_small` TEXT, `sponsor_profile_image_large` TEXT, `sponsor_profile_image_medium` TEXT, `sponsor_link_followers` TEXT, `sponsor_link_portfolio` TEXT, `sponsor_link_following` TEXT, `sponsor_link_self` TEXT, `sponsor_link_html` TEXT, `sponsor_link_photos` TEXT, `sponsor_link_likes` TEXT, `url_small` TEXT NOT NULL, `url_thumb` TEXT NOT NULL, `url_raw` TEXT NOT NULL, `url_regular` TEXT NOT NULL, `url_full` TEXT NOT NULL, `link_followers` TEXT, `link_portfolio` TEXT, `link_following` TEXT, `link_self` TEXT NOT NULL, `link_html` TEXT NOT NULL, `link_photos` TEXT, `link_likes` TEXT, `user_total_photos` INTEGER NOT NULL, `user_accepted_tos` INTEGER NOT NULL, `user_twitter_username` TEXT, `user_last_name` TEXT, `user_bio` TEXT, `user_total_likes` INTEGER NOT NULL, `user_portfolio_url` TEXT, `user_updated_at` TEXT NOT NULL, `user_name` TEXT NOT NULL, `user_location` TEXT, `user_total_collections` INTEGER NOT NULL, `user_id` TEXT NOT NULL, `user_first_name` TEXT, `user_instagram_username` TEXT, `user_username` TEXT NOT NULL, `user_profile_image_small` TEXT NOT NULL, `user_profile_image_large` TEXT NOT NULL, `user_profile_image_medium` TEXT NOT NULL, `user_link_followers` TEXT, `user_link_portfolio` TEXT, `user_link_following` TEXT, `user_link_self` TEXT NOT NULL, `user_link_html` TEXT NOT NULL, `user_link_photos` TEXT, `user_link_likes` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsored",
+            "columnName": "sponsored",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sponsoredImpressionsId",
+            "columnName": "sponsored_impressions_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "likedByUser",
+            "columnName": "liked_by_user",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likes",
+            "columnName": "likes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sponsoredBy.totalPhotos",
+            "columnName": "sponsor_total_photos",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.acceptedTos",
+            "columnName": "sponsor_accepted_tos",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.twitterUsername",
+            "columnName": "sponsor_twitter_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.lastName",
+            "columnName": "sponsor_last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.bio",
+            "columnName": "sponsor_bio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.totalLikes",
+            "columnName": "sponsor_total_likes",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.portfolioUrl",
+            "columnName": "sponsor_portfolio_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.updatedAt",
+            "columnName": "sponsor_updated_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.name",
+            "columnName": "sponsor_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.location",
+            "columnName": "sponsor_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.totalCollections",
+            "columnName": "sponsor_total_collections",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.id",
+            "columnName": "sponsor_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.firstName",
+            "columnName": "sponsor_first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.instagramUsername",
+            "columnName": "sponsor_instagram_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.username",
+            "columnName": "sponsor_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.profileImage.small",
+            "columnName": "sponsor_profile_image_small",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.profileImage.large",
+            "columnName": "sponsor_profile_image_large",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.profileImage.medium",
+            "columnName": "sponsor_profile_image_medium",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.followers",
+            "columnName": "sponsor_link_followers",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.portfolio",
+            "columnName": "sponsor_link_portfolio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.following",
+            "columnName": "sponsor_link_following",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.self",
+            "columnName": "sponsor_link_self",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.html",
+            "columnName": "sponsor_link_html",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.photos",
+            "columnName": "sponsor_link_photos",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sponsoredBy.links.likes",
+            "columnName": "sponsor_link_likes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "urls.small",
+            "columnName": "url_small",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "urls.thumb",
+            "columnName": "url_thumb",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "urls.raw",
+            "columnName": "url_raw",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "urls.regular",
+            "columnName": "url_regular",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "urls.full",
+            "columnName": "url_full",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "links.followers",
+            "columnName": "link_followers",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "links.portfolio",
+            "columnName": "link_portfolio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "links.following",
+            "columnName": "link_following",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "links.self",
+            "columnName": "link_self",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "links.html",
+            "columnName": "link_html",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "links.photos",
+            "columnName": "link_photos",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "links.likes",
+            "columnName": "link_likes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.totalPhotos",
+            "columnName": "user_total_photos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.acceptedTos",
+            "columnName": "user_accepted_tos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.twitterUsername",
+            "columnName": "user_twitter_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.lastName",
+            "columnName": "user_last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.bio",
+            "columnName": "user_bio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.totalLikes",
+            "columnName": "user_total_likes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.portfolioUrl",
+            "columnName": "user_portfolio_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.updatedAt",
+            "columnName": "user_updated_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.name",
+            "columnName": "user_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.location",
+            "columnName": "user_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.totalCollections",
+            "columnName": "user_total_collections",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.id",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.firstName",
+            "columnName": "user_first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.instagramUsername",
+            "columnName": "user_instagram_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.username",
+            "columnName": "user_username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.profileImage.small",
+            "columnName": "user_profile_image_small",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.profileImage.large",
+            "columnName": "user_profile_image_large",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.profileImage.medium",
+            "columnName": "user_profile_image_medium",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.links.followers",
+            "columnName": "user_link_followers",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.links.portfolio",
+            "columnName": "user_link_portfolio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.links.following",
+            "columnName": "user_link_following",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.links.self",
+            "columnName": "user_link_self",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.links.html",
+            "columnName": "user_link_html",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "user.links.photos",
+            "columnName": "user_link_photos",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user.links.likes",
+            "columnName": "user_link_likes",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PhotoStatistics",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `downloads_total` INTEGER NOT NULL, `downloads_historical_quantity` INTEGER NOT NULL, `downloads_historical_change` INTEGER NOT NULL, `downloads_historical_values` TEXT, `downloads_historical_resolution` TEXT NOT NULL, `views_total` INTEGER NOT NULL, `views_historical_quantity` INTEGER NOT NULL, `views_historical_change` INTEGER NOT NULL, `views_historical_values` TEXT, `views_historical_resolution` TEXT NOT NULL, `likes_total` INTEGER NOT NULL, `likes_historical_quantity` INTEGER NOT NULL, `likes_historical_change` INTEGER NOT NULL, `likes_historical_values` TEXT, `likes_historical_resolution` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloads.total",
+            "columnName": "downloads_total",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloads.historical.quantity",
+            "columnName": "downloads_historical_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloads.historical.change",
+            "columnName": "downloads_historical_change",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloads.historical.values",
+            "columnName": "downloads_historical_values",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "downloads.historical.resolution",
+            "columnName": "downloads_historical_resolution",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "views.total",
+            "columnName": "views_total",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "views.historical.quantity",
+            "columnName": "views_historical_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "views.historical.change",
+            "columnName": "views_historical_change",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "views.historical.values",
+            "columnName": "views_historical_values",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "views.historical.resolution",
+            "columnName": "views_historical_resolution",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likes.total",
+            "columnName": "likes_total",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likes.historical.quantity",
+            "columnName": "likes_historical_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likes.historical.change",
+            "columnName": "likes_historical_change",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likes.historical.values",
+            "columnName": "likes_historical_values",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "likes.historical.resolution",
+            "columnName": "likes_historical_resolution",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4acee9816539bcb5af7562023edec6e9\")"
+    ]
+  }
+}
