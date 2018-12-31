@@ -1,12 +1,10 @@
 package com.yueban.splashyo.data.local
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoStatistics
-import java.util.concurrent.Executor
 
 /**
  * @author yueban
@@ -14,15 +12,10 @@ import java.util.concurrent.Executor
  * @email fbzhh007@gmail.com
  */
 class PhotoCache(
-    private val photoDao: PhotoDao,
-    private val ioExecutor: Executor
+    private val photoDao: PhotoDao
 ) {
-
     fun insertPhotos(photos: List<Photo>) {
-        ioExecutor.execute {
-            Log.d(TAG, "inserting ${photos.size} photos")
-            photoDao.insertPhotos(photos)
-        }
+        photoDao.insertPhotos(photos)
     }
 
     fun getPhotos(): LiveData<List<Photo>> {
@@ -30,10 +23,7 @@ class PhotoCache(
     }
 
     fun insertPhotoStatistics(photoStatistics: PhotoStatistics) {
-        ioExecutor.execute {
-            Log.d(TAG, "inserting photo statistics, id: ${photoStatistics.id}")
-            photoDao.insertPhotoStatistics(photoStatistics)
-        }
+        photoDao.insertPhotoStatistics(photoStatistics)
     }
 
     fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics> {
@@ -41,10 +31,7 @@ class PhotoCache(
     }
 
     fun insertCollections(collections: List<PhotoCollection>) {
-        ioExecutor.execute {
-            Log.d(TAG, "inserting ${collections.size} collections")
-            photoDao.insertCollections(collections)
-        }
+        photoDao.insertCollections(collections)
     }
 
     fun getCollections(featured: Boolean = true): LiveData<List<PhotoCollection>> {

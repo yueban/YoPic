@@ -1,13 +1,13 @@
 package com.yueban.splashyo.data.net
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.model.UnSplashKeys
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -21,7 +21,7 @@ import retrofit2.http.Query
  */
 interface UnSplashService {
     @GET("photos/")
-    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int): Call<List<Photo>>
+    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<Photo>>>
 
     /**
      * @param photoId
@@ -29,10 +29,13 @@ interface UnSplashService {
      * @param quantity The amount of for each stat. (Optional; default: 30)
      */
     @GET("photos/{id}/statistics")
-    fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): Call<PhotoStatistics>
+    fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): LiveData<ApiResponse<PhotoStatistics>>
 
-    @GET("collections/")
-    fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int): Call<List<PhotoCollection>>
+    @GET("collections")
+    fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<PhotoCollection>>>
+
+    @GET("collections/featured")
+    fun collectionsFeatured(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<PhotoCollection>>>
 
     companion object {
         private const val BASE_URL = "https://api.unsplash.com/"
@@ -56,6 +59,7 @@ interface UnSplashService {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .build()
                 .create(UnSplashService::class.java)
         }

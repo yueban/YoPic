@@ -1,77 +1,48 @@
 package com.yueban.splashyo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.yueban.splashyo.data.model.Photo
-import com.yueban.splashyo.data.model.PhotoCollection
-import com.yueban.splashyo.data.model.PhotoStatistics
-import com.yueban.splashyo.data.model.UnSplashKeys
-import com.yueban.splashyo.data.net.UnSplashService
+import com.yueban.splashyo.data.repo.PhotoRepo
+import com.yueban.splashyo.data.repo.model.Status
 import com.yueban.splashyo.util.Injection
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = MainActivity::class.java.simpleName
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG, UnSplashKeys.getInstance(this).toString())
+        val photoRepo = Injection.providePhotoRepo(this)
 
-        val photoCache = Injection.providePhotoCache(this)
-
-        // test get photos
-        photoCache.getPhotos().observe(this, Observer<List<Photo>> {
-            Log.d(TAG, "photos:\n$it")
-        })
-        val service = UnSplashService.create(this)
-        service.photos(1, 20).enqueue(object : Callback<List<Photo>> {
-            override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
-                Log.e(TAG, "", t)
-            }
-
-            override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
-                response.body()?.let { photos ->
-                    photoCache.insertPhotos(photos)
+        photoRepo.getPhotos().observe(this, Observer { res ->
+            when (res.status) {
+                Status.SUCCESS -> {
+                    Timber.d("get photo list: success")
+                    res.data?.get(0)?.id?.let {
+                        getPhotoStat(photoRepo, it)
+                    }
                 }
+                Status.ERROR -> Timber.e("get photo list: error ${res.message}")
+                Status.LOADING -> Timber.d("get photo list: loading")
             }
         })
 
-        // test get photoStatistics
-        val photoIdForTest = "z3RQCiIEbi4"
-        photoCache.getPhotoStatistics(photoIdForTest).observe(this, Observer<PhotoStatistics> {
-            Log.d(TAG, "PhotoStatistics:\n$it")
-        })
-        service.photoStatistics(photoIdForTest).enqueue(object : Callback<PhotoStatistics> {
-            override fun onFailure(call: Call<PhotoStatistics>, t: Throwable) {
-                Log.e(TAG, "", t)
-            }
-
-            override fun onResponse(call: Call<PhotoStatistics>, response: Response<PhotoStatistics>) {
-                response.body()?.let { photoStatistics ->
-                    photoCache.insertPhotoStatistics(photoStatistics)
-                }
+        photoRepo.getCollections(true).observe(this, Observer { res ->
+            when (res.status) {
+                Status.SUCCESS -> Timber.d("get collection list: success")
+                Status.ERROR -> Timber.e("get collection list: error ${res.message}")
+                Status.LOADING -> Timber.d("get collection list: loading")
             }
         })
+    }
 
-        // test get Collection
-        photoCache.getCollections().observe(this, Observer<List<PhotoCollection>> {
-            Log.d(TAG, "collections:\n$it")
-        })
-        service.collections(1, 30).enqueue(object : Callback<List<PhotoCollection>> {
-            override fun onFailure(call: Call<List<PhotoCollection>>, t: Throwable) {
-                Log.e(TAG, "", t)
-            }
-
-            override fun onResponse(call: Call<List<PhotoCollection>>, response: Response<List<PhotoCollection>>) {
-                response.body()?.let { collections ->
-                    photoCache.insertCollections(collections)
-                }
+    private fun getPhotoStat(photoRepo: PhotoRepo, photoId: String) {
+        photoRepo.getPhotoStat(photoId).observe(this, Observer { res ->
+            when (res.status) {
+                Status.SUCCESS -> Timber.d("get photostat: success")
+                Status.ERROR -> Timber.e("get photostat: error ${res.message}")
+                Status.LOADING -> Timber.d("get photostat: loading")
             }
         })
     }
