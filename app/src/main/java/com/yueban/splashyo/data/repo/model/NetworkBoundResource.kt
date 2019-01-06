@@ -56,7 +56,6 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                                 setValue(Resource.success(newData))
                             }
                         }
-
                     }
                 }
 

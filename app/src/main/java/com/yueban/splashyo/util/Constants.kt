@@ -7,3 +7,4 @@ package com.yueban.splashyo.util
  */
 const val UNSPLASH_KEYS_FILENAME = "unsplash_keys.json"
 const val APP_DATABASE_NAME = "db_unsplash"
+const val PAGE_SIZE = 30

@@ -31,6 +31,12 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<PhotoCollection>)
 
-    @Query("select * from collection where featured=:featured")
-    fun getCollections(featured: Boolean = true): LiveData<List<PhotoCollection>>
+    @Query("select * from collection")
+    fun getCollections(): LiveData<List<PhotoCollection>>
+
+    @Query("select * from collection where featured=1")
+    fun getFeaturedCollections(): LiveData<List<PhotoCollection>>
+
+    @Query("delete from collection")
+    fun deleteAllCollections()
 }

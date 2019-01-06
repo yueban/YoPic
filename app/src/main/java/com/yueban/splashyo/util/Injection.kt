@@ -1,10 +1,10 @@
 package com.yueban.splashyo.util
 
 import android.content.Context
-import com.yueban.splashyo.data.local.PhotoCache
 import com.yueban.splashyo.data.local.db.AppDatabase
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.PhotoRepo
+import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
 
 /**
  * TODO(make members singleton by dagger2)
@@ -14,10 +14,10 @@ import com.yueban.splashyo.data.repo.PhotoRepo
  * @email fbzhh007@gmail.com
  */
 object Injection {
-    fun providePhotoRepo(context: Context) =
-        PhotoRepo(provideAppExecutors(), providePhotoCache(context), provideService(context))
+    fun provideCollectionVMFactory(context: Context) = CollectionVMFactory(providePhotoRepo(context))
 
-    private fun providePhotoCache(context: Context) = PhotoCache(providePhotoDao(context))
+    fun providePhotoRepo(context: Context) =
+        PhotoRepo(provideAppExecutors(), providePhotoDao(context), provideService(context))
 
     private fun providePhotoDao(context: Context) = provideDatabase(context).photoDao()
 

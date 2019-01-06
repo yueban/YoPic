@@ -1,7 +1,7 @@
 package com.yueban.splashyo.data.repo
 
 import androidx.lifecycle.LiveData
-import com.yueban.splashyo.data.local.PhotoCache
+import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoStatistics
@@ -19,14 +19,14 @@ import timber.log.Timber
  */
 class PhotoRepo(
     private val appExecutors: AppExecutors,
-    private val photoCache: PhotoCache,
+    private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
     fun getPhotos(): LiveData<Resource<List<Photo>>> {
         return object : NetworkBoundResource<List<Photo>, List<Photo>>(appExecutors) {
             override fun saveCallResult(data: List<Photo>) {
                 Timber.d("photo list from api: ${data.size}")
-                photoCache.insertPhotos(data)
+                photoDao.insertPhotos(data)
             }
 
             override fun shouldFetch(data: List<Photo>?): Boolean {
@@ -34,9 +34,9 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<List<Photo>> = photoCache.getPhotos()
+            override fun loadFromCache(): LiveData<List<Photo>> = photoDao.getPhotos()
 
-            override fun createCall(): LiveData<ApiResponse<List<Photo>>> = service.photos(page = 1, per_page = 10)
+            override fun createCall(): LiveData<ApiResponse<List<Photo>>> = service.photos(page = 1)
         }.asLiveData()
     }
 
@@ -44,7 +44,7 @@ class PhotoRepo(
         return object : NetworkBoundResource<PhotoStatistics, PhotoStatistics>(appExecutors) {
             override fun saveCallResult(data: PhotoStatistics) {
                 Timber.d("photostat from api: $data")
-                photoCache.insertPhotoStatistics(data)
+                photoDao.insertPhotoStatistics(data)
             }
 
             override fun shouldFetch(data: PhotoStatistics?): Boolean {
@@ -52,16 +52,33 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<PhotoStatistics> = photoCache.getPhotoStatistics(photoId)
+            override fun loadFromCache(): LiveData<PhotoStatistics> = photoDao.getPhotoStatistics(photoId)
 
             override fun createCall(): LiveData<ApiResponse<PhotoStatistics>> = service.photoStatistics(photoId)
         }.asLiveData()
     }
 
-    fun getCollections(featured: Boolean): LiveData<Resource<List<PhotoCollection>>> {
+    fun getCollectionsFromCache(featured: Boolean): LiveData<List<PhotoCollection>> =
+        if (featured) {
+            photoDao.getFeaturedCollections()
+        } else {
+            photoDao.getCollections()
+        }
+
+    fun getCollections(
+        featured: Boolean,
+        page: Int,
+        clearCacheOnFirstPage: Boolean = true,
+        firstPage: Int = 1
+    ): LiveData<Resource<List<PhotoCollection>>> {
         return object : NetworkBoundResource<List<PhotoCollection>, List<PhotoCollection>>(appExecutors) {
             override fun saveCallResult(data: List<PhotoCollection>) {
                 Timber.d("collection list from api: ${data.size}")
+                // clear cache on get first page
+                if (clearCacheOnFirstPage && page == firstPage) {
+                    photoDao.deleteAllCollections()
+                }
+                photoDao.insertCollections(data)
             }
 
             override fun shouldFetch(data: List<PhotoCollection>?): Boolean {
@@ -69,13 +86,18 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<List<PhotoCollection>> = photoCache.getCollections(featured)
+            override fun loadFromCache(): LiveData<List<PhotoCollection>> =
+                if (featured) {
+                    photoDao.getFeaturedCollections()
+                } else {
+                    photoDao.getCollections()
+                }
 
             override fun createCall(): LiveData<ApiResponse<List<PhotoCollection>>> =
                 if (featured) {
-                    service.collectionsFeatured(1, 10)
+                    service.collectionsFeatured(page)
                 } else {
-                    service.collections(1, 10)
+                    service.collections(page)
                 }
         }.asLiveData()
     }

@@ -6,6 +6,7 @@ import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.model.UnSplashKeys
+import com.yueban.splashyo.util.PAGE_SIZE
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ import retrofit2.http.Query
  */
 interface UnSplashService {
     @GET("photos/")
-    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<Photo>>>
+    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<Photo>>>
 
     /**
      * @param photoId
@@ -32,10 +33,10 @@ interface UnSplashService {
     fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): LiveData<ApiResponse<PhotoStatistics>>
 
     @GET("collections")
-    fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<PhotoCollection>>>
+    fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<PhotoCollection>>>
 
     @GET("collections/featured")
-    fun collectionsFeatured(@Query("page") page: Int, @Query("per_page") per_page: Int): LiveData<ApiResponse<List<PhotoCollection>>>
+    fun collectionsFeatured(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<PhotoCollection>>>
 
     companion object {
         private const val BASE_URL = "https://api.unsplash.com/"
