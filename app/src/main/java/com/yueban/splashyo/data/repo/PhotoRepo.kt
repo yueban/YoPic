@@ -86,12 +86,7 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<List<PhotoCollection>> =
-                if (featured) {
-                    photoDao.getFeaturedCollections()
-                } else {
-                    photoDao.getCollections()
-                }
+            override fun loadFromCache(): LiveData<List<PhotoCollection>> = getCollectionsFromCache(featured)
 
             override fun createCall(): LiveData<ApiResponse<List<PhotoCollection>>> =
                 if (featured) {

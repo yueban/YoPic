@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.yueban.splashyo.BuildConfig
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoStatistics
@@ -22,7 +23,7 @@ import com.yueban.splashyo.util.APP_DATABASE_NAME
         PhotoCollection::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = !BuildConfig.isDebug
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

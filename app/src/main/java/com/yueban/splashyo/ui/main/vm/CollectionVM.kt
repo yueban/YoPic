@@ -139,7 +139,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    class LoadMoreState(val isRunning: Boolean, val errorMsg: String?) {
+    class LoadMoreState(val isRunning: Boolean, private val errorMsg: String?) {
         private var handledError = false
 
         val errorMsgIfNotHandled: String?

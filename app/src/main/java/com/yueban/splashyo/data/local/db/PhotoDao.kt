@@ -19,7 +19,7 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotos(photos: List<Photo>)
 
-    @Query("select * from photo")
+    @Query("select * from photo order by updated_at")
     fun getPhotos(): LiveData<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,12 +29,12 @@ interface PhotoDao {
     fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCollections(collections: List<PhotoCollection>)
+    fun insertCollections(collections: List<PhotoCollection>): List<Long>
 
-    @Query("select * from collection")
+    @Query("select * from collection order by published_at desc")
     fun getCollections(): LiveData<List<PhotoCollection>>
 
-    @Query("select * from collection where featured=1")
+    @Query("select * from collection where featured=1 order by published_at desc")
     fun getFeaturedCollections(): LiveData<List<PhotoCollection>>
 
     @Query("delete from collection")

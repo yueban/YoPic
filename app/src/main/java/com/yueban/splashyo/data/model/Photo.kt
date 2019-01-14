@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 @Entity
 data class Photo(
@@ -13,7 +14,7 @@ data class Photo(
     @SerializedName("color") @ColumnInfo(name = "color")
     val color: String = "",
     @SerializedName("created_at") @ColumnInfo(name = "created_at")
-    val createdAt: String = "",
+    val createdAt: Date,
     @SerializedName("description") @ColumnInfo(name = "description")
     val description: String? = "",
     @SerializedName("sponsored") @ColumnInfo(name = "sponsored")
@@ -25,7 +26,7 @@ data class Photo(
     @SerializedName("urls") @Embedded(prefix = "url_")
     val urls: Urls,
     @SerializedName("updated_at") @ColumnInfo(name = "updated_at")
-    val updatedAt: String = "",
+    val updatedAt: Date,
     @SerializedName("width") @ColumnInfo(name = "width")
     val width: Int = 0,
     @SerializedName("links") @Embedded(prefix = "link_")

@@ -25,5 +25,5 @@ object Injection {
 
     private fun provideService(context: Context) = UnSplashService.create(context)
 
-    private fun provideAppExecutors() = AppExecutors.getInstance()
+    fun provideAppExecutors() = AppExecutors.getInstance()
 }

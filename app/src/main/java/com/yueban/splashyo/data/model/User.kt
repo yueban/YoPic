@@ -3,6 +3,7 @@ package com.yueban.splashyo.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class User(
     @SerializedName("total_photos") @ColumnInfo(name = "total_photos")
@@ -22,7 +23,7 @@ data class User(
     @SerializedName("profile_image") @Embedded(prefix = "profile_image_")
     val profileImage: ProfileImage,
     @SerializedName("updated_at") @ColumnInfo(name = "updated_at")
-    val updatedAt: String = "",
+    val updatedAt: Date,
     @SerializedName("name") @ColumnInfo(name = "name")
     val name: String = "",
     @SerializedName("location") @ColumnInfo(name = "location")

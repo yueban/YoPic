@@ -2,10 +2,12 @@ package com.yueban.splashyo.data.local.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.yueban.splashyo.data.model.HistoricalValueItem
 import com.yueban.splashyo.data.model.PreviewPhoto
 import com.yueban.splashyo.data.model.TagItem
+import com.yueban.splashyo.util.UNSPLASH_DATE_FORMAT
 import java.util.Date
 
 /**
@@ -14,7 +16,7 @@ import java.util.Date
  * @email fbzhh007@gmail.com
  */
 class Converters {
-    private val gson: Gson = Gson()
+    private val gson: Gson = GsonBuilder().setDateFormat(UNSPLASH_DATE_FORMAT).create()
 
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {

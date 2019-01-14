@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 @Entity(tableName = "collection")
 data class PhotoCollection(
@@ -28,7 +29,7 @@ data class PhotoCollection(
     @SerializedName("preview_photos") @ColumnInfo(name = "preview_photos")
     val previewPhotos: List<PreviewPhoto>?,
     @SerializedName("updated_at") @ColumnInfo(name = "updated_at")
-    val updatedAt: String = "",
+    val updatedAt: Date,
     @SerializedName("curated") @ColumnInfo(name = "curated")
     val curated: Boolean = false,
     @SerializedName("links") @Embedded(prefix = "links_")
@@ -37,9 +38,17 @@ data class PhotoCollection(
     @PrimaryKey
     val id: Int = 0,
     @SerializedName("published_at") @ColumnInfo(name = "published_at")
-    val publishedAt: String = "",
+    val publishedAt: Date,
     @SerializedName("user") @Embedded(prefix = "user_")
     val user: User?
-)
+) {
+    fun getSmallCoverImageUrl(): String? {
+        return coverPhoto?.urls?.small
+    }
+
+    fun getOriginCoverImageUrl(): String? {
+        return coverPhoto?.urls?.full
+    }
+}
 
 
