@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">SplashYo</string>
-    <string name="only_featured">只看精选</string>
-    <string name="view_all">查看全部</string>
+    <string name="only_featured">only featured</string>
+    <string name="view_all">view all</string>
+    <string formatted="false" name="photos_count">&#160;·&#160;%d photos</string>
+    <string formatted="false" name="curated_by">curated by %s</string>
+
+    <!-- content description -->
+    <string name="cd_cover_image">cover_image</string>
 </resources>

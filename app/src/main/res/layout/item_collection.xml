@@ -16,19 +16,49 @@
         android:layout_height="@dimen/item_collection_height">
 
         <ImageView
+            android:id="@+id/cover_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/cd_cover_image"
+            android:foreground="?attr/selectableItemBackground"
             android:scaleType="centerCrop"
-            app:imgUrl="@{collection.smallCoverImageUrl}"/>
+            app:imgUrl="@{collection.smallCoverImageUrl}"
+            tools:background="#cc000000"/>
+
+        <TextView
+            android:id="@+id/total_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@{String.format(@string/photos_count, collection.totalPhotos)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text=" · 36 photos"
+            style="@style/Text_SubTitle"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:text="@{String.format(@string/curated_by, collection.user.name)}"
+            app:layout_constraintBottom_toBottomOf="@id/total_count"
+            app:layout_constraintRight_toLeftOf="@id/total_count"
+            app:layout_constraintTop_toTopOf="@id/total_count"
+            tools:text="Curated by Danae Sunderman"
+            style="@style/Text_SubTitle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="@{collection.title}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/total_count"
             app:layout_constraintRight_toRightOf="parent"
-            tools:text="title"
+            tools:text="Collection Title"
             style="@style/Text_Title"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

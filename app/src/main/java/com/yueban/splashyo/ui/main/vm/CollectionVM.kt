@@ -36,8 +36,8 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    val loadMoreStatus: LiveData<LoadMoreState>
-        get() = nextPageHandler.loadMoreState
+    val loadStatus: LiveData<LoadState>
+        get() = nextPageHandler.loadState
 
     fun setFeatured(featured: Boolean) {
         if (_featured.value == featured) {
@@ -59,10 +59,11 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
     }
 
     class NextPageHandler(private val photoRepo: PhotoRepo) : Observer<Resource<List<PhotoCollection>>> {
+        private val firstPage = 1
         private var nextPageLiveData: LiveData<Resource<List<PhotoCollection>>>? = null
-        val loadMoreState = MutableLiveData<LoadMoreState>()
+        val loadState = MutableLiveData<LoadState>()
         private var _hasMore: Boolean = false
-        private var nextPage = 1
+        private var nextPage = firstPage
         val hasMore
             get() = _hasMore
 
@@ -72,10 +73,11 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
 
         fun reset() {
             unregister()
-            nextPage = 1
+            nextPage = firstPage
             _hasMore = true
-            loadMoreState.value = LoadMoreState(
-                isRunning = false,
+            loadState.value = LoadState(
+                isRefreshing = false,
+                isLoadingMore = false,
                 errorMsg = null
             )
         }
@@ -86,15 +88,16 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 return
             }
 
-            val state = loadMoreState.value
-            if (state != null && state.isRunning) {
-                Timber.d("queryNextPage: isRunning")
+            val state = loadState.value
+            if (state != null && state.isRefreshing) {
+                Timber.d("queryNextPage: isRefreshing")
                 return
             }
             unregister()
             nextPageLiveData = photoRepo.getCollections(featured, nextPage)
-            loadMoreState.value = LoadMoreState(
-                isRunning = true,
+            loadState.value = LoadState(
+                isRefreshing = nextPage == firstPage,
+                isLoadingMore = nextPage != firstPage,
                 errorMsg = null
             )
             nextPageLiveData?.observeForever(this)
@@ -113,8 +116,9 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     }
                     _hasMore = result.data.size >= PAGE_SIZE
                     unregister()
-                    loadMoreState.value = LoadMoreState(
-                        isRunning = false,
+                    loadState.value = LoadState(
+                        isRefreshing = false,
+                        isLoadingMore = false,
                         errorMsg = null
                     )
                     nextPage++
@@ -122,8 +126,9 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 ERROR -> {
                     _hasMore = true
                     unregister()
-                    loadMoreState.value = LoadMoreState(
-                        isRunning = false,
+                    loadState.value = LoadState(
+                        isRefreshing = false,
+                        isLoadingMore = false,
                         errorMsg = result.message
                     )
                 }
@@ -139,7 +144,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    class LoadMoreState(val isRunning: Boolean, private val errorMsg: String?) {
+    class LoadState(val isRefreshing: Boolean, val isLoadingMore: Boolean, private val errorMsg: String?) {
         private var handledError = false
 
         val errorMsgIfNotHandled: String?
@@ -150,5 +155,8 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 handledError = true
                 return errorMsg
             }
+
+        val isRunning: Boolean
+            get() = isRefreshing || isLoadingMore
     }
 }

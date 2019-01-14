@@ -10,15 +10,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentCollectionBinding
 import com.yueban.splashyo.ui.main.adapter.CollectionAdapter
 import com.yueban.splashyo.ui.main.vm.CollectionVM
 import com.yueban.splashyo.util.Injection
-import timber.log.Timber
+import com.yueban.splashyo.util.ext.autoAnimationOnly
+import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
+import com.yueban.splashyo.util.ext.scrollToTop
 
 /**
  * @author yueban
@@ -50,37 +52,49 @@ class CollectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         mAdapter = CollectionAdapter(Injection.provideAppExecutors())
         mBinding.rvCollections.adapter = mAdapter
 
-        // live data
+        observeLiveData()
+        setListener()
+        initData()
+    }
+
+    private fun observeLiveData() {
         mCollectionVM.collections.observe(this, Observer {
             mAdapter.submitList(it)
         })
-        mCollectionVM.loadMoreStatus.observe(this, Observer { loadMoreStatus ->
-            Timber.d("loadMoreStatus.isRunning: ${loadMoreStatus.isRunning}")
-            Timber.d("loadMoreStatus.errorMsgIfNotHandled: ${loadMoreStatus.errorMsgIfNotHandled}")
+        mCollectionVM.loadStatus.observe(this, Observer { loadMoreStatus ->
+            if (loadMoreStatus.isRunning) {
+                mBinding.refreshLayout.autoAnimationOnly(loadMoreStatus.isRefreshing, loadMoreStatus.isLoadingMore)
+            } else {
+                mBinding.refreshLayout.finishRefreshAndLoadMore()
+            }
+
+            loadMoreStatus.errorMsgIfNotHandled?.let {
+                Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
+            }
         })
         mCollectionVM.featured.observe(this, Observer {
             activity?.invalidateOptionsMenu()
+            mBinding.rvCollections.scrollToTop()
         })
+    }
 
-        //set listener
-        mBinding.rvCollections.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisiblePos = linearLayoutManager.findLastVisibleItemPosition()
-                if (lastVisiblePos == linearLayoutManager.itemCount - 1) {
-                    mCollectionVM.loadNextPage()
-                }
+    private fun setListener() {
+        mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                mCollectionVM.loadNextPage()
+            }
+
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                mCollectionVM.refresh()
             }
         })
         mAdapter.itemClickListener = { collection ->
             Snackbar.make(mBinding.root, collection.title, Snackbar.LENGTH_SHORT).show()
         }
-
-        initData()
     }
 
     private fun initData() {

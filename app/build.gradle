@@ -66,4 +66,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    implementation "com.scwang.smartrefresh:SmartRefreshLayout:$rootProject.smartRefreshLayoutVerison"
+    implementation "com.scwang.smartrefresh:SmartRefreshHeader:$rootProject.smartRefreshLayoutVerison"
 }
