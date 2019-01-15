@@ -1,8 +1,9 @@
-package com.yueban.splashyo
+package com.yueban.splashyo.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
