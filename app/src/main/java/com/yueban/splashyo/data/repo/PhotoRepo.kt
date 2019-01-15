@@ -22,10 +22,17 @@ class PhotoRepo(
     private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
-    fun getPhotos(): LiveData<Resource<List<Photo>>> {
+    fun getPhotos(
+        page: Int,
+        clearCacheOnFirstPage: Boolean = true,
+        firstPage: Int = 1
+    ): LiveData<Resource<List<Photo>>> {
         return object : NetworkBoundResource<List<Photo>, List<Photo>>(appExecutors) {
             override fun saveCallResult(data: List<Photo>) {
                 Timber.d("photo list from api: ${data.size}")
+                if (clearCacheOnFirstPage && page == firstPage) {
+                    photoDao.deleteAllPhotos()
+                }
                 photoDao.insertPhotos(data)
             }
 
@@ -34,11 +41,13 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<List<Photo>> = photoDao.getPhotos()
+            override fun loadFromCache(): LiveData<List<Photo>> = getPhotosFromCache()
 
-            override fun createCall(): LiveData<ApiResponse<List<Photo>>> = service.photos(page = 1)
+            override fun createCall(): LiveData<ApiResponse<List<Photo>>> = service.photos(page)
         }.asLiveData()
     }
+
+    fun getPhotosFromCache(): LiveData<List<Photo>> = photoDao.getPhotos()
 
     fun getPhotoStat(photoId: String): LiveData<Resource<PhotoStatistics>> {
         return object : NetworkBoundResource<PhotoStatistics, PhotoStatistics>(appExecutors) {
@@ -57,13 +66,6 @@ class PhotoRepo(
             override fun createCall(): LiveData<ApiResponse<PhotoStatistics>> = service.photoStatistics(photoId)
         }.asLiveData()
     }
-
-    fun getCollectionsFromCache(featured: Boolean): LiveData<List<PhotoCollection>> =
-        if (featured) {
-            photoDao.getFeaturedCollections()
-        } else {
-            photoDao.getCollections()
-        }
 
     fun getCollections(
         featured: Boolean,
@@ -96,4 +98,11 @@ class PhotoRepo(
                 }
         }.asLiveData()
     }
+
+    fun getCollectionsFromCache(featured: Boolean): LiveData<List<PhotoCollection>> =
+        if (featured) {
+            photoDao.getFeaturedCollections()
+        } else {
+            photoDao.getCollections()
+        }
 }

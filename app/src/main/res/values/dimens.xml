@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_collection_height">240dp</dimen>
+    <dimen name="item_photo_item_image_height">120dp</dimen>
 </resources>

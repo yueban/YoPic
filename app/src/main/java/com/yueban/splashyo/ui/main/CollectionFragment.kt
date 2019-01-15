@@ -52,7 +52,6 @@ class CollectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         mAdapter = CollectionAdapter(Injection.provideAppExecutors())
         mBinding.rvCollections.adapter = mAdapter
 
@@ -65,14 +64,14 @@ class CollectionFragment : Fragment() {
         mCollectionVM.collections.observe(this, Observer {
             mAdapter.submitList(it)
         })
-        mCollectionVM.loadStatus.observe(this, Observer { loadMoreStatus ->
-            if (loadMoreStatus.isRunning) {
-                mBinding.refreshLayout.autoAnimationOnly(loadMoreStatus.isRefreshing, loadMoreStatus.isLoadingMore)
+        mCollectionVM.loadStatus.observe(this, Observer { loadState ->
+            if (loadState.isRunning) {
+                mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
             } else {
                 mBinding.refreshLayout.finishRefreshAndLoadMore()
             }
 
-            loadMoreStatus.errorMsgIfNotHandled?.let {
+            loadState.errorMsgIfNotHandled?.let {
                 Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
             }
         })

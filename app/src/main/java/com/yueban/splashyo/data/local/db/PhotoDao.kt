@@ -19,7 +19,10 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotos(photos: List<Photo>)
 
-    @Query("select * from photo order by updated_at")
+    @Query("delete from photo")
+    fun deleteAllPhotos()
+
+    @Query("select * from photo order by updated_at desc")
     fun getPhotos(): LiveData<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

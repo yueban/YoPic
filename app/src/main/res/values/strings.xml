@@ -7,4 +7,5 @@
 
     <!-- content description -->
     <string name="cd_cover_image">cover_image</string>
+    <string name="cd_photo_image">photo_image</string>
 </resources>

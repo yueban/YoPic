@@ -5,6 +5,7 @@ import com.yueban.splashyo.data.local.db.AppDatabase
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
+import com.yueban.splashyo.ui.main.vm.PhotoListVMFactory
 
 /**
  * TODO(make members singleton by dagger2)
@@ -14,6 +15,8 @@ import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
  * @email fbzhh007@gmail.com
  */
 object Injection {
+    fun providePhotoListVMFactory(context: Context) = PhotoListVMFactory(providePhotoRepo(context))
+
     fun provideCollectionVMFactory(context: Context) = CollectionVMFactory(providePhotoRepo(context))
 
     fun providePhotoRepo(context: Context) =

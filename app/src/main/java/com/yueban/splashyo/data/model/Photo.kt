@@ -40,4 +40,25 @@ data class Photo(
     val height: Int = 0,
     @SerializedName("likes") @ColumnInfo(name = "likes")
     val likes: Int = 0
-)
+) {
+    val userName: String
+        get() = user.name
+
+    val sponsorName: String
+        get() {
+            return if (sponsored && sponsoredBy != null) {
+                sponsoredBy.name
+            } else {
+                ""
+            }
+        }
+
+    val smallImageUrl: String
+        get() = urls.small
+
+    val normalImageUrl: String
+        get() = urls.regular
+
+    val originImageUrl: String
+        get() = urls.full
+}

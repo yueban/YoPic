@@ -42,13 +42,14 @@ data class PhotoCollection(
     @SerializedName("user") @Embedded(prefix = "user_")
     val user: User?
 ) {
-    fun getSmallCoverImageUrl(): String? {
-        return coverPhoto?.urls?.small
-    }
+    val smallCoverImageUrl: String?
+        get() = coverPhoto?.urls?.small
 
-    fun getOriginCoverImageUrl(): String? {
-        return coverPhoto?.urls?.full
-    }
+    val normalCoverImageUrl: String?
+        get() = coverPhoto?.urls?.regular
+
+    val originCoverImageUrl: String?
+        get() = coverPhoto?.urls?.full
 }
 
 

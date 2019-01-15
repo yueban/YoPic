@@ -2,10 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_main"
-            app:startDestination="@id/collectionFragment">
+            app:startDestination="@id/photoListFragment">
 
     <fragment
         android:id="@+id/collectionFragment"
         android:name="com.yueban.splashyo.ui.main.CollectionFragment"
         android:label="CollectionFragment"/>
+    <fragment
+        android:id="@+id/photoListFragment"
+        android:name="com.yueban.splashyo.ui.main.PhotoListFragment"
+        android:label="PhotoListFragment"/>
 </navigation>

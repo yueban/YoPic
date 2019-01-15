@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="photo"
+            type="com.yueban.splashyo.data.model.Photo"/>
+    </data>
+
+    <ImageView
+        android:id="@+id/photo_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_photo_item_image_height"
+        android:contentDescription="@string/cd_photo_image"
+        android:foreground="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:imgUrl="@{photo.smallImageUrl}"
+        tools:src="#cc000000"/>
+</layout>
