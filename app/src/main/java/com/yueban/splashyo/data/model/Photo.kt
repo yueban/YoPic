@@ -1,5 +1,7 @@
 package com.yueban.splashyo.data.model
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -9,6 +11,8 @@ import java.util.Date
 
 @Entity
 data class Photo(
+    @ColumnInfo(name = "rowid") @PrimaryKey(autoGenerate = true)
+    val rowId: Int,
     @SerializedName("sponsored_by") @Embedded(prefix = "sponsor_")
     val sponsoredBy: User?,
     @SerializedName("color") @ColumnInfo(name = "color")
@@ -32,14 +36,18 @@ data class Photo(
     @SerializedName("links") @Embedded(prefix = "link_")
     val links: Links,
     @SerializedName("id") @ColumnInfo(name = "id")
-    @PrimaryKey
     val id: String = "",
     @SerializedName("user") @Embedded(prefix = "user_")
     val user: User,
     @SerializedName("height") @ColumnInfo(name = "height")
     val height: Int = 0,
     @SerializedName("likes") @ColumnInfo(name = "likes")
-    val likes: Int = 0
+    val likes: Int = 0,
+    /**
+     * 缓存标记，用以区分不同场景下的缓存数据
+     */
+    @ColumnInfo(name = "cache_label")
+    var cacheLabel: String? = ""
 ) {
     val userName: String
         get() = user.name
@@ -61,4 +69,13 @@ data class Photo(
 
     val originImageUrl: String
         get() = urls.full
+
+    val previewColor: Int?
+        @SuppressLint("Range")
+        get() =
+            if (color.isEmpty()) {
+                null
+            } else {
+                Color.parseColor(color)
+            }
 }

@@ -1,5 +1,6 @@
 package com.yueban.splashyo.data.model
 
+import android.annotation.SuppressLint
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -9,6 +10,8 @@ import java.util.Date
 
 @Entity(tableName = "collection")
 data class PhotoCollection(
+    @ColumnInfo(name = "rowid") @PrimaryKey(autoGenerate = true)
+    val rowId: Int,
     @SerializedName("featured") @ColumnInfo(name = "featured")
     val featured: Boolean = false,
     @SerializedName("private") @ColumnInfo(name = "private")
@@ -35,7 +38,6 @@ data class PhotoCollection(
     @SerializedName("links") @Embedded(prefix = "links_")
     val links: Links,
     @SerializedName("id") @ColumnInfo(name = "id")
-    @PrimaryKey
     val id: Int = 0,
     @SerializedName("published_at") @ColumnInfo(name = "published_at")
     val publishedAt: Date,
@@ -50,6 +52,10 @@ data class PhotoCollection(
 
     val originCoverImageUrl: String?
         get() = coverPhoto?.urls?.full
+
+    val previewColor: Int?
+        @SuppressLint("Range")
+        get() = coverPhoto?.previewColor
 }
 
 

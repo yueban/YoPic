@@ -23,6 +23,7 @@
             android:foreground="?attr/selectableItemBackground"
             android:scaleType="centerCrop"
             app:imgUrl="@{collection.smallCoverImageUrl}"
+            app:previewColor="@{collection.previewColor}"
             tools:background="#cc000000"/>
 
         <TextView

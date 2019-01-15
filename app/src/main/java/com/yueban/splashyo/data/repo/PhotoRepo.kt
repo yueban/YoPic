@@ -9,6 +9,7 @@ import com.yueban.splashyo.data.net.ApiResponse
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.model.NetworkBoundResource
 import com.yueban.splashyo.data.repo.model.Resource
+import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.AppExecutors
 import timber.log.Timber
 
@@ -23,15 +24,21 @@ class PhotoRepo(
     private val service: UnSplashService
 ) {
     fun getPhotos(
+        cacheLabel: String,
         page: Int,
         clearCacheOnFirstPage: Boolean = true,
         firstPage: Int = 1
     ): LiveData<Resource<List<Photo>>> {
-        return object : NetworkBoundResource<List<Photo>, List<Photo>>(appExecutors) {
+        return object : NetworkBoundResource<List<Photo>>(appExecutors) {
+            override fun processResponse(response: ApiResponse.ApiSuccessResponse<List<Photo>>): List<Photo> {
+                response.body.forEach { it.cacheLabel = cacheLabel }
+                return response.body
+            }
+
             override fun saveCallResult(data: List<Photo>) {
                 Timber.d("photo list from api: ${data.size}")
                 if (clearCacheOnFirstPage && page == firstPage) {
-                    photoDao.deleteAllPhotos()
+                    photoDao.deleteAllPhotos(cacheLabel)
                 }
                 photoDao.insertPhotos(data)
             }
@@ -41,16 +48,21 @@ class PhotoRepo(
                 return true
             }
 
-            override fun loadFromCache(): LiveData<List<Photo>> = getPhotosFromCache()
+            override fun loadFromCache(): LiveData<List<Photo>> = getPhotosFromCache(cacheLabel)
 
-            override fun createCall(): LiveData<ApiResponse<List<Photo>>> = service.photos(page)
+            override fun createCall(): LiveData<ApiResponse<List<Photo>>> =
+                if (cacheLabel == PhotoListVM.CACHE_LABEL_ALL) {
+                    service.photos(page)
+                } else {
+                    service.photosByCollection(cacheLabel, page)
+                }
         }.asLiveData()
     }
 
-    fun getPhotosFromCache(): LiveData<List<Photo>> = photoDao.getPhotos()
+    fun getPhotosFromCache(cacheLabel: String): LiveData<List<Photo>> = photoDao.getPhotos(cacheLabel)
 
     fun getPhotoStat(photoId: String): LiveData<Resource<PhotoStatistics>> {
-        return object : NetworkBoundResource<PhotoStatistics, PhotoStatistics>(appExecutors) {
+        return object : NetworkBoundResource<PhotoStatistics>(appExecutors) {
             override fun saveCallResult(data: PhotoStatistics) {
                 Timber.d("photostat from api: $data")
                 photoDao.insertPhotoStatistics(data)
@@ -58,6 +70,10 @@ class PhotoRepo(
 
             override fun shouldFetch(data: PhotoStatistics?): Boolean {
                 Timber.d("photostat from db: $data")
+                return true
+            }
+
+            override fun resultFromCache(): Boolean {
                 return true
             }
 
@@ -73,7 +89,7 @@ class PhotoRepo(
         clearCacheOnFirstPage: Boolean = true,
         firstPage: Int = 1
     ): LiveData<Resource<List<PhotoCollection>>> {
-        return object : NetworkBoundResource<List<PhotoCollection>, List<PhotoCollection>>(appExecutors) {
+        return object : NetworkBoundResource<List<PhotoCollection>>(appExecutors) {
             override fun saveCallResult(data: List<PhotoCollection>) {
                 Timber.d("collection list from api: ${data.size}")
                 // clear cache on get first page

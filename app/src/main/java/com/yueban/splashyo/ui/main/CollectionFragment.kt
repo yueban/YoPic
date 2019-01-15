@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
@@ -68,7 +69,8 @@ class CollectionFragment : Fragment() {
             if (loadState.isRunning) {
                 mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
             } else {
-                mBinding.refreshLayout.finishRefreshAndLoadMore()
+                val hasMore = mCollectionVM.hasMore
+                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
             }
 
             loadState.errorMsgIfNotHandled?.let {
@@ -92,7 +94,10 @@ class CollectionFragment : Fragment() {
             }
         })
         mAdapter.itemClickListener = { collection ->
-            Snackbar.make(mBinding.root, collection.title, Snackbar.LENGTH_SHORT).show()
+            findNavController().navigate(
+                R.id.action_collectionFragment_to_photoListFragment,
+                PhotoListFragmentArgs.Builder(collection.id.toString()).build().toBundle()
+            )
         }
     }
 

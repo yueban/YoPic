@@ -20,13 +20,19 @@ import timber.log.Timber
  * @email fbzhh007@gmail.com
  */
 class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
-    private val _refreshTrigger = MutableLiveData<Any>()
+    companion object {
+        const val CACHE_LABEL_ALL = "all"
+    }
+
+    private val _cacheLabel = MutableLiveData<String>()
     private val nextPageHandler = NextPageHandler(photoRepo)
-    val photos: LiveData<List<Photo>> = Transformations.switchMap(_refreshTrigger) { it ->
+
+    val cacheLabel: LiveData<String> = _cacheLabel
+    val photos: LiveData<List<Photo>> = Transformations.switchMap(_cacheLabel) { it ->
         if (it == null) {
             NullLiveData.create()
         } else {
-            photoRepo.getPhotosFromCache().also {
+            photoRepo.getPhotosFromCache(it).also {
                 nextPageHandler.reset()
                 loadNextPage()
             }
@@ -36,24 +42,36 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
     val loadStatus: LiveData<LoadState>
         get() = nextPageHandler.loadState
 
+    val hasMore: Boolean
+        get() = nextPageHandler.hasMore
+
+    fun setCacheLabel(cacheLabel: String) {
+        if (_cacheLabel.value == cacheLabel) {
+            return
+        }
+        _cacheLabel.value = cacheLabel
+    }
+
     fun refresh() {
-        _refreshTrigger.value = {
-            _refreshTrigger.value ?: Any()
+        _cacheLabel.value?.let {
+            _cacheLabel.value = _cacheLabel.value
         }
     }
 
     fun loadNextPage() {
-        _refreshTrigger.value?.let {
-            nextPageHandler.queryNextPage()
+        _cacheLabel.value?.let {
+            nextPageHandler.queryNextPage(it)
         }
     }
 
     class NextPageHandler(private val photoRepo: PhotoRepo) : Observer<Resource<List<Photo>>> {
         var loadState = MutableLiveData<LoadState>()
+        val hasMore: Boolean
+            get() = _hasMore
 
         private val firstPage = 1
         private var nextPageLiveData: LiveData<Resource<List<Photo>>>? = null
-        private var hasMore: Boolean = false
+        private var _hasMore: Boolean = false
         private var nextPage = firstPage
 
         init {
@@ -63,7 +81,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
         fun reset() {
             unregister()
             nextPage = firstPage
-            hasMore = true
+            _hasMore = true
             loadState.value = LoadState(
                 isRefreshing = false,
                 isLoadingMore = false,
@@ -71,8 +89,8 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
             )
         }
 
-        fun queryNextPage() {
-            if (!hasMore) {
+        fun queryNextPage(cacheLabel: String) {
+            if (!_hasMore) {
                 Timber.d("queryNextPage: no more")
                 return
             }
@@ -84,7 +102,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
             }
 
             unregister()
-            nextPageLiveData = photoRepo.getPhotos(nextPage)
+            nextPageLiveData = photoRepo.getPhotos(cacheLabel, nextPage)
             loadState.value = LoadState(
                 isRefreshing = nextPage == firstPage,
                 isLoadingMore = nextPage != firstPage,
@@ -101,7 +119,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
 
             when (result.status) {
                 Status.SUCCESS -> {
-                    hasMore =
+                    _hasMore =
                         if (result.data == null) {
                             false
                         } else {
@@ -118,7 +136,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     nextPage++
                 }
                 Status.ERROR -> {
-                    hasMore = true
+                    _hasMore = true
                     unregister()
                     loadState.value = LoadState(
                         isRefreshing = false,

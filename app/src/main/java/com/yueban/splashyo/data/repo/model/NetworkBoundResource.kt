@@ -11,9 +11,9 @@ import com.yueban.splashyo.util.AppExecutors
  * @date 2018/12/30
  * @email fbzhh007@gmail.com
  */
-abstract class NetworkBoundResource<ResultType, RequestType>
+abstract class NetworkBoundResource<Type>
 @MainThread constructor(private val appExecutors: AppExecutors) {
-    private val result = MediatorLiveData<Resource<ResultType>>()
+    private val result = MediatorLiveData<Resource<Type>>()
 
     init {
         result.value = Resource.loading(null)
@@ -32,13 +32,13 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     }
 
     @MainThread
-    private fun setValue(newValue: Resource<ResultType>) {
+    private fun setValue(newValue: Resource<Type>) {
         if (result.value != newValue) {
             result.value = newValue
         }
     }
 
-    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork(dbSource: LiveData<Type>) {
         val apiResponse = createCall()
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
@@ -49,11 +49,16 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             when (response) {
                 is ApiResponse.ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {
-                        saveCallResult(processResponse(response))
+                        val data = processResponse(response)
+                        saveCallResult(data)
                         appExecutors.mainThread().execute {
-                            // request a new livedata from db, cause we have already saveCallResult in db. This can make result always use dbSource as its dataSource
-                            result.addSource(loadFromCache()) { newData ->
-                                setValue(Resource.success(newData))
+                            if (resultFromCache()) {
+                                // request a new livedata from db, cause we have already saveCallResult in db. This can make result always use dbSource as its dataSource
+                                result.addSource(loadFromCache()) { newData ->
+                                    setValue(Resource.success(newData))
+                                }
+                            } else {
+                                setValue(Resource.success(data))
                             }
                         }
                     }
@@ -81,20 +86,23 @@ abstract class NetworkBoundResource<ResultType, RequestType>
 
     protected open fun onFetchFailed() {}
 
-    fun asLiveData() = result as LiveData<Resource<ResultType>>
+    fun asLiveData() = result as LiveData<Resource<Type>>
 
     @MainThread
-    protected open fun processResponse(response: ApiResponse.ApiSuccessResponse<RequestType>) = response.body
+    protected open fun processResponse(response: ApiResponse.ApiSuccessResponse<Type>) = response.body
 
     @MainThread
-    protected abstract fun saveCallResult(data: RequestType)
+    protected open fun resultFromCache(): Boolean = false
 
     @MainThread
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
+    protected abstract fun saveCallResult(data: Type)
 
     @MainThread
-    protected abstract fun loadFromCache(): LiveData<ResultType>
+    protected abstract fun shouldFetch(data: Type?): Boolean
 
     @MainThread
-    protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
+    protected abstract fun loadFromCache(): LiveData<Type>
+
+    @MainThread
+    protected abstract fun createCall(): LiveData<ApiResponse<Type>>
 }

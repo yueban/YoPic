@@ -30,6 +30,7 @@ class PhotoListFragment : Fragment() {
     private lateinit var mBinding: FragmentPhotoListBinding
     private lateinit var mPhotoListVM: PhotoListVM
     private lateinit var mAdapter: PhotoListAdapter
+    private var mCollectionId: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentPhotoListBinding.inflate(inflater, container, false)
@@ -38,6 +39,10 @@ class PhotoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            mCollectionId = PhotoListFragmentArgs.fromBundle(it).collectionId
+        }
 
         mPhotoListVM =
             ViewModelProviders.of(this, Injection.providePhotoListVMFactory(requireActivity()))
@@ -80,7 +85,8 @@ class PhotoListFragment : Fragment() {
             if (loadState.isRunning) {
                 mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
             } else {
-                mBinding.refreshLayout.finishRefreshAndLoadMore()
+                val hasMore = mPhotoListVM.hasMore
+                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
             }
 
             loadState.errorMsgIfNotHandled?.let {
@@ -110,6 +116,7 @@ class PhotoListFragment : Fragment() {
     }
 
     private fun initData() {
-        mPhotoListVM.refresh()
+        val cacheLabel = mCollectionId ?: PhotoListVM.CACHE_LABEL_ALL
+        mPhotoListVM.setCacheLabel(cacheLabel)
     }
 }

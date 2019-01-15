@@ -8,9 +8,13 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
  * @date 2019/1/14
  * @email fbzhh007@gmail.com
  */
-fun SmartRefreshLayout.finishRefreshAndLoadMore() {
+fun SmartRefreshLayout.finishRefreshAndLoadMore(hasMore: Boolean = true) {
     finishRefresh()
-    finishLoadMore()
+    if (hasMore) {
+        finishLoadMore()
+    } else {
+        finishLoadMoreWithNoMoreData()
+    }
 }
 
 fun SmartRefreshLayout.autoAnimationOnly(refresh: Boolean = false, loadMore: Boolean = false) {

@@ -19,11 +19,17 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotos(photos: List<Photo>)
 
-    @Query("delete from photo")
-    fun deleteAllPhotos()
+    /**
+     * @param cacheLabel 用以区分不同场景下的缓存数据
+     */
+    @Query("delete from photo where cache_label=:cacheLabel")
+    fun deleteAllPhotos(cacheLabel: String)
 
-    @Query("select * from photo order by updated_at desc")
-    fun getPhotos(): LiveData<List<Photo>>
+    /**
+     * @param cacheLabel 用以区分不同场景下的缓存数据
+     */
+    @Query("select * from photo where cache_label=:cacheLabel")
+    fun getPhotos(cacheLabel: String): LiveData<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoStatistics(photoStatistics: PhotoStatistics)
@@ -34,10 +40,10 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<PhotoCollection>): List<Long>
 
-    @Query("select * from collection order by published_at desc")
+    @Query("select * from collection")
     fun getCollections(): LiveData<List<PhotoCollection>>
 
-    @Query("select * from collection where featured=1 order by published_at desc")
+    @Query("select * from collection where featured=1")
     fun getFeaturedCollections(): LiveData<List<PhotoCollection>>
 
     @Query("delete from collection")

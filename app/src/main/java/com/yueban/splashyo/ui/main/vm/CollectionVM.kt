@@ -40,6 +40,9 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
     val loadStatus: LiveData<LoadState>
         get() = nextPageHandler.loadState
 
+    val hasMore: Boolean
+        get() = nextPageHandler.hasMore
+
     fun setFeatured(featured: Boolean) {
         if (_featured.value == featured) {
             return
@@ -60,10 +63,13 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
     }
 
     class NextPageHandler(private val photoRepo: PhotoRepo) : Observer<Resource<List<PhotoCollection>>> {
+        val loadState = MutableLiveData<LoadState>()
+        val hasMore: Boolean
+            get() = _hasMore
+
         private val firstPage = 1
         private var nextPageLiveData: LiveData<Resource<List<PhotoCollection>>>? = null
-        val loadState = MutableLiveData<LoadState>()
-        private var hasMore: Boolean = false
+        private var _hasMore: Boolean = false
         private var nextPage = firstPage
 
         init {
@@ -73,7 +79,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         fun reset() {
             unregister()
             nextPage = firstPage
-            hasMore = true
+            _hasMore = true
             loadState.value = LoadState(
                 isRefreshing = false,
                 isLoadingMore = false,
@@ -82,7 +88,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
 
         fun queryNextPage(featured: Boolean) {
-            if (!hasMore) {
+            if (!_hasMore) {
                 Timber.d("queryNextPage: no more")
                 return
             }
@@ -109,7 +115,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
             }
             when (result.status) {
                 SUCCESS -> {
-                    hasMore =
+                    _hasMore =
                         if (result.data == null) {
                             false
                         } else {
@@ -126,7 +132,7 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     nextPage++
                 }
                 ERROR -> {
-                    hasMore = true
+                    _hasMore = true
                     unregister()
                     loadState.value = LoadState(
                         isRefreshing = false,

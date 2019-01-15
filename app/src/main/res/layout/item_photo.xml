@@ -18,5 +18,6 @@
         android:foreground="?attr/selectableItemBackground"
         android:scaleType="centerCrop"
         app:imgUrl="@{photo.smallImageUrl}"
+        app:previewColor="@{photo.previewColor}"
         tools:src="#cc000000"/>
 </layout>
