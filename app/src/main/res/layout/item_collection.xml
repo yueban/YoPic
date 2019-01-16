@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             tools:text=" · 36 photos"
-            style="@style/Text_SubTitle"/>
+            style="@style/Text.SubTitle"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             app:layout_constraintRight_toLeftOf="@id/total_count"
             app:layout_constraintTop_toTopOf="@id/total_count"
             tools:text="Curated by Danae Sunderman"
-            style="@style/Text_SubTitle"/>
+            style="@style/Text.SubTitle"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toTopOf="@id/total_count"
             app:layout_constraintRight_toRightOf="parent"
             tools:text="Collection Title"
-            style="@style/Text_Title"/>
+            style="@style/Text.Title"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
