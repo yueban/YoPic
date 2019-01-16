@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,11 @@ class PhotoListFragment : Fragment() {
     private lateinit var mBinding: FragmentPhotoListBinding
     private lateinit var mPhotoListVM: PhotoListVM
     private lateinit var mAdapter: PhotoListAdapter
+    /**
+     * when mCollectionId is null, it means that it was in MainActivity. in this case:
+     * - use activity to get VM to enable cache
+     * - use viewLifecycleOwner to avoid multiple Observer bindings
+     */
     private var mCollectionId: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,8 +51,13 @@ class PhotoListFragment : Fragment() {
         }
 
         mPhotoListVM =
-            ViewModelProviders.of(this, Injection.providePhotoListVMFactory(requireActivity()))
-                .get(PhotoListVM::class.java)
+            if (mCollectionId == null) {
+                ViewModelProviders.of(requireActivity(), Injection.providePhotoListVMFactory(requireActivity()))
+                    .get(PhotoListVM::class.java)
+            } else {
+                ViewModelProviders.of(this, Injection.providePhotoListVMFactory(requireActivity()))
+                    .get(PhotoListVM::class.java)
+            }
 
         val spanCount = 3
         val spacing = 6.toPx()
@@ -80,8 +91,8 @@ class PhotoListFragment : Fragment() {
     }
 
     private fun observeLiveData() {
-        mPhotoListVM.photos.observe(this, Observer(mAdapter::submitList))
-        mPhotoListVM.loadStatus.observe(this, Observer { loadState ->
+        mPhotoListVM.photos.observe(getLifecycleOwner(), Observer(mAdapter::submitList))
+        mPhotoListVM.loadStatus.observe(getLifecycleOwner(), Observer { loadState ->
             if (loadState.isRunning) {
                 mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
             } else {
@@ -114,6 +125,13 @@ class PhotoListFragment : Fragment() {
                 .show()
         }
     }
+
+    private fun getLifecycleOwner(): LifecycleOwner =
+        if (mCollectionId == null) {
+            this
+        } else {
+            viewLifecycleOwner
+        }
 
     private fun initData() {
         val cacheLabel = mCollectionId ?: PhotoListVM.CACHE_LABEL_ALL

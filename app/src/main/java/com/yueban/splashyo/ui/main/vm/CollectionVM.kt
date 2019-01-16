@@ -24,7 +24,13 @@ import timber.log.Timber
 class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
     private val nextPageHandler = NextPageHandler(photoRepo)
     private val _featured = MutableLiveData<Boolean>()
+
+    init {
+        _featured.value = true
+    }
+
     val featured: LiveData<Boolean> = _featured
+
     // result
     val collections: LiveData<List<PhotoCollection>> = Transformations.switchMap(_featured) { featured ->
         if (featured == null) {

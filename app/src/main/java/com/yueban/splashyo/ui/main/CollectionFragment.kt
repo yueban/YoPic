@@ -22,6 +22,7 @@ import com.yueban.splashyo.util.Injection
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
+import com.yueban.splashyo.util.vm.LoadState
 
 /**
  * @author yueban
@@ -58,28 +59,36 @@ class CollectionFragment : Fragment() {
 
         observeLiveData()
         setListener()
-        initData()
     }
 
     private fun observeLiveData() {
-        mCollectionVM.collections.observe(this, Observer {
+        mCollectionVM.collections.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
         })
-        mCollectionVM.loadStatus.observe(this, Observer { loadState ->
-            if (loadState.isRunning) {
-                mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
-            } else {
-                val hasMore = mCollectionVM.hasMore
-                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
-            }
+        mCollectionVM.loadStatus.observe(viewLifecycleOwner, object : Observer<LoadState> {
+            //record if last time is refreshing
+            private var lastTimeIsRefreshing = false
 
-            loadState.errorMsgIfNotHandled?.let {
-                Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
+            override fun onChanged(loadState: LoadState) {
+                if (loadState.isRunning) {
+                    lastTimeIsRefreshing = loadState.isRefreshing
+                    mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
+                } else {
+                    if (lastTimeIsRefreshing) {
+                        mBinding.rvCollections.scrollToTop()
+                        lastTimeIsRefreshing = false
+                    }
+                    val hasMore = mCollectionVM.hasMore
+                    mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
+                }
+
+                loadState.errorMsgIfNotHandled?.let {
+                    Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
+                }
             }
         })
-        mCollectionVM.featured.observe(this, Observer {
+        mCollectionVM.featured.observe(viewLifecycleOwner, Observer {
             activity?.invalidateOptionsMenu()
-            mBinding.rvCollections.scrollToTop()
         })
     }
 
@@ -99,10 +108,6 @@ class CollectionFragment : Fragment() {
                 PhotoListFragmentArgs.Builder(collection.id.toString()).build().toBundle()
             )
         }
-    }
-
-    private fun initData() {
-        mCollectionVM.setFeatured(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
