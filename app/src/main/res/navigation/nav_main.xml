@@ -24,5 +24,9 @@
             android:name="collectionId"
             app:argType="string"
             app:nullable="true"/>
+        <argument
+            android:name="collectionTitle"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 </navigation>

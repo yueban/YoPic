@@ -8,4 +8,9 @@
     <!-- content description -->
     <string name="cd_cover_image">cover_image</string>
     <string name="cd_photo_image">photo_image</string>
+    <string name="collections">Collections</string>
+    <string name="photos">Photos</string>
+    <string name="all_collections">All Collections</string>
+    <string name="featured">Featured</string>
+    <string name="all_photos">All Photos</string>
 </resources>

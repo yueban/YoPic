@@ -34,8 +34,7 @@ class CollectionFragment : Fragment() {
     private lateinit var mAdapter: CollectionAdapter
     private lateinit var mCollectionVM: CollectionVM
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mCollectionVM =
             ViewModelProviders
                 .of(
@@ -44,9 +43,7 @@ class CollectionFragment : Fragment() {
                 )
                 .get(CollectionVM::class.java)
         setHasOptionsMenu(true)
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentCollectionBinding.inflate(inflater, container, false)
         return mBinding.root
     }
@@ -87,7 +84,8 @@ class CollectionFragment : Fragment() {
                 }
             }
         })
-        mCollectionVM.featured.observe(viewLifecycleOwner, Observer {
+        mCollectionVM.featured.observe(viewLifecycleOwner, Observer { featured ->
+            activity?.setTitle(if (featured) R.string.featured else R.string.all_collections)
             activity?.invalidateOptionsMenu()
         })
     }
@@ -105,7 +103,7 @@ class CollectionFragment : Fragment() {
         mAdapter.itemClickListener = { collection ->
             findNavController().navigate(
                 R.id.action_collectionFragment_to_photoListFragment,
-                PhotoListFragmentArgs.Builder(collection.id.toString()).build().toBundle()
+                PhotoListFragmentArgs.Builder(collection.id.toString(), collection.title).build().toBundle()
             )
         }
     }

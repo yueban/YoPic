@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
@@ -46,9 +47,19 @@ class PhotoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var collectionTitle: String? = null
         arguments?.let {
-            mCollectionId = PhotoListFragmentArgs.fromBundle(it).collectionId
+            val args = PhotoListFragmentArgs.fromBundle(it)
+            mCollectionId = args.collectionId
+            collectionTitle = args.collectionTitle
         }
+
+        requireActivity().title =
+            if (mCollectionId == null || collectionTitle == null) {
+                getString(R.string.all_photos)
+            } else {
+                collectionTitle
+            }
 
         mPhotoListVM =
             if (mCollectionId == null) {
