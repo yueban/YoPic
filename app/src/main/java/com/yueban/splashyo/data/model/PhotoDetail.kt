@@ -1,7 +1,5 @@
 package com.yueban.splashyo.data.model
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
@@ -12,13 +10,11 @@ import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 /**
- * see also [PhotoDetail]
+ * see also [Photo]
  */
 @Entity
 @Parcelize
-data class Photo(
-    @ColumnInfo(name = "rowid") @PrimaryKey(autoGenerate = true)
-    val rowId: Int,
+data class PhotoDetail(
     @SerializedName("sponsored_by") @Embedded(prefix = "sponsor_")
     val sponsoredBy: User?,
     @SerializedName("color") @ColumnInfo(name = "color")
@@ -41,7 +37,7 @@ data class Photo(
     val width: Int = 0,
     @SerializedName("links") @Embedded(prefix = "link_")
     val links: Links,
-    @SerializedName("id") @ColumnInfo(name = "id")
+    @SerializedName("id") @ColumnInfo(name = "id") @PrimaryKey
     val id: String = "",
     @SerializedName("user") @Embedded(prefix = "user_")
     val user: User,
@@ -49,39 +45,14 @@ data class Photo(
     val height: Int = 0,
     @SerializedName("likes") @ColumnInfo(name = "likes")
     val likes: Int = 0,
-    /**
-     * 缓存标记，用以区分不同场景下的缓存数据
-     */
-    @ColumnInfo(name = "cache_label")
-    var cacheLabel: String? = ""
-) : Parcelable {
-    val userName: String
-        get() = user.name
-
-    val sponsorName: String
-        get() {
-            return if (sponsored && sponsoredBy != null) {
-                sponsoredBy.name
-            } else {
-                ""
-            }
-        }
-
-    val smallImageUrl: String
-        get() = urls.small
-
-    val normalImageUrl: String
-        get() = urls.regular
-
-    val originImageUrl: String
-        get() = urls.full
-
-    val previewColor: Int?
-        @SuppressLint("Range")
-        get() =
-            if (color.isEmpty()) {
-                null
-            } else {
-                Color.parseColor(color)
-            }
-}
+    @SerializedName("downloads") @ColumnInfo(name = "downloads")
+    val downloads: Int = 0,
+    @SerializedName("location") @Embedded(prefix = "location_")
+    val location: Location,
+    @SerializedName("slug") @ColumnInfo(name = "slug")
+    val slug: String = "",
+    @SerializedName("views") @ColumnInfo(name = "views")
+    val views: Int = 0,
+    @SerializedName("exif") @Embedded(prefix = "exif_")
+    val exif: Exif
+) : Parcelable

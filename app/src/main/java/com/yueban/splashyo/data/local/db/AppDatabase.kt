@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.yueban.splashyo.BuildConfig
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
+import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.util.APP_DATABASE_NAME
 
@@ -20,7 +21,8 @@ import com.yueban.splashyo.util.APP_DATABASE_NAME
     entities = [
         Photo::class,
         PhotoStatistics::class,
-        PhotoCollection::class
+        PhotoCollection::class,
+        PhotoDetail::class
     ],
     version = 1,
     exportSchema = !BuildConfig.isDebug

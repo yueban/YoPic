@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class HistoricalValueItem(
-    @SerializedName("date") @ColumnInfo(name = "date")
-    val date: String = "",
-    @SerializedName("value") @ColumnInfo(name = "value")
-    val value: Int = 0
+data class Position(
+    @SerializedName("latitude") @ColumnInfo(name = "latitude")
+    val latitude: Double = 0.0,
+    @SerializedName("longitude") @ColumnInfo(name = "longitude")
+    val longitude: Double = 0.0
 ) : Parcelable

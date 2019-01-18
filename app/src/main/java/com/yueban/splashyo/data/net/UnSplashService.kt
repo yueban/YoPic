@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.google.gson.GsonBuilder
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
+import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.model.UnSplashKeys
 import com.yueban.splashyo.util.PAGE_SIZE
@@ -39,6 +40,9 @@ interface UnSplashService {
      */
     @GET("photos/{id}/statistics")
     fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): LiveData<ApiResponse<PhotoStatistics>>
+
+    @GET("photos/{id}")
+    fun photoDetail(@Path("id") photoId: String): LiveData<ApiResponse<PhotoDetail>>
 
     @GET("collections")
     fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<PhotoCollection>>>
