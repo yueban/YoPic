@@ -26,8 +26,7 @@ data class UnSplashKeys(val access_key: String, val secret_key: String) {
         private fun getUnSplashKeys(context: Context): UnSplashKeys {
             val inputStream = context.assets.open(UNSPLASH_KEYS_FILENAME)
             val jsonReader = JsonReader(inputStream.reader())
-            val unSplashKeys: UnSplashKeys = Gson().fromJson(jsonReader, UnSplashKeys::class.java)
-            return unSplashKeys
+            return Gson().fromJson(jsonReader, UnSplashKeys::class.java)
         }
     }
 }

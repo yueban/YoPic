@@ -1,10 +1,13 @@
 package com.yueban.splashyo.data.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
+@Parcelize
 data class User(
     @SerializedName("total_photos") @ColumnInfo(name = "total_photos")
     val totalPhotos: Int = 0,
@@ -40,4 +43,4 @@ data class User(
     val instagramUsername: String? = "",
     @SerializedName("username") @ColumnInfo(name = "username")
     val username: String = ""
-)
+) : Parcelable

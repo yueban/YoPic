@@ -1,8 +1,11 @@
 package com.yueban.splashyo.data.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Historical(
     @SerializedName("quantity") @ColumnInfo(name = "quantity")
     val quantity: Int = 0,
@@ -12,4 +15,4 @@ data class Historical(
     val values: List<HistoricalValueItem>?,
     @SerializedName("resolution") @ColumnInfo(name = "resolution")
     val resolution: String = ""
-)
+) : Parcelable

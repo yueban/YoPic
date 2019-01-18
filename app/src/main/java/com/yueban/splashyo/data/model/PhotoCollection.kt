@@ -1,14 +1,17 @@
 package com.yueban.splashyo.data.model
 
 import android.annotation.SuppressLint
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 @Entity(tableName = "collection")
+@Parcelize
 data class PhotoCollection(
     @ColumnInfo(name = "rowid") @PrimaryKey(autoGenerate = true)
     val rowId: Int,
@@ -43,7 +46,7 @@ data class PhotoCollection(
     val publishedAt: Date,
     @SerializedName("user") @Embedded(prefix = "user_")
     val user: User?
-) {
+) : Parcelable {
     val smallCoverImageUrl: String?
         get() = coverPhoto?.urls?.small
 

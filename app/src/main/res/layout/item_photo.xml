@@ -17,6 +17,7 @@
         android:contentDescription="@string/cd_photo_image"
         android:foreground="?attr/selectableItemBackground"
         android:scaleType="centerCrop"
+        android:transitionName="@string/transition_img_photo"
         app:imgUrl="@{photo.smallImageUrl}"
         app:previewColor="@{photo.previewColor}"
         tools:src="#cc000000"/>

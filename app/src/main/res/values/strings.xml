@@ -13,4 +13,8 @@
     <string name="all_collections">All Collections</string>
     <string name="featured">Featured</string>
     <string name="all_photos">All Photos</string>
+    <string name="photo_do_not_exist">photo doesn\'t exist.</string>
+
+    <!-- transition name -->
+    <string name="transition_img_photo">transition_img_photo</string>
 </resources>

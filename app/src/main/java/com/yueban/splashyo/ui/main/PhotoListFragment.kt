@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.ActivityNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +19,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
+import com.yueban.splashyo.ui.detail.PhotoDetailActivityArgs
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.Injection
@@ -127,13 +131,19 @@ class PhotoListFragment : Fragment() {
                 mPhotoListVM.refresh()
             }
         })
-        mAdapter.itemClickListener = { photo ->
-            Snackbar.make(
-                mBinding.root,
-                "userName:${photo.userName}\nlikes:${photo.likes}\nsponsor:${photo.sponsorName}",
-                Snackbar.LENGTH_SHORT
+        mAdapter.itemClickListener = { imageView, photo ->
+            findNavController().navigate(
+                R.id.action_photoListFragment_to_photoDetailActivity,
+                PhotoDetailActivityArgs.Builder(photo).build().toBundle(),
+                null,
+                ActivityNavigatorExtras(
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        imageView,
+                        imageView.transitionName
+                    )
+                )
             )
-                .show()
         }
     }
 

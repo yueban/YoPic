@@ -12,17 +12,20 @@ import com.bumptech.glide.Glide
  */
 object BindingAdapters {
     @JvmStatic
-    @BindingAdapter("imgUrl", "previewColor", requireAll = false)
-    fun displayImage(view: ImageView, url: String?, previewColor: Int?) {
+    @BindingAdapter("imgUrl", "previewUrl", "previewColor", requireAll = false)
+    fun displayImage(view: ImageView, url: String?, previewUrl: String?, previewColor: Int?) {
         if (url.isNullOrEmpty()) {
             Glide.with(view).clear(view)
             view.setImageDrawable(null)
             return
         }
-        if (previewColor == null) {
-            GlideApp.with(view).load(url).into(view)
-        } else {
+
+        if (!previewUrl.isNullOrEmpty()) {
+            GlideApp.with(view).load(url).thumbnail(GlideApp.with(view).load(previewUrl)).into(view)
+        } else if (previewColor != null) {
             GlideApp.with(view).load(url).placeholder(ColorDrawable(previewColor)).into(view)
+        } else {
+            GlideApp.with(view).load(url).into(view)
         }
     }
 }

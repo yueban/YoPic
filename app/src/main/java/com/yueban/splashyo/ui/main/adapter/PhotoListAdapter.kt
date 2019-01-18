@@ -3,6 +3,7 @@ package com.yueban.splashyo.ui.main.adapter
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.databinding.ItemPhotoBinding
@@ -16,9 +17,9 @@ import com.yueban.splashyo.util.BaseBindingListAdapter
  */
 class PhotoListAdapter(
     appExecutors: AppExecutors,
-    spanCount: Int,
-    itemSpacing: Int,
-    var itemClickListener: ((Photo) -> Unit)? = null
+    val spanCount: Int,
+    val itemSpacing: Int,
+    var itemClickListener: ((imgView: ImageView, photo: Photo) -> Unit)? = null
 ) : BaseBindingListAdapter<Photo, ItemPhotoBinding>(
     appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<Photo>() {
@@ -31,9 +32,6 @@ class PhotoListAdapter(
         }
     }
 ) {
-    private val itemWidth =
-        (Resources.getSystem().displayMetrics.widthPixels - (spanCount + 1) * itemSpacing) / spanCount
-
     override fun createBinding(parent: ViewGroup): ItemPhotoBinding {
         val binding = ItemPhotoBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -42,7 +40,7 @@ class PhotoListAdapter(
         )
         binding.root.setOnClickListener {
             binding.photo?.let { photo ->
-                itemClickListener?.invoke(photo)
+                itemClickListener?.invoke(binding.photoImage, photo)
             }
         }
         return binding
@@ -50,6 +48,7 @@ class PhotoListAdapter(
 
     override fun bind(binding: ItemPhotoBinding, item: Photo, payloads: MutableList<Any>) {
         val params = binding.photoImage.layoutParams
+        val itemWidth = (Resources.getSystem().displayMetrics.widthPixels - (spanCount + 1) * itemSpacing) / spanCount
         params.height = itemWidth * item.height / item.width
         binding.photoImage.layoutParams = params
 

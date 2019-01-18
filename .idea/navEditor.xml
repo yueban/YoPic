@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-335" />
-                            <option name="y" value="-95" />
+                            <option name="x" value="-526" />
+                            <option name="y" value="-119" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -29,13 +29,35 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="photoDetailActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-62" />
+                            <option name="y" value="-117" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="photoListFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="y" value="-96" />
+                            <option name="x" value="-300" />
+                            <option name="y" value="-119" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_photoListFragment_to_photoDetailActivity">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

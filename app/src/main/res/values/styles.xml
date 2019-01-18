@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <!--<item name="android:windowSharedElementReenterTransition">@android:transition/move</item>-->
+        <!--<item name="android:windowSharedElementReturnTransition">@android:transition/move</item>-->
+        <item name="android:fragmentSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:fragmentSharedElementReturnTransition">@android:transition/move</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

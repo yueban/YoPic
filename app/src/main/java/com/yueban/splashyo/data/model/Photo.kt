@@ -2,14 +2,17 @@ package com.yueban.splashyo.data.model
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 @Entity
+@Parcelize
 data class Photo(
     @ColumnInfo(name = "rowid") @PrimaryKey(autoGenerate = true)
     val rowId: Int,
@@ -48,7 +51,7 @@ data class Photo(
      */
     @ColumnInfo(name = "cache_label")
     var cacheLabel: String? = ""
-) {
+) : Parcelable {
     val userName: String
         get() = user.name
 

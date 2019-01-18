@@ -28,5 +28,20 @@
             android:name="collectionTitle"
             app:argType="string"
             app:nullable="true"/>
+        <action
+            android:id="@+id/action_photoListFragment_to_photoDetailActivity"
+            app:destination="@id/photoDetailActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
+    <activity
+        android:id="@+id/photoDetailActivity"
+        android:name="com.yueban.splashyo.ui.detail.PhotoDetailActivity"
+        android:label="PhotoDetailActivity">
+        <argument
+            android:name="photo"
+            app:argType="com.yueban.splashyo.data.model.Photo"/>
+    </activity>
 </navigation>
