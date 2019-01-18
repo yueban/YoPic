@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.data.repo.model.Resource
+import com.yueban.splashyo.data.repo.model.Status.CACHE
 import com.yueban.splashyo.data.repo.model.Status.ERROR
 import com.yueban.splashyo.data.repo.model.Status.LOADING
 import com.yueban.splashyo.data.repo.model.Status.SUCCESS
@@ -136,6 +137,8 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                             errorMsg = null
                         )
                     nextPage++
+                }
+                CACHE -> {
                 }
                 ERROR -> {
                     _hasMore = true

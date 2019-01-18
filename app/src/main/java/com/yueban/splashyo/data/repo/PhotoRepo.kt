@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
+import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.net.ApiResponse
 import com.yueban.splashyo.data.net.UnSplashService
@@ -61,28 +62,6 @@ class PhotoRepo(
 
     fun getPhotosFromCache(cacheLabel: String): LiveData<List<Photo>> = photoDao.getPhotos(cacheLabel)
 
-    fun getPhotoStat(photoId: String): LiveData<Resource<PhotoStatistics>> {
-        return object : NetworkBoundResource<PhotoStatistics>(appExecutors) {
-            override fun saveCallResult(data: PhotoStatistics) {
-                Timber.d("photostat from api: $data")
-                photoDao.insertPhotoStatistics(data)
-            }
-
-            override fun shouldFetch(data: PhotoStatistics?): Boolean {
-                Timber.d("photostat from db: $data")
-                return true
-            }
-
-            override fun resultFromCache(): Boolean {
-                return true
-            }
-
-            override fun loadFromCache(): LiveData<PhotoStatistics> = photoDao.getPhotoStatistics(photoId)
-
-            override fun createCall(): LiveData<ApiResponse<PhotoStatistics>> = service.photoStatistics(photoId)
-        }.asLiveData()
-    }
-
     fun getCollections(
         featured: Boolean,
         page: Int,
@@ -121,4 +100,49 @@ class PhotoRepo(
         } else {
             photoDao.getCollections()
         }
+
+    fun getPhotoStat(photoId: String): LiveData<Resource<PhotoStatistics>> {
+        return object : NetworkBoundResource<PhotoStatistics>(appExecutors) {
+            override fun saveCallResult(data: PhotoStatistics) {
+                Timber.d("photostat from api: $data")
+                photoDao.insertPhotoStatistics(data)
+            }
+
+            override fun shouldFetch(data: PhotoStatistics?): Boolean {
+                Timber.d("photostat from db: $data")
+                return true
+            }
+
+            override fun resultFromCache(): Boolean {
+                return true
+            }
+
+            override fun loadFromCache(): LiveData<PhotoStatistics> = photoDao.getPhotoStatistics(photoId)
+
+            override fun createCall(): LiveData<ApiResponse<PhotoStatistics>> = service.photoStatistics(photoId)
+        }.asLiveData()
+    }
+
+    fun getPhotoDetailFromCache(photoId: String): LiveData<PhotoDetail> = photoDao.getPhotoDetail(photoId)
+
+    fun getPhotoDetail(photoId: String): LiveData<Resource<PhotoDetail>> {
+        return object : NetworkBoundResource<PhotoDetail>(appExecutors) {
+            override fun saveCallResult(data: PhotoDetail) {
+                photoDao.insertPhotoDetail(data)
+            }
+
+            override fun shouldFetch(data: PhotoDetail?): Boolean {
+                // TODO(PhotoDetail 添加一个 cacheUpdateTime 字段记录本地缓存更新时间，这里做判断，5分钟内不再请求 api)
+                return true
+            }
+
+            override fun loadFromCache(): LiveData<PhotoDetail> = getPhotoDetailFromCache(photoId)
+
+            override fun resultFromCache(): Boolean = true
+
+            override fun skipCacheResultWhenFetchFromNet(data: PhotoDetail?): Boolean = data == null
+
+            override fun createCall(): LiveData<ApiResponse<PhotoDetail>> = service.photoDetail(photoId)
+        }.asLiveData()
+    }
 }

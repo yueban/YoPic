@@ -48,11 +48,14 @@ data class PhotoDetail(
     @SerializedName("downloads") @ColumnInfo(name = "downloads")
     val downloads: Int = 0,
     @SerializedName("location") @Embedded(prefix = "location_")
-    val location: Location,
+    val location: Location?,
     @SerializedName("slug") @ColumnInfo(name = "slug")
-    val slug: String = "",
+    val slug: String? = "",
     @SerializedName("views") @ColumnInfo(name = "views")
     val views: Int = 0,
     @SerializedName("exif") @Embedded(prefix = "exif_")
-    val exif: Exif
-) : Parcelable
+    val exif: Exif?
+) : Parcelable {
+    val dimensions: String
+        get() = "$width x $height"
+}

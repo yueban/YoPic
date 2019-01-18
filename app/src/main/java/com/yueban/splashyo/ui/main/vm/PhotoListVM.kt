@@ -8,7 +8,10 @@ import androidx.lifecycle.ViewModel
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.data.repo.model.Resource
-import com.yueban.splashyo.data.repo.model.Status
+import com.yueban.splashyo.data.repo.model.Status.CACHE
+import com.yueban.splashyo.data.repo.model.Status.ERROR
+import com.yueban.splashyo.data.repo.model.Status.LOADING
+import com.yueban.splashyo.data.repo.model.Status.SUCCESS
 import com.yueban.splashyo.util.NullLiveData
 import com.yueban.splashyo.util.PAGE_SIZE
 import com.yueban.splashyo.util.vm.LoadState
@@ -118,7 +121,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
             }
 
             when (result.status) {
-                Status.SUCCESS -> {
+                SUCCESS -> {
                     _hasMore =
                         if (result.data == null) {
                             false
@@ -135,7 +138,9 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
                         )
                     nextPage++
                 }
-                Status.ERROR -> {
+                CACHE -> {
+                }
+                ERROR -> {
                     _hasMore = true
                     unregister()
                     loadState.value = LoadState(
@@ -144,7 +149,7 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
                         errorMsg = result.message
                     )
                 }
-                Status.LOADING -> {
+                LOADING -> {
                 }
             }
         }

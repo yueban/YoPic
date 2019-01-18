@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
+import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
 
 /**
@@ -32,12 +33,6 @@ interface PhotoDao {
     fun getPhotos(cacheLabel: String): LiveData<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPhotoStatistics(photoStatistics: PhotoStatistics)
-
-    @Query("select * from photostatistics where id=:photoId limit 1")
-    fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<PhotoCollection>): List<Long>
 
     @Query("select * from collection")
@@ -48,4 +43,16 @@ interface PhotoDao {
 
     @Query("delete from collection")
     fun deleteAllCollections()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPhotoStatistics(photoStatistics: PhotoStatistics)
+
+    @Query("select * from photostatistics where id=:photoId limit 1")
+    fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPhotoDetail(photoDetail: PhotoDetail)
+
+    @Query("select * from photodetail where id=:photoId")
+    fun getPhotoDetail(photoId: String): LiveData<PhotoDetail>
 }

@@ -11,3 +11,5 @@ const val PAGE_SIZE = 30
 
 //2018-09-07T09:31:26-04:00
 const val UNSPLASH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss-XXX"
+
+const val DEFAULT_ERROR_MSG = "unknown error"

@@ -15,6 +15,10 @@ data class Resource<out T>(
             return Resource(Status.SUCCESS, data, null)
         }
 
+        fun <T> cache(data: T?): Resource<T> {
+            return Resource(Status.CACHE, data, null)
+        }
+
         fun <T> error(msg: String, data: T?): Resource<T> {
             return Resource(Status.ERROR, data, msg)
         }

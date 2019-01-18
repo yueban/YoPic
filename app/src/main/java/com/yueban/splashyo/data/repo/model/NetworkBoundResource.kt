@@ -22,6 +22,9 @@ abstract class NetworkBoundResource<Type>
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
             if (shouldFetch(data)) {
+                if (!skipCacheResultWhenFetchFromNet(data)) {
+                    setValue(Resource.cache(data))
+                }
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
@@ -93,6 +96,9 @@ abstract class NetworkBoundResource<Type>
 
     @MainThread
     protected open fun resultFromCache(): Boolean = false
+
+    @MainThread
+    protected open fun skipCacheResultWhenFetchFromNet(data: Type?): Boolean = true
 
     @MainThread
     protected abstract fun saveCallResult(data: Type)

@@ -17,4 +17,14 @@
 
     <!-- transition name -->
     <string name="transition_img_photo">transition_img_photo</string>
+    <string name="views">Views</string>
+    <string name="downloads">Downloads</string>
+    <string name="likes">Likes</string>
+    <string name="camera_make">Camera Make</string>
+    <string name="camera_model">Camera Model</string>
+    <string name="focal_length">Focal Length</string>
+    <string name="aperture">Aperture</string>
+    <string name="shutter_speed">Shutter Speed</string>
+    <string name="iso">ISO</string>
+    <string name="dimensions">Dimensions</string>
 </resources>

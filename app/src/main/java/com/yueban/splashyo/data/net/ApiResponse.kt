@@ -1,5 +1,6 @@
 package com.yueban.splashyo.data.net
 
+import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import retrofit2.Response
 import timber.log.Timber
 import java.util.regex.Pattern
@@ -9,10 +10,10 @@ import java.util.regex.Pattern
  * @date 2018/12/29
  * @email fbzhh007@gmail.com
  */
+
 @Suppress("unused")
 sealed class ApiResponse<T> {
     companion object {
-        private const val DEFAULT_ERROR_MSG = "unknown error"
 
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
             return ApiErrorResponse(error.message ?: DEFAULT_ERROR_MSG)

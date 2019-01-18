@@ -1,6 +1,7 @@
 package com.yueban.splashyo.util
 
 import android.graphics.drawable.ColorDrawable
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -27,5 +28,11 @@ object BindingAdapters {
         } else {
             GlideApp.with(view).load(url).into(view)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("visible")
+    fun visible(view: View, visible: Boolean) {
+        view.visibility = if (visible) View.VISIBLE else View.GONE
     }
 }

@@ -7,6 +7,10 @@ package com.yueban.splashyo.data.repo.model
  */
 enum class Status {
     SUCCESS,
+    /**
+     * appears only when there is a api request. if there's no api request, the cache data will return as a [SUCCESS] status
+     */
+    CACHE,
     ERROR,
     LOADING,
 }
