@@ -4,18 +4,20 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Entity
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class PhotoStatistics(
-    @SerializedName("downloads") @Embedded(prefix = "downloads_")
+    @Json(name = "downloads") @Embedded(prefix = "downloads_")
     val downloads: PhotoStatisticsItem,
-    @SerializedName("id") @PrimaryKey
+    @Json(name = "id") @PrimaryKey
     val id: String = "",
-    @SerializedName("views") @Embedded(prefix = "views_")
+    @Json(name = "views") @Embedded(prefix = "views_")
     val views: PhotoStatisticsItem,
-    @SerializedName("likes") @Embedded(prefix = "likes_")
+    @Json(name = "likes") @Embedded(prefix = "likes_")
     val likes: PhotoStatisticsItem
 ) : Parcelable

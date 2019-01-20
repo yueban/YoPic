@@ -1,12 +1,15 @@
 package com.yueban.splashyo.util
 
 import android.content.Context
+import com.squareup.moshi.Moshi
 import com.yueban.splashyo.data.local.db.AppDatabase
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
 import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
 import com.yueban.splashyo.ui.main.vm.PhotoListVMFactory
+import com.yueban.splashyo.util.moshi.ApplicationJsonAdapterFactory
+import com.yueban.splashyo.util.moshi.MoshiDateConverter
 
 /**
  * TODO(make members singleton by dagger2)
@@ -32,4 +35,9 @@ object Injection {
     private fun provideService(context: Context) = UnSplashService.create(context)
 
     fun provideAppExecutors() = AppExecutors.getInstance()
+
+    fun provideMoshi() = Moshi.Builder()
+        .add(MoshiDateConverter())
+        .add(ApplicationJsonAdapterFactory.INSTANCE)
+        .build()
 }

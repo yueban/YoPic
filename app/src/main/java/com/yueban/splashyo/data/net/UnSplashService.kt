@@ -2,18 +2,17 @@ package com.yueban.splashyo.data.net
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.google.gson.GsonBuilder
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.model.UnSplashKeys
+import com.yueban.splashyo.util.Injection
 import com.yueban.splashyo.util.PAGE_SIZE
-import com.yueban.splashyo.util.UNSPLASH_DATE_FORMAT
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -71,7 +70,7 @@ interface UnSplashService {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat(UNSPLASH_DATE_FORMAT).create()))
+                .addConverterFactory(MoshiConverterFactory.create(Injection.provideMoshi()))
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .build()
                 .create(UnSplashService::class.java)

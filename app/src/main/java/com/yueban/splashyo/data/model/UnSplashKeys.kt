@@ -1,16 +1,25 @@
 package com.yueban.splashyo.data.model
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.stream.JsonReader
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonReader
+import com.yueban.splashyo.util.Injection
 import com.yueban.splashyo.util.UNSPLASH_KEYS_FILENAME
+import okio.Buffer
 
 /**
  * @author yueban
  * @date 2018/12/24
  * @email fbzhh007@gmail.com
  */
-data class UnSplashKeys(val access_key: String, val secret_key: String) {
+@JsonClass(generateAdapter = true)
+data class UnSplashKeys(
+    @Json(name = "access_key")
+    val access_key: String,
+    @Json(name = "secret_key")
+    val secret_key: String
+) {
     companion object {
         @Volatile
         private var instance: UnSplashKeys? = null
@@ -25,8 +34,9 @@ data class UnSplashKeys(val access_key: String, val secret_key: String) {
 
         private fun getUnSplashKeys(context: Context): UnSplashKeys {
             val inputStream = context.assets.open(UNSPLASH_KEYS_FILENAME)
-            val jsonReader = JsonReader(inputStream.reader())
-            return Gson().fromJson(jsonReader, UnSplashKeys::class.java)
+            val jsonReader = JsonReader.of(Buffer().readFrom(inputStream))
+            val adapter = Injection.provideMoshi().adapter<UnSplashKeys>(UnSplashKeys::class.java)
+            return adapter.fromJson(jsonReader)!!
         }
     }
 }

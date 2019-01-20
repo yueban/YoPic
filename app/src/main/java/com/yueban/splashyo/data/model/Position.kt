@@ -2,13 +2,15 @@ package com.yueban.splashyo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class Position(
-    @SerializedName("latitude") @ColumnInfo(name = "latitude")
+    @Json(name = "latitude") @ColumnInfo(name = "latitude")
     val latitude: Double = 0.0,
-    @SerializedName("longitude") @ColumnInfo(name = "longitude")
+    @Json(name = "longitude") @ColumnInfo(name = "longitude")
     val longitude: Double = 0.0
 ) : Parcelable

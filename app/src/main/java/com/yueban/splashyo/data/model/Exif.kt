@@ -2,21 +2,23 @@ package com.yueban.splashyo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class Exif(
-    @SerializedName("exposure_time") @ColumnInfo(name = "exposure_time")
+    @Json(name = "exposure_time") @ColumnInfo(name = "exposure_time")
     val exposureTime: String = "",
-    @SerializedName("aperture") @ColumnInfo(name = "aperture")
+    @Json(name = "aperture") @ColumnInfo(name = "aperture")
     val aperture: String = "",
-    @SerializedName("focal_length") @ColumnInfo(name = "focal_length")
+    @Json(name = "focal_length") @ColumnInfo(name = "focal_length")
     val focalLength: String = "",
-    @SerializedName("iso") @ColumnInfo(name = "iso")
+    @Json(name = "iso") @ColumnInfo(name = "iso")
     val iso: Int = 0,
-    @SerializedName("model") @ColumnInfo(name = "model")
+    @Json(name = "model") @ColumnInfo(name = "model")
     val model: String = "",
-    @SerializedName("make") @ColumnInfo(name = "make")
+    @Json(name = "make") @ColumnInfo(name = "make")
     val make: String = ""
 ) : Parcelable

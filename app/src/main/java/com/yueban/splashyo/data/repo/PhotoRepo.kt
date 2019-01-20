@@ -132,7 +132,11 @@ class PhotoRepo(
             }
 
             override fun shouldFetch(data: PhotoDetail?): Boolean {
-                // TODO(PhotoDetail 添加一个 cacheUpdateTime 字段记录本地缓存更新时间，这里做判断，5分钟内不再请求 api)
+                // cache expired time: 1 minute
+                data?.let {
+                    val timeSpan = System.currentTimeMillis() - it.cacheUpdateAt
+                    return timeSpan > 1000 * 60
+                }
                 return true
             }
 

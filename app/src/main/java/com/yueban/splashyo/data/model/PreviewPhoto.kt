@@ -3,13 +3,15 @@ package com.yueban.splashyo.data.model
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class PreviewPhoto(
-    @SerializedName("urls") @Embedded(prefix = "urls")
+    @Json(name = "urls") @Embedded(prefix = "urls")
     val urls: Urls,
-    @SerializedName("id") @ColumnInfo(name = "id")
+    @Json(name = "id") @ColumnInfo(name = "id")
     val id: String = ""
 ) : Parcelable

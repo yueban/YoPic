@@ -1,13 +1,12 @@
 package com.yueban.splashyo.data.local.db
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.yueban.splashyo.data.model.HistoricalValueItem
 import com.yueban.splashyo.data.model.PreviewPhoto
 import com.yueban.splashyo.data.model.TagItem
-import com.yueban.splashyo.util.UNSPLASH_DATE_FORMAT
+import com.yueban.splashyo.util.Injection
 import java.util.Date
 
 /**
@@ -16,7 +15,7 @@ import java.util.Date
  * @email fbzhh007@gmail.com
  */
 class Converters {
-    private val gson: Gson = GsonBuilder().setDateFormat(UNSPLASH_DATE_FORMAT).create()
+    private val moshi: Moshi = Injection.provideMoshi()
 
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
@@ -30,7 +29,13 @@ class Converters {
 
     @TypeConverter
     fun historicalValueItemListToString(data: List<HistoricalValueItem>?): String? {
-        return gson.toJson(data)
+        val adapter = moshi.adapter<List<HistoricalValueItem>>(
+            Types.newParameterizedType(
+                List::class.java,
+                HistoricalValueItem::class.java
+            )
+        )
+        return adapter.toJson(data)
     }
 
     @TypeConverter
@@ -39,13 +44,19 @@ class Converters {
             return emptyList()
         }
 
-        val listType = object : TypeToken<List<HistoricalValueItem>>() {}.type
-        return gson.fromJson(data, listType)
+        val adapter = moshi.adapter<List<HistoricalValueItem>>(
+            Types.newParameterizedType(
+                List::class.java,
+                HistoricalValueItem::class.java
+            )
+        )
+        return adapter.fromJsonValue(data)
     }
 
     @TypeConverter
     fun tagItemListToString(data: List<TagItem>?): String? {
-        return gson.toJson(data)
+        val adapter = moshi.adapter<List<TagItem>>(Types.newParameterizedType(List::class.java, TagItem::class.java))
+        return adapter.toJson(data)
     }
 
     @TypeConverter
@@ -54,13 +65,15 @@ class Converters {
             return emptyList()
         }
 
-        val listType = object : TypeToken<List<TagItem>>() {}.type
-        return gson.fromJson(data, listType)
+        val adapter = moshi.adapter<List<TagItem>>(Types.newParameterizedType(List::class.java, TagItem::class.java))
+        return adapter.fromJson(data)
     }
 
     @TypeConverter
     fun previewPhotoListToString(data: List<PreviewPhoto>?): String? {
-        return gson.toJson(data)
+        val adapter =
+            moshi.adapter<List<PreviewPhoto>>(Types.newParameterizedType(List::class.java, PreviewPhoto::class.java))
+        return adapter.toJson(data)
     }
 
     @TypeConverter
@@ -69,7 +82,8 @@ class Converters {
             return emptyList()
         }
 
-        val listType = object : TypeToken<List<PreviewPhoto>>() {}.type
-        return gson.fromJson(data, listType)
+        val adapter =
+            moshi.adapter<List<PreviewPhoto>>(Types.newParameterizedType(List::class.java, PreviewPhoto::class.java))
+        return adapter.fromJson(data)
     }
 }

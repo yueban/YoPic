@@ -2,19 +2,21 @@ package com.yueban.splashyo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class Urls(
-    @SerializedName("small") @ColumnInfo(name = "small")
+    @Json(name = "small") @ColumnInfo(name = "small")
     val small: String = "",
-    @SerializedName("thumb") @ColumnInfo(name = "thumb")
+    @Json(name = "thumb") @ColumnInfo(name = "thumb")
     val thumb: String = "",
-    @SerializedName("raw") @ColumnInfo(name = "raw")
+    @Json(name = "raw") @ColumnInfo(name = "raw")
     val raw: String = "",
-    @SerializedName("regular") @ColumnInfo(name = "regular")
+    @Json(name = "regular") @ColumnInfo(name = "regular")
     val regular: String = "",
-    @SerializedName("full") @ColumnInfo(name = "full")
+    @Json(name = "full") @ColumnInfo(name = "full")
     val full: String = ""
 ) : Parcelable

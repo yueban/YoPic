@@ -2,11 +2,13 @@ package com.yueban.splashyo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class TagItem(
-    @SerializedName("title") @ColumnInfo(name = "title")
+    @Json(name = "title") @ColumnInfo(name = "title")
     val title: String = ""
 ) : Parcelable

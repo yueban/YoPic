@@ -3,44 +3,46 @@ package com.yueban.splashyo.data.model
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class User(
-    @SerializedName("total_photos") @ColumnInfo(name = "total_photos")
+    @Json(name = "total_photos") @ColumnInfo(name = "total_photos")
     val totalPhotos: Int = 0,
-    @SerializedName("accepted_tos") @ColumnInfo(name = "accepted_tos")
+    @Json(name = "accepted_tos") @ColumnInfo(name = "accepted_tos")
     val acceptedTos: Boolean = false,
-    @SerializedName("twitter_username") @ColumnInfo(name = "twitter_username")
+    @Json(name = "twitter_username") @ColumnInfo(name = "twitter_username")
     val twitterUsername: String? = "",
-    @SerializedName("last_name") @ColumnInfo(name = "last_name")
+    @Json(name = "last_name") @ColumnInfo(name = "last_name")
     val lastName: String? = "",
-    @SerializedName("bio") @ColumnInfo(name = "bio")
+    @Json(name = "bio") @ColumnInfo(name = "bio")
     val bio: String? = "",
-    @SerializedName("total_likes") @ColumnInfo(name = "total_likes")
+    @Json(name = "total_likes") @ColumnInfo(name = "total_likes")
     val totalLikes: Int = 0,
-    @SerializedName("portfolio_url") @ColumnInfo(name = "portfolio_url")
+    @Json(name = "portfolio_url") @ColumnInfo(name = "portfolio_url")
     val portfolioUrl: String? = "",
-    @SerializedName("profile_image") @Embedded(prefix = "profile_image_")
+    @Json(name = "profile_image") @Embedded(prefix = "profile_image_")
     val profileImage: ProfileImage,
-    @SerializedName("updated_at") @ColumnInfo(name = "updated_at")
+    @Json(name = "updated_at") @ColumnInfo(name = "updated_at")
     val updatedAt: Date,
-    @SerializedName("name") @ColumnInfo(name = "name")
+    @Json(name = "name") @ColumnInfo(name = "name")
     val name: String = "",
-    @SerializedName("location") @ColumnInfo(name = "location")
+    @Json(name = "location") @ColumnInfo(name = "location")
     val location: String? = "",
-    @SerializedName("links") @Embedded(prefix = "link_")
+    @Json(name = "links") @Embedded(prefix = "link_")
     val links: Links,
-    @SerializedName("total_collections") @ColumnInfo(name = "total_collections")
+    @Json(name = "total_collections") @ColumnInfo(name = "total_collections")
     val totalCollections: Int = 0,
-    @SerializedName("id") @ColumnInfo(name = "id")
+    @Json(name = "id") @ColumnInfo(name = "id")
     val id: String = "",
-    @SerializedName("first_name") @ColumnInfo(name = "first_name")
+    @Json(name = "first_name") @ColumnInfo(name = "first_name")
     val firstName: String? = "",
-    @SerializedName("instagram_username") @ColumnInfo(name = "instagram_username")
+    @Json(name = "instagram_username") @ColumnInfo(name = "instagram_username")
     val instagramUsername: String? = "",
-    @SerializedName("username") @ColumnInfo(name = "username")
+    @Json(name = "username") @ColumnInfo(name = "username")
     val username: String = ""
 ) : Parcelable

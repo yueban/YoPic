@@ -2,15 +2,17 @@ package com.yueban.splashyo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class ProfileImage(
-    @SerializedName("small") @ColumnInfo(name = "small")
+    @Json(name = "small") @ColumnInfo(name = "small")
     val small: String = "",
-    @SerializedName("large") @ColumnInfo(name = "large")
+    @Json(name = "large") @ColumnInfo(name = "large")
     val large: String = "",
-    @SerializedName("medium") @ColumnInfo(name = "medium")
+    @Json(name = "medium") @ColumnInfo(name = "medium")
     val medium: String = ""
 ) : Parcelable
