@@ -10,15 +10,15 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Exif(
     @Json(name = "exposure_time") @ColumnInfo(name = "exposure_time")
-    val exposureTime: String = "",
+    val exposureTime: String? = "",
     @Json(name = "aperture") @ColumnInfo(name = "aperture")
-    val aperture: String = "",
+    val aperture: String? = "",
     @Json(name = "focal_length") @ColumnInfo(name = "focal_length")
-    val focalLength: String = "",
+    val focalLength: String? = "",
     @Json(name = "iso") @ColumnInfo(name = "iso")
-    val iso: Int = 0,
+    val iso: Int? = 0,
     @Json(name = "model") @ColumnInfo(name = "model")
-    val model: String = "",
+    val model: String? = "",
     @Json(name = "make") @ColumnInfo(name = "make")
-    val make: String = ""
+    val make: String? = ""
 ) : Parcelable
