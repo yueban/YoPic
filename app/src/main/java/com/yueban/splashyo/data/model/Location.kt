@@ -11,13 +11,13 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Location(
     @Json(name = "country") @ColumnInfo(name = "country")
-    val country: String = "",
+    val country: String? = "",
     @Json(name = "city") @ColumnInfo(name = "city")
     val city: String? = null,
     @Json(name = "name") @ColumnInfo(name = "name")
-    val name: String = "",
+    val name: String? = "",
     @Json(name = "position") @Embedded(prefix = "position_")
-    val position: Position,
+    val position: Position?,
     @Json(name = "title") @ColumnInfo(name = "title")
-    val title: String = ""
+    val title: String? = ""
 ) : Parcelable
