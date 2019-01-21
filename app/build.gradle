@@ -12,7 +12,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -27,10 +27,14 @@ android {
     androidExtensions {
         experimental = true
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
     buildTypes {
         debug {
             buildConfigField 'boolean', 'isDebug', 'true'
+            minifyEnabled false
         }
         release {
             buildConfigField 'boolean', 'isDebug', 'false'

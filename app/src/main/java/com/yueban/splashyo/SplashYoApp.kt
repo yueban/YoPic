@@ -28,7 +28,7 @@ class SplashYoApp : Application() {
                 MaterialHeader(context)
             }
             //设置全局的Footer构建器
-            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
                 ClassicsFooter(context).setDrawableSize(20f).setFinishDuration(0)
             }
         }

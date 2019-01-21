@@ -204,7 +204,7 @@
                         style="@style/Text.SubTitle.Camera_Info_Label"/>
 
                     <TextView
-                        android:text="@{String.valueOf(photoDetail.exif.iso)}"
+                        android:text="@{String.valueOf(safeUnbox(photoDetail.exif.iso))}"
                         tools:text="400"
                         style="@style/Text.SubTitle.Camera_Info_Content"/>
                 </LinearLayout>
