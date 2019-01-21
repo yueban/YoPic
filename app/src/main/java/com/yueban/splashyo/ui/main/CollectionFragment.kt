@@ -102,8 +102,10 @@ class CollectionFragment : Fragment() {
         })
         mAdapter.itemClickListener = { collection ->
             findNavController().navigate(
-                R.id.action_collectionFragment_to_photoListFragment,
-                PhotoListFragmentArgs.Builder(collection.id.toString(), collection.title).build().toBundle()
+                CollectionFragmentDirections.actionCollectionFragmentToPhotoListFragment(
+                    collection.id.toString(),
+                    collection.title
+                )
             )
         }
     }

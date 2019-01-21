@@ -2,6 +2,7 @@ package com.yueban.splashyo.ui.detail
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
@@ -45,6 +46,10 @@ class PhotoDetailActivity : AppCompatActivity() {
 
         //set view
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_photo_detail)
+        setSupportActionBar(mBinding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         mBinding.photoImage.updateLayoutParams {
             height = Resources.getSystem().displayMetrics.widthPixels * mPhoto.height / mPhoto.width
         }
@@ -78,5 +83,15 @@ class PhotoDetailActivity : AppCompatActivity() {
         Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).setAction("retry") {
             mVM.retry()
         }.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

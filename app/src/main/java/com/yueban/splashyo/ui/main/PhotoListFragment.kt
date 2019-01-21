@@ -19,7 +19,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
-import com.yueban.splashyo.ui.detail.PhotoDetailActivityArgs
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.Injection
@@ -133,9 +132,7 @@ class PhotoListFragment : Fragment() {
         })
         mAdapter.itemClickListener = { imageView, photo ->
             findNavController().navigate(
-                R.id.action_photoListFragment_to_photoDetailActivity,
-                PhotoDetailActivityArgs.Builder(photo).build().toBundle(),
-                null,
+                PhotoListFragmentDirections.actionPhotoListFragmentToPhotoDetailActivity(photo),
                 ActivityNavigatorExtras(
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
