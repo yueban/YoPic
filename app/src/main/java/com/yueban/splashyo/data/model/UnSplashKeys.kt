@@ -18,8 +18,16 @@ data class UnSplashKeys(
     @Json(name = "access_key")
     val access_key: String,
     @Json(name = "secret_key")
-    val secret_key: String
+    val secret_key: String,
+    @Json(name = "app_name")
+    val app_name: String
 ) {
+    /**
+     * All links back to Unsplash should use utm parameters in the '?utm_source=your_app_name&utm_medium=referral'
+     */
+    val urlSuffix: String
+        get() = "?utm_source=$app_name&utm_medium=referral"
+
     companion object {
         @Volatile
         private var instance: UnSplashKeys? = null
