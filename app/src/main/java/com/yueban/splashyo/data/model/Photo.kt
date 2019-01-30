@@ -48,7 +48,7 @@ data class Photo(
     @Json(name = "width") @ColumnInfo(name = "width")
     val width: Int = 0,
     @Json(name = "links") @Embedded(prefix = "link_")
-    val links: Links,
+    val links: PhotoLinks,
     @Json(name = "id") @ColumnInfo(name = "id")
     val id: String = "",
     @Json(name = "user") @Embedded(prefix = "user_")
@@ -92,4 +92,8 @@ data class Photo(
             } else {
                 Color.parseColor(color)
             }
+
+    fun resizeUrl(height: Int): String {
+        return "${urls.raw}&fm=jpg&h=$height&q=80&fit=max"
+    }
 }

@@ -49,7 +49,7 @@ data class PhotoCollection(
     @Json(name = "curated") @ColumnInfo(name = "curated")
     val curated: Boolean = false,
     @Json(name = "links") @Embedded(prefix = "links_")
-    val links: Links,
+    val links: PhotoLinks,
     @Json(name = "id") @ColumnInfo(name = "id")
     val id: Int = 0,
     @Json(name = "published_at") @ColumnInfo(name = "published_at")

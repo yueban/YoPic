@@ -28,6 +28,8 @@ buildscript {
         smartRefreshLayoutVerison = '1.1.0-andx-2'
         moshiVersion = '1.8.0'
         kotshiVersion = '1.0.6'
+        floatingactionbuttonVersion = '1.10.1'
+        rxpermissionsVersion = '0.10.2'
     }
     repositories {
         google()
@@ -49,6 +51,7 @@ allprojects {
         google()
         jcenter()
         maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://jitpack.io' }
     }
 }
 

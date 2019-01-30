@@ -16,217 +16,245 @@
             type="com.yueban.splashyo.data.model.PhotoDetail"/>
     </data>
 
-    <ScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                tools:ignore="MissingConstraints"
-                style="@style/Toolbar"/>
-
-            <ImageView
-                android:id="@+id/photo_image"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_photo_image"
-                android:scaleType="centerCrop"
-                android:transitionName="@string/transition_img_photo"
-                app:imgUrl="@{photo.normalImageUrl}"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:previewUrl="@{photo.smallImageUrl}"
-                tools:layout_height="240dp"/>
-
-            <!-- photo statistic info -->
-            <LinearLayout
-                android:id="@+id/layout_views"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/layout_downloads"
-                app:layout_constraintTop_toBottomOf="@id/photo_image"
-                style="@style/Layout_Item_PhotoDetail_Stat">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/views"
-                    style="@style/Text.SubTitle"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(photoDetail.views)}"
-                    tools:text="775"
-                    style="@style/Text.Title.PhotoDetail_Stat"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_downloads"
-                app:layout_constraintBottom_toBottomOf="@id/layout_views"
-                app:layout_constraintLeft_toRightOf="@id/layout_views"
-                app:layout_constraintRight_toLeftOf="@id/layout_likes"
-                app:layout_constraintTop_toTopOf="@id/layout_views"
-                style="@style/Layout_Item_PhotoDetail_Stat">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/downloads"
-                    style="@style/Text.SubTitle"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(photoDetail.downloads)}"
-                    tools:text="775"
-                    style="@style/Text.Title.PhotoDetail_Stat"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_likes"
-                app:layout_constraintBottom_toBottomOf="@id/layout_views"
-                app:layout_constraintLeft_toRightOf="@id/layout_downloads"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/layout_views"
-                style="@style/Layout_Item_PhotoDetail_Stat">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/likes"
-                    style="@style/Text.SubTitle"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(photoDetail.likes)}"
-                    tools:text="775"
-                    style="@style/Text.Title.PhotoDetail_Stat"/>
-            </LinearLayout>
-
-            <View
-                android:id="@+id/photo_stat_divider"
-                android:layout_width="0dp"
-                android:layout_height="1px"
-                android:background="@android:color/white"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_views"
-                app:visible="@{photoDetail.exif != null}"/>
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="6dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/photo_stat_divider"
-                app:visible="@{photoDetail.exif != null}">
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/photo_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/cd_photo_image"
+                    android:scaleType="centerCrop"
+                    android:transitionName="@string/transition_img_photo"
+                    app:imgUrl="@{photo.normalImageUrl}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:previewUrl="@{photo.smallImageUrl}"
+                    tools:layout_height="240dp"/>
+
+                <!-- photo statistic info -->
                 <LinearLayout
-                    app:visible="@{photoDetail.exif.make != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+                    android:id="@+id/layout_views"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/layout_downloads"
+                    app:layout_constraintTop_toBottomOf="@id/photo_image"
+                    style="@style/Layout_Item_PhotoDetail_Stat">
 
                     <TextView
-                        android:text="@string/camera_make"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/views"
+                        style="@style/Text.SubTitle"/>
 
                     <TextView
-                        android:text="@{photoDetail.exif.make}"
-                        tools:text="NIKON CORPORATION"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.valueOf(photoDetail.views)}"
+                        tools:text="775"
+                        style="@style/Text.Title.PhotoDetail_Stat"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    app:visible="@{photoDetail.exif.model != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+                    android:id="@+id/layout_downloads"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_views"
+                    app:layout_constraintLeft_toRightOf="@id/layout_views"
+                    app:layout_constraintRight_toLeftOf="@id/layout_likes"
+                    app:layout_constraintTop_toTopOf="@id/layout_views"
+                    style="@style/Layout_Item_PhotoDetail_Stat">
 
                     <TextView
-                        android:text="@string/camera_model"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/downloads"
+                        style="@style/Text.SubTitle"/>
 
                     <TextView
-                        android:text="@{photoDetail.exif.model}"
-                        tools:text="NIKON D7100"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.valueOf(photoDetail.downloads)}"
+                        tools:text="775"
+                        style="@style/Text.Title.PhotoDetail_Stat"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    app:visible="@{photoDetail.exif.focalLength != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+                    android:id="@+id/layout_likes"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_views"
+                    app:layout_constraintLeft_toRightOf="@id/layout_downloads"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/layout_views"
+                    style="@style/Layout_Item_PhotoDetail_Stat">
 
                     <TextView
-                        android:text="@string/focal_length"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/likes"
+                        style="@style/Text.SubTitle"/>
 
                     <TextView
-                        android:text="@{photoDetail.exif.focalLength}"
-                        tools:ignore="InOrMmUsage"
-                        tools:text="18.0mm"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.valueOf(photoDetail.likes)}"
+                        tools:text="775"
+                        style="@style/Text.Title.PhotoDetail_Stat"/>
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/photo_stat_divider"
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:background="@android:color/white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_views"
+                    app:visible="@{photoDetail.exif != null}"/>
 
                 <LinearLayout
-                    app:visible="@{photoDetail.exif.aperture != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="6dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/photo_stat_divider"
+                    app:visible="@{photoDetail.exif != null}">
 
-                    <TextView
-                        android:text="@string/aperture"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.make != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
 
-                    <TextView
-                        android:text="@{photoDetail.exif.aperture}"
-                        tools:text="ƒ/3.5"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
+                        <TextView
+                            android:text="@string/camera_make"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.exif.make}"
+                            tools:text="NIKON CORPORATION"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.model != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/camera_model"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.exif.model}"
+                            tools:text="NIKON D7100"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.focalLength != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/focal_length"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.exif.focalLength}"
+                            tools:ignore="InOrMmUsage"
+                            tools:text="18.0mm"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.aperture != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/aperture"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.exif.aperture}"
+                            tools:text="ƒ/3.5"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.exposureTime != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/shutter_speed"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.exif.exposureTime}"
+                            tools:text="1/80s"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:visible="@{photoDetail.exif.iso != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/iso"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{String.valueOf(safeUnbox(photoDetail.exif.iso))}"
+                            tools:text="400"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <TextView
+                            android:text="@string/dimensions"
+                            style="@style/Text.SubTitle.Camera_Info_Label"/>
+
+                        <TextView
+                            android:text="@{photoDetail.dimensions}"
+                            tools:text="4000 × 6000"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
                 </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
-                <LinearLayout
-                    app:visible="@{photoDetail.exif.exposureTime != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Toolbar.Coordinator"/>
 
-                    <TextView
-                        android:text="@string/shutter_speed"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fab_menu"
+            android:layout_gravity="end|bottom"
+            app:layout_behavior="com.yueban.splashyo.util.ui.FABBehaviorImpl"
+            style="@style/Fab.Menu">
 
-                    <TextView
-                        android:text="@{photoDetail.exif.exposureTime}"
-                        tools:text="1/80s"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
-                </LinearLayout>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_share"
+                app:fab_title="share"
+                style="@style/Fab.Button"/>
 
-                <LinearLayout
-                    app:visible="@{photoDetail.exif.iso != null}"
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_download"
+                app:fab_title="download"
+                style="@style/Fab.Button"/>
 
-                    <TextView
-                        android:text="@string/iso"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
-
-                    <TextView
-                        android:text="@{String.valueOf(safeUnbox(photoDetail.exif.iso))}"
-                        tools:text="400"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/Layout_Item_PhotoDetail_Camera_Info">
-
-                    <TextView
-                        android:text="@string/dimensions"
-                        style="@style/Text.SubTitle.Camera_Info_Label"/>
-
-                    <TextView
-                        android:text="@{photoDetail.dimensions}"
-                        tools:text="4000 × 6000"
-                        style="@style/Text.SubTitle.Camera_Info_Content"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_set_as_background"
+                app:fab_title="set as background"
+                style="@style/Fab.Button"/>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

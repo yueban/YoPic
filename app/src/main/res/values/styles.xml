@@ -21,14 +21,21 @@
     </style>
 
     <style name="Toolbar">
-        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="Toolbar.Constraint">
+        <item name="android:layout_width">0dp</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
         <item name="layout_constraintRight_toRightOf">parent</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="Toolbar.Coordinator">
+        <item name="android:layout_width">match_parent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -87,5 +94,24 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Fab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="fab_colorNormal">@color/colorPrimary</item>
+        <item name="fab_colorPressed">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Fab.Menu">
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="fab_addButtonPlusIconColor">@color/colorPrimary</item>
+        <item name="fab_labelsPosition">left</item>
+    </style>
+
+    <style name="Fab.Button">
+        <item name="fab_size">mini</item>
     </style>
 </resources>

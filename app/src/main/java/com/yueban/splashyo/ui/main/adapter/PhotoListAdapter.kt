@@ -1,6 +1,5 @@
 package com.yueban.splashyo.ui.main.adapter
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,6 +8,7 @@ import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.databinding.ItemPhotoBinding
 import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.BaseBindingListAdapter
+import com.yueban.splashyo.util.screenWidth
 
 /**
  * @author yueban
@@ -48,7 +48,7 @@ class PhotoListAdapter(
 
     override fun bind(binding: ItemPhotoBinding, item: Photo, payloads: MutableList<Any>) {
         val params = binding.photoImage.layoutParams
-        val itemWidth = (Resources.getSystem().displayMetrics.widthPixels - (spanCount + 1) * itemSpacing) / spanCount
+        val itemWidth = (screenWidth - (spanCount + 1) * itemSpacing) / spanCount
         params.height = itemWidth * item.height / item.width
         binding.photoImage.layoutParams = params
 

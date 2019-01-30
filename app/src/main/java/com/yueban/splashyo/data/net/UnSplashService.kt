@@ -16,6 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 /**
  * @author yueban
@@ -49,12 +50,18 @@ interface UnSplashService {
     @GET("collections/featured")
     fun collectionsFeatured(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<PhotoCollection>>>
 
+    /**
+     * As it declared in UnSplash API guidelines: When your application performs something similar to a download (like when a user chooses the image to include in a blog post, set as a header, etc.), you must send a request to the download endpoint returned under the photo.links.download_location property.
+     */
+    @GET
+    fun requestDownloadLocation(@Url download_location: String): LiveData<ApiResponse<Any>>
+
     companion object {
         private const val BASE_URL = "https://api.unsplash.com/"
 
         fun create(context: Context): UnSplashService {
             val logger = HttpLoggingInterceptor()
-            logger.level = HttpLoggingInterceptor.Level.BASIC
+            logger.level = HttpLoggingInterceptor.Level.BODY
 
             val unSplashKeys = UnSplashKeys.getInstance(context)
             val client = OkHttpClient.Builder()

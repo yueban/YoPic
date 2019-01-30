@@ -9,6 +9,7 @@ import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.net.ApiResponse
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.model.NetworkBoundResource
+import com.yueban.splashyo.data.repo.model.NetworkResource
 import com.yueban.splashyo.data.repo.model.Resource
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.AppExecutors
@@ -147,6 +148,12 @@ class PhotoRepo(
             override fun skipCacheResultWhenFetchFromNet(data: PhotoDetail?): Boolean = data == null
 
             override fun createCall(): LiveData<ApiResponse<PhotoDetail>> = service.photoDetail(photoId)
+        }.asLiveData()
+    }
+
+    fun requestDownloadLocation(downloadLocation: String): LiveData<Resource<Any>> {
+        return object : NetworkResource<Any>(appExecutors) {
+            override fun createCall(): LiveData<ApiResponse<Any>> = service.requestDownloadLocation(downloadLocation)
         }.asLiveData()
     }
 }

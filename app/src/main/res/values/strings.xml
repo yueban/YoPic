@@ -27,4 +27,7 @@
     <string name="shutter_speed">Shutter Speed</string>
     <string name="iso">ISO</string>
     <string name="dimensions">Dimensions</string>
+    <string name="downloading_fitted_wallpaper">正在下载合适尺寸的壁纸</string>
+    <string name="set_wallpaper_success">设置壁纸成功</string>
+    <string name="retry">重试</string>
 </resources>

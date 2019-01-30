@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Position(
     @Json(name = "latitude") @ColumnInfo(name = "latitude")
-    val latitude: Double = 0.0,
+    val latitude: Double? = 0.0,
     @Json(name = "longitude") @ColumnInfo(name = "longitude")
-    val longitude: Double = 0.0
+    val longitude: Double? = 0.0
 ) : Parcelable

@@ -20,7 +20,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 tools:ignore="MissingConstraints"
-                style="@style/Toolbar"/>
+                style="@style/Toolbar.Constraint"/>
 
             <fragment
                 android:id="@+id/nav_host_fragment"

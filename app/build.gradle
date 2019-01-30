@@ -78,4 +78,6 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.moshiVersion"
     implementation "se.ansman.kotshi:api:$rootProject.kotshiVersion"
     kapt "se.ansman.kotshi:compiler:$rootProject.kotshiVersion"
+    implementation "com.getbase:floatingactionbutton:$rootProject.floatingactionbuttonVersion"
+    implementation "com.github.tbruyelle:rxpermissions:${rootProject.rxpermissionsVersion}"
 }

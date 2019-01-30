@@ -41,7 +41,7 @@ data class PhotoDetail(
     @Json(name = "width") @ColumnInfo(name = "width")
     val width: Int = 0,
     @Json(name = "links") @Embedded(prefix = "link_")
-    val links: Links,
+    val links: PhotoLinks,
     @Json(name = "id") @ColumnInfo(name = "id") @PrimaryKey
     val id: String = "",
     @Json(name = "user") @Embedded(prefix = "user_")

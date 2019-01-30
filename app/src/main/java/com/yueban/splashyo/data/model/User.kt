@@ -34,7 +34,7 @@ data class User(
     @Json(name = "location") @ColumnInfo(name = "location")
     val location: String? = "",
     @Json(name = "links") @Embedded(prefix = "link_")
-    val links: Links,
+    val links: UserLinks,
     @Json(name = "total_collections") @ColumnInfo(name = "total_collections")
     val totalCollections: Int = 0,
     @Json(name = "id") @ColumnInfo(name = "id")

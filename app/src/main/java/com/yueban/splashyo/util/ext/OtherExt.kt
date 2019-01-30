@@ -1,7 +1,7 @@
 package com.yueban.splashyo.util.ext
 
-import android.content.res.Resources
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.yueban.splashyo.util.displayMetrics
 
 /**
  * @author yueban
@@ -26,10 +26,10 @@ fun SmartRefreshLayout.autoAnimationOnly(refresh: Boolean = false, loadMore: Boo
     }
 }
 
-fun Float.toDp(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+fun Float.toDp(): Int = (this * displayMetrics.density).toInt()
 
-fun Float.toPx(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
+fun Float.toPx(): Int = (this / displayMetrics.density).toInt()
 
-fun Int.toDp(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+fun Int.toDp(): Int = (this * displayMetrics.density).toInt()
 
-fun Int.toPx(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
+fun Int.toPx(): Int = (this / displayMetrics.density).toInt()
