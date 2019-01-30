@@ -197,7 +197,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun showSetWallpaperError(errorMsg: String? = DEFAULT_ERROR_MSG) {
         val msg = errorMsg ?: DEFAULT_ERROR_MSG
         Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).setAction(getString(R.string.retry)) {
-            mVM.retryDownload()
+            mVM.retryRequestWallpaper()
         }.show()
     }
 
