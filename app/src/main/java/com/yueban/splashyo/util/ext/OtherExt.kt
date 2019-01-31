@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.yueban.splashyo.util.ext
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout

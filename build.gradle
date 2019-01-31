@@ -30,6 +30,7 @@ buildscript {
         kotshiVersion = '1.0.6'
         floatingactionbuttonVersion = '1.10.1'
         rxpermissionsVersion = '0.10.2'
+        daggerVersion = '2.21'
     }
     repositories {
         google()

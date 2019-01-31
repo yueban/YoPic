@@ -13,14 +13,18 @@ import com.yueban.splashyo.data.repo.model.NetworkResource
 import com.yueban.splashyo.data.repo.model.Resource
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.AppExecutors
+import com.yueban.splashyo.util.di.scope.AppScope
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * @author yueban
  * @date 2018/12/30
  * @email fbzhh007@gmail.com
  */
-class PhotoRepo(
+@AppScope
+class PhotoRepo
+@Inject constructor(
     private val appExecutors: AppExecutors,
     private val photoDao: PhotoDao,
     private val service: UnSplashService

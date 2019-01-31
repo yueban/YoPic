@@ -15,14 +15,18 @@ import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
+import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.databinding.FragmentCollectionBinding
 import com.yueban.splashyo.ui.main.adapter.CollectionAdapter
+import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.CollectionVM
-import com.yueban.splashyo.util.Injection
+import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
+import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
 import com.yueban.splashyo.util.vm.LoadState
+import javax.inject.Inject
 
 /**
  * @author yueban
@@ -33,25 +37,26 @@ class CollectionFragment : Fragment() {
     private lateinit var mBinding: FragmentCollectionBinding
     private lateinit var mAdapter: CollectionAdapter
     private lateinit var mCollectionVM: CollectionVM
+    @Inject
+    lateinit var collectionVMFactory: CollectionVMFactory
+    @Inject
+    lateinit var appExecutors: AppExecutors
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mCollectionVM =
-            ViewModelProviders
-                .of(
-                    requireActivity(),
-                    Injection.provideCollectionVMFactory(requireActivity())
-                )
-                .get(CollectionVM::class.java)
+        mBinding = FragmentCollectionBinding.inflate(inflater, container, false)
+
+        DaggerMainComponent.builder().appComponent((requireActivity().application as SplashYoApp).appComponent).build()
+            .inject(this)
+        mCollectionVM = ViewModelProviders.of(requireActivity(), collectionVMFactory).get(CollectionVM::class.java)
         setHasOptionsMenu(true)
 
-        mBinding = FragmentCollectionBinding.inflate(inflater, container, false)
         return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mAdapter = CollectionAdapter(Injection.provideAppExecutors())
+        mAdapter = CollectionAdapter(appExecutors)
         mBinding.rvCollections.adapter = mAdapter
 
         observeLiveData()

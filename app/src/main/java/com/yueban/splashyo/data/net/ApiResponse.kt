@@ -9,6 +9,7 @@ import retrofit2.Response
  * @email fbzhh007@gmail.com
  */
 
+@Suppress("unused")
 sealed class ApiResponse<T> {
     companion object {
         fun <T> create(error: Throwable): ApiErrorResponse<T> {

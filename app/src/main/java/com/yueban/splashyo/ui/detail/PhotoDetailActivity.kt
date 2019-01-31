@@ -18,19 +18,23 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.yueban.splashyo.R
+import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.data.model.Photo
+import com.yueban.splashyo.data.model.UnSplashKeys
 import com.yueban.splashyo.data.repo.model.Status.CACHE
 import com.yueban.splashyo.data.repo.model.Status.ERROR
 import com.yueban.splashyo.data.repo.model.Status.LOADING
 import com.yueban.splashyo.data.repo.model.Status.SUCCESS
 import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
+import com.yueban.splashyo.ui.detail.di.DaggerPhotoDetailComponent
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
+import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
+import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
-import com.yueban.splashyo.util.Injection
-import com.yueban.splashyo.util.ext.suffixWithUnSplashParams
 import com.yueban.splashyo.util.screenHeight
 import com.yueban.splashyo.util.screenWidth
+import javax.inject.Inject
 
 /**
  * @author yueban
@@ -41,6 +45,12 @@ class PhotoDetailActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityPhotoDetailBinding
     private lateinit var mVM: PhotoDetailVM
     private lateinit var mPhoto: Photo
+    @Inject
+    lateinit var photoDetailVMFactory: PhotoDetailVMFactory
+    @Inject
+    lateinit var appExecutors: AppExecutors
+    @Inject
+    lateinit var unSplashKeys: UnSplashKeys
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +62,12 @@ class PhotoDetailActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        DaggerPhotoDetailComponent.builder().appComponent((application as SplashYoApp).appComponent).build()
+            .inject(this)
+
         mPhoto = PhotoDetailActivityArgs.fromBundle(extras).photo
-        mVM = ViewModelProviders.of(this, Injection.providePhotoDetailVMFactory(this)).get(PhotoDetailVM::class.java)
+        mVM = ViewModelProviders.of(this, photoDetailVMFactory).get(PhotoDetailVM::class.java)
 
         //set view
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_photo_detail)
@@ -65,7 +79,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         mBinding.fabShare.setOnClickListener {
             Intent().apply {
                 action = Intent.ACTION_VIEW
-                data = Uri.parse(mPhoto.links.html.suffixWithUnSplashParams(this@PhotoDetailActivity))
+                data = Uri.parse(mPhoto.links.html + unSplashKeys.urlSuffix)
                 startActivity(this)
             }
 
@@ -143,8 +157,8 @@ class PhotoDetailActivity : AppCompatActivity() {
             }
             when (res.status) {
                 SUCCESS, CACHE -> {
-                    Injection.provideAppExecutors().networkIO().execute {
-                        Injection.provideAppExecutors().mainThread().execute {
+                    appExecutors.networkIO().execute {
+                        appExecutors.mainThread().execute {
                             Snackbar.make(
                                 mBinding.root,
                                 getString(R.string.downloading_fitted_wallpaper),
@@ -159,7 +173,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                         wallpaperManager.setBitmap(bitmap)
                         bitmap.recycle()
 
-                        Injection.provideAppExecutors().mainThread().execute {
+                        appExecutors.mainThread().execute {
                             Snackbar.make(
                                 mBinding.root,
                                 getString(R.string.set_wallpaper_success),

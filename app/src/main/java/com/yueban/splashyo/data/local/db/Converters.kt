@@ -1,12 +1,11 @@
 package com.yueban.splashyo.data.local.db
 
 import androidx.room.TypeConverter
-import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.yueban.splashyo.data.model.HistoricalValueItem
 import com.yueban.splashyo.data.model.PreviewPhoto
 import com.yueban.splashyo.data.model.TagItem
-import com.yueban.splashyo.util.Injection
+import com.yueban.splashyo.util.di.component.BaseComponent
 import java.util.Date
 
 /**
@@ -15,7 +14,7 @@ import java.util.Date
  * @email fbzhh007@gmail.com
  */
 class Converters {
-    private val moshi: Moshi = Injection.provideMoshi()
+    private val moshi = BaseComponent.getInstance().moshi()
 
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {

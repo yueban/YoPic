@@ -17,8 +17,8 @@ import com.yueban.splashyo.util.screenWidth
  */
 class PhotoListAdapter(
     appExecutors: AppExecutors,
-    val spanCount: Int,
-    val itemSpacing: Int,
+    private val spanCount: Int,
+    private val itemSpacing: Int,
     var itemClickListener: ((imgView: ImageView, photo: Photo) -> Unit)? = null
 ) : BaseBindingListAdapter<Photo, ItemPhotoBinding>(
     appExecutors = appExecutors,

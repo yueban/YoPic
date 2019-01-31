@@ -4,6 +4,10 @@ import android.app.Application
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
+import com.yueban.splashyo.util.di.component.AppComponent
+import com.yueban.splashyo.util.di.component.BaseComponent
+import com.yueban.splashyo.util.di.component.DaggerAppComponent
+import com.yueban.splashyo.util.di.module.AppModule
 import timber.log.Timber
 
 /**
@@ -12,11 +16,19 @@ import timber.log.Timber
  * @email fbzhh007@gmail.com
  */
 class SplashYoApp : Application() {
+    lateinit var appComponent: AppComponent
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+        appComponent =
+            DaggerAppComponent.builder()
+                .baseComponent(BaseComponent.getInstance())
+                .appModule(AppModule(this))
+                .build()
     }
 
     companion object {

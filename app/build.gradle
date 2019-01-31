@@ -85,4 +85,6 @@ dependencies {
     kapt "se.ansman.kotshi:compiler:$rootProject.kotshiVersion"
     implementation "com.getbase:floatingactionbutton:$rootProject.floatingactionbuttonVersion"
     implementation "com.github.tbruyelle:rxpermissions:${rootProject.rxpermissionsVersion}"
+    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
+    kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 }

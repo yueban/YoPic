@@ -18,13 +18,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
+import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
+import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
-import com.yueban.splashyo.util.Injection
+import com.yueban.splashyo.ui.main.vm.PhotoListVMFactory
+import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.toPx
+import javax.inject.Inject
 
 /**
  * @author yueban
@@ -41,9 +45,17 @@ class PhotoListFragment : Fragment() {
      * - use viewLifecycleOwner to avoid multiple Observer bindings
      */
     private var mCollectionId: String? = null
+    @Inject
+    lateinit var photoListVMFactory: PhotoListVMFactory
+    @Inject
+    lateinit var appExecutors: AppExecutors
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentPhotoListBinding.inflate(inflater, container, false)
+
+        DaggerMainComponent.builder().appComponent((requireActivity().application as SplashYoApp).appComponent).build()
+            .inject(this)
+
         return mBinding.root
     }
 
@@ -66,11 +78,9 @@ class PhotoListFragment : Fragment() {
 
         mPhotoListVM =
             if (mCollectionId == null) {
-                ViewModelProviders.of(requireActivity(), Injection.providePhotoListVMFactory(requireActivity()))
-                    .get(PhotoListVM::class.java)
+                ViewModelProviders.of(requireActivity(), photoListVMFactory).get(PhotoListVM::class.java)
             } else {
-                ViewModelProviders.of(this, Injection.providePhotoListVMFactory(requireActivity()))
-                    .get(PhotoListVM::class.java)
+                ViewModelProviders.of(this, photoListVMFactory).get(PhotoListVM::class.java)
             }
 
         val spanCount = 3
@@ -96,7 +106,7 @@ class PhotoListFragment : Fragment() {
             }
         })
 
-        mAdapter = PhotoListAdapter(Injection.provideAppExecutors(), spanCount, spacing)
+        mAdapter = PhotoListAdapter(appExecutors, spanCount, spacing)
         mBinding.rvPhotos.adapter = mAdapter
 
         observeLiveData()
