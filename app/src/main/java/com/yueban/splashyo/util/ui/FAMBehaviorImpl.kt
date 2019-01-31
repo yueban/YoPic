@@ -9,4 +9,4 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu
  * @date 2019/1/23
  * @email fbzhh007@gmail.com
  */
-class FAMBehaviorImpl(context: Context, attrs: AttributeSet) : FABBaseBhavior<FloatingActionsMenu>(context, attrs)
+class FAMBehaviorImpl(context: Context, attrs: AttributeSet) : FABBaseBehavior<FloatingActionsMenu>(context, attrs)

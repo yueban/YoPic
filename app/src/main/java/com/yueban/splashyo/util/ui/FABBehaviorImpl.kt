@@ -9,4 +9,4 @@ import com.getbase.floatingactionbutton.FloatingActionButton
  * @date 2019/1/23
  * @email fbzhh007@gmail.com
  */
-class FABBehaviorImpl(context: Context, attrs: AttributeSet) : FABBaseBhavior<FloatingActionButton>(context, attrs)
+class FABBehaviorImpl(context: Context, attrs: AttributeSet) : FABBaseBehavior<FloatingActionButton>(context, attrs)

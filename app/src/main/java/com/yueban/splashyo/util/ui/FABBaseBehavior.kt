@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
  * @date 2019/1/23
  * @email fbzhh007@gmail.com
  */
-abstract class FABBaseBhavior<T : View>(context: Context, attrs: AttributeSet) :
+abstract class FABBaseBehavior<T : View>(context: Context, attrs: AttributeSet) :
     CoordinatorLayout.Behavior<T>(context, attrs) {
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: T, dependency: View): Boolean {

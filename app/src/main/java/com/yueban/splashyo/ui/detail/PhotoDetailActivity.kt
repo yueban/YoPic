@@ -110,7 +110,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             }
         })
 
-        mVM.reqeustDownloadResult.observe(this, Observer { res ->
+        mVM.requestDownloadResult.observe(this, Observer { res ->
             if (res == null) {
                 showDownloadError()
                 return@Observer

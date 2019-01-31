@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="@id/total_count"
             app:layout_constraintRight_toLeftOf="@id/total_count"
             app:layout_constraintTop_toTopOf="@id/total_count"
-            tools:text="Curated by Danae Sunderman"
+            tools:text="Curated by Danae Sun"
             style="@style/Text.SubTitle"/>
 
         <TextView

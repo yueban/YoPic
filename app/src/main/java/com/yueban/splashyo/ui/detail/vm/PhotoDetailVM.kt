@@ -27,7 +27,7 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    val reqeustDownloadResult: LiveData<Resource<Any>> = Transformations.switchMap(_downloadLocation) {
+    val requestDownloadResult: LiveData<Resource<Any>> = Transformations.switchMap(_downloadLocation) {
         if (it.isNullOrEmpty()) {
             NullLiveData.create()
         } else {

@@ -56,7 +56,7 @@ abstract class NetworkBoundResource<Type>
                         saveCallResult(data)
                         appExecutors.mainThread().execute {
                             if (resultFromCache()) {
-                                // request a new livedata from db, cause we have already saveCallResult in db. This can make result always use dbSource as its dataSource
+                                // request a new liveData from db, cause we have already saveCallResult in db. This can make result always use dbSource as its dataSource
                                 result.addSource(loadFromCache()) { newData ->
                                     setValue(Resource.success(newData))
                                 }

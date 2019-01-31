@@ -47,12 +47,12 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoStatistics(photoStatistics: PhotoStatistics)
 
-    @Query("select * from photostatistics where id=:photoId limit 1")
+    @Query("select * from PhotoStatistics where id=:photoId limit 1")
     fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoDetail(photoDetail: PhotoDetail)
 
-    @Query("select * from photodetail where id=:photoId")
+    @Query("select * from PhotoDetail where id=:photoId")
     fun getPhotoDetail(photoId: String): LiveData<PhotoDetail>
 }
