@@ -165,21 +165,26 @@ class PhotoDetailActivity : AppCompatActivity() {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
-                        val future = GlideApp.with(this).download(mPhoto.resizeUrl(screenHeight)).submit()
-                        val file = future.get()
-                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
 
-                        val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(this)
-                        wallpaperManager.setBitmap(bitmap)
-                        bitmap.recycle()
+                        try {
+                            val future = GlideApp.with(this).download(mPhoto.resizeUrl(screenHeight)).submit()
+                            val file = future.get()
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
 
-                        appExecutors.mainThread().execute {
-                            Snackbar.make(
-                                mBinding.root,
-                                getString(R.string.set_wallpaper_success),
-                                Snackbar.LENGTH_SHORT
-                            )
-                                .show()
+                            val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(this)
+                            wallpaperManager.setBitmap(bitmap)
+                            bitmap.recycle()
+
+                            appExecutors.mainThread().execute {
+                                Snackbar.make(
+                                    mBinding.root,
+                                    getString(R.string.set_wallpaper_success),
+                                    Snackbar.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        } catch (e: Exception) {
+                            showSetWallpaperError(e.message)
                         }
                     }
                 }
