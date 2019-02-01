@@ -10,26 +10,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.yueban.splashyo.R
-import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.data.model.Photo
-import com.yueban.splashyo.data.model.UnSplashKeys
-import com.yueban.splashyo.data.repo.model.Status.CACHE
-import com.yueban.splashyo.data.repo.model.Status.ERROR
-import com.yueban.splashyo.data.repo.model.Status.LOADING
-import com.yueban.splashyo.data.repo.model.Status.SUCCESS
+import com.yueban.splashyo.data.repo.model.Status
 import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
+import com.yueban.splashyo.ui.base.BaseViewActivity
 import com.yueban.splashyo.ui.detail.di.DaggerPhotoDetailComponent
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
 import com.yueban.splashyo.util.screenHeight
@@ -41,45 +34,42 @@ import javax.inject.Inject
  * @date 2019/1/17
  * @email fbzhh007@gmail.com
  */
-class PhotoDetailActivity : AppCompatActivity() {
-    private lateinit var mBinding: ActivityPhotoDetailBinding
+class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
     private lateinit var mVM: PhotoDetailVM
+
     private lateinit var mPhoto: Photo
     @Inject
     lateinit var photoDetailVMFactory: PhotoDetailVMFactory
-    @Inject
-    lateinit var appExecutors: AppExecutors
-    @Inject
-    lateinit var unSplashKeys: UnSplashKeys
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutId(): Int = R.layout.activity_photo_detail
 
-        // parse arguments
-        val extras = intent.extras
-        if (extras == null) {
-            Toast.makeText(this, R.string.photo_do_not_exist, Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+    override fun initInjection() {
+        DaggerPhotoDetailComponent.builder().appComponent(appComponent).build().inject(this)
+    }
 
-        DaggerPhotoDetailComponent.builder().appComponent((application as SplashYoApp).appComponent).build()
-            .inject(this)
-
-        mPhoto = PhotoDetailActivityArgs.fromBundle(extras).photo
+    override fun initVMAndParams(savedInstanceState: Bundle?): Boolean {
         mVM = ViewModelProviders.of(this, photoDetailVMFactory).get(PhotoDetailVM::class.java)
 
-        //set view
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_photo_detail)
+        val extras = intent.extras
+        return if (extras == null) {
+            Toast.makeText(this, R.string.photo_do_not_exist, Toast.LENGTH_SHORT).show()
+            finish()
+            false
+        } else {
+            mPhoto = PhotoDetailActivityArgs.fromBundle(extras).photo
+            true
+        }
+    }
+
+    override fun initView() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        //set fab
         mBinding.fabShare.setOnClickListener {
             Intent().apply {
                 action = Intent.ACTION_VIEW
-                data = Uri.parse(mPhoto.links.html + unSplashKeys.urlSuffix)
+                data = Uri.parse(mPhoto.links.html + appComponent.unSplashKeys().urlSuffix)
                 startActivity(this)
             }
 
@@ -105,32 +95,28 @@ class PhotoDetailActivity : AppCompatActivity() {
             height = screenWidth * mPhoto.height / mPhoto.width
         }
         mBinding.photo = mPhoto
-
-        observeLiveData()
-        initData()
     }
 
-    private fun observeLiveData() {
+    override fun observeVM() {
         mVM.photoDetail.observe(this, Observer { res ->
             if (res == null) {
                 showGetDetailError()
                 return@Observer
             }
             when (res.status) {
-                SUCCESS, CACHE -> mBinding.photoDetail = res.data
-                ERROR -> showGetDetailError(res.message)
-                LOADING -> {
+                Status.SUCCESS, Status.CACHE -> mBinding.photoDetail = res.data
+                Status.ERROR -> showGetDetailError(res.message)
+                Status.LOADING -> {
                 }
             }
         })
-
         mVM.requestDownloadResult.observe(this, Observer { res ->
             if (res == null) {
                 showDownloadError()
                 return@Observer
             }
             when (res.status) {
-                SUCCESS, CACHE -> {
+                Status.SUCCESS, Status.CACHE -> {
                     val downloadManager: DownloadManager =
                         getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                     val request = DownloadManager.Request(Uri.parse(mPhoto.originImageUrl))
@@ -144,21 +130,20 @@ class PhotoDetailActivity : AppCompatActivity() {
                     request.setMimeType("image/jpeg")
                     downloadManager.enqueue(request)
                 }
-                ERROR -> showDownloadError(res.message)
-                LOADING -> {
+                Status.ERROR -> showDownloadError(res.message)
+                Status.LOADING -> {
                 }
             }
         })
-
         mVM.requestWallpaperResult.observe(this, Observer { res ->
             if (res == null) {
                 showSetWallpaperError()
                 return@Observer
             }
             when (res.status) {
-                SUCCESS, CACHE -> {
-                    appExecutors.networkIO().execute {
-                        appExecutors.mainThread().execute {
+                Status.SUCCESS, Status.CACHE -> {
+                    appComponent.appExecutors().networkIO().execute {
+                        appComponent.appExecutors().mainThread().execute {
                             Snackbar.make(
                                 mBinding.root,
                                 getString(R.string.downloading_fitted_wallpaper),
@@ -175,7 +160,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                             wallpaperManager.setBitmap(bitmap)
                             bitmap.recycle()
 
-                            appExecutors.mainThread().execute {
+                            appComponent.appExecutors().mainThread().execute {
                                 Snackbar.make(
                                     mBinding.root,
                                     getString(R.string.set_wallpaper_success),
@@ -188,14 +173,14 @@ class PhotoDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-                ERROR -> showSetWallpaperError(res.message)
-                LOADING -> {
+                Status.ERROR -> showSetWallpaperError(res.message)
+                Status.LOADING -> {
                 }
             }
         })
     }
 
-    private fun initData() {
+    override fun initData() {
         mVM.setPhotoId(mPhoto.id)
     }
 

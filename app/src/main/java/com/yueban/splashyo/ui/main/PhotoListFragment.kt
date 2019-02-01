@@ -2,12 +2,8 @@ package com.yueban.splashyo.ui.main
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.ActivityNavigatorExtras
@@ -18,13 +14,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
-import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
+import com.yueban.splashyo.ui.base.BaseViewFragment
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
 import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.ui.main.vm.PhotoListVMFactory
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.toPx
@@ -35,52 +30,45 @@ import javax.inject.Inject
  * @date 2019/1/15
  * @email fbzhh007@gmail.com
  */
-class PhotoListFragment : Fragment() {
-    private lateinit var mBinding: FragmentPhotoListBinding
+class PhotoListFragment : BaseViewFragment<FragmentPhotoListBinding>() {
     private lateinit var mPhotoListVM: PhotoListVM
     private lateinit var mAdapter: PhotoListAdapter
     /**
      * when mCollectionId is null, it means that it was in MainActivity. in this case:
      * - use activity to get VM to enable cache
-     * - use viewLifecycleOwner to avoid multiple Observer bindings
      */
     private var mCollectionId: String? = null
+    private var mCollectionTitle: String? = null
     @Inject
     lateinit var photoListVMFactory: PhotoListVMFactory
-    @Inject
-    lateinit var appExecutors: AppExecutors
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = FragmentPhotoListBinding.inflate(inflater, container, false)
+    override fun getLayoutId(): Int = R.layout.fragment_photo_list
 
-        DaggerMainComponent.builder().appComponent((requireActivity().application as SplashYoApp).appComponent).build()
-            .inject(this)
-
-        return mBinding.root
+    override fun initInjection() {
+        DaggerMainComponent.builder().appComponent(appComponent).build().inject(this)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        var collectionTitle: String? = null
+    override fun initVMAndParams(savedInstanceState: Bundle?) {
         arguments?.let {
             val args = PhotoListFragmentArgs.fromBundle(it)
             mCollectionId = args.collectionId
-            collectionTitle = args.collectionTitle
+            mCollectionTitle = args.collectionTitle
         }
-
-        requireActivity().title =
-            if (mCollectionId == null || collectionTitle == null) {
-                getString(R.string.all_photos)
-            } else {
-                collectionTitle
-            }
 
         mPhotoListVM =
             if (mCollectionId == null) {
                 ViewModelProviders.of(requireActivity(), photoListVMFactory).get(PhotoListVM::class.java)
             } else {
                 ViewModelProviders.of(this, photoListVMFactory).get(PhotoListVM::class.java)
+            }
+    }
+
+    override fun initView() {
+        requireActivity().title =
+            if (mCollectionId == null || mCollectionTitle == null) {
+                getString(R.string.all_photos)
+            } else {
+                mCollectionTitle
             }
 
         val spanCount = 3
@@ -105,32 +93,9 @@ class PhotoListFragment : Fragment() {
                 }
             }
         })
-
-        mAdapter = PhotoListAdapter(appExecutors, spanCount, spacing)
+        mAdapter = PhotoListAdapter(appComponent.appExecutors(), spanCount, spacing)
         mBinding.rvPhotos.adapter = mAdapter
 
-        observeLiveData()
-        setListener()
-        initData()
-    }
-
-    private fun observeLiveData() {
-        mPhotoListVM.photos.observe(getLifecycleOwner(), Observer(mAdapter::submitList))
-        mPhotoListVM.loadStatus.observe(getLifecycleOwner(), Observer { loadState ->
-            if (loadState.isRunning) {
-                mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
-            } else {
-                val hasMore = mPhotoListVM.hasMore
-                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
-            }
-
-            loadState.errorMsgIfNotHandled?.let {
-                Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun setListener() {
         mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 mPhotoListVM.loadNextPage()
@@ -154,14 +119,23 @@ class PhotoListFragment : Fragment() {
         }
     }
 
-    private fun getLifecycleOwner(): LifecycleOwner =
-        if (mCollectionId == null) {
-            this
-        } else {
-            viewLifecycleOwner
-        }
+    override fun observeVM() {
+        mPhotoListVM.photos.observe(viewLifecycleOwner, Observer(mAdapter::submitList))
+        mPhotoListVM.loadStatus.observe(viewLifecycleOwner, Observer { loadState ->
+            if (loadState.isRunning) {
+                mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
+            } else {
+                val hasMore = mPhotoListVM.hasMore
+                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
+            }
 
-    private fun initData() {
+            loadState.errorMsgIfNotHandled?.let {
+                Snackbar.make(mBinding.root, it, Snackbar.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun initData() {
         val cacheLabel = mCollectionId ?: PhotoListVM.CACHE_LABEL_ALL
         mPhotoListVM.setCacheLabel(cacheLabel)
     }

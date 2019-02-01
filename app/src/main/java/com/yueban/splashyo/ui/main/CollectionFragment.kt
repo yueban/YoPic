@@ -1,13 +1,9 @@
 package com.yueban.splashyo.ui.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -15,13 +11,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
-import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.databinding.FragmentCollectionBinding
+import com.yueban.splashyo.ui.base.BaseViewFragment
 import com.yueban.splashyo.ui.main.adapter.CollectionAdapter
 import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.CollectionVM
 import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
@@ -33,37 +28,47 @@ import javax.inject.Inject
  * @date 2019/1/6
  * @email fbzhh007@gmail.com
  */
-class CollectionFragment : Fragment() {
-    private lateinit var mBinding: FragmentCollectionBinding
+class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     private lateinit var mAdapter: CollectionAdapter
     private lateinit var mCollectionVM: CollectionVM
     @Inject
     lateinit var collectionVMFactory: CollectionVMFactory
-    @Inject
-    lateinit var appExecutors: AppExecutors
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = FragmentCollectionBinding.inflate(inflater, container, false)
+    override fun getLayoutId(): Int = R.layout.fragment_collection
 
-        DaggerMainComponent.builder().appComponent((requireActivity().application as SplashYoApp).appComponent).build()
-            .inject(this)
+    override fun initInjection() {
+        DaggerMainComponent.builder().appComponent(appComponent).build().inject(this)
+    }
+
+    override fun initVMAndParams(savedInstanceState: Bundle?) {
         mCollectionVM = ViewModelProviders.of(requireActivity(), collectionVMFactory).get(CollectionVM::class.java)
         setHasOptionsMenu(true)
-
-        return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        mAdapter = CollectionAdapter(appExecutors)
+    override fun initView() {
+        mAdapter = CollectionAdapter(appComponent.appExecutors())
         mBinding.rvCollections.adapter = mAdapter
 
-        observeLiveData()
-        setListener()
+        mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                mCollectionVM.loadNextPage()
+            }
+
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                mCollectionVM.refresh()
+            }
+        })
+        mAdapter.itemClickListener = { collection ->
+            findNavController().navigate(
+                CollectionFragmentDirections.actionCollectionFragmentToPhotoListFragment(
+                    collection.id.toString(),
+                    collection.title
+                )
+            )
+        }
     }
 
-    private fun observeLiveData() {
+    override fun observeVM() {
         mCollectionVM.collections.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
         })
@@ -95,24 +100,8 @@ class CollectionFragment : Fragment() {
         })
     }
 
-    private fun setListener() {
-        mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                mCollectionVM.loadNextPage()
-            }
-
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                mCollectionVM.refresh()
-            }
-        })
-        mAdapter.itemClickListener = { collection ->
-            findNavController().navigate(
-                CollectionFragmentDirections.actionCollectionFragmentToPhotoListFragment(
-                    collection.id.toString(),
-                    collection.title
-                )
-            )
-        }
+    override fun initData() {
+        mCollectionVM.setFeatured(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

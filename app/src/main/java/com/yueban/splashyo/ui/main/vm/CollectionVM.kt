@@ -26,10 +26,6 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
     private val nextPageHandler = NextPageHandler(photoRepo)
     private val _featured = MutableLiveData<Boolean>()
 
-    init {
-        _featured.value = true
-    }
-
     val featured: LiveData<Boolean> = _featured
 
     // result
