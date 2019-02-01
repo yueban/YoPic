@@ -2,7 +2,9 @@ package com.yueban.splashyo.util.di.component
 
 import com.squareup.moshi.Moshi
 import com.yueban.splashyo.util.AppExecutors
-import com.yueban.splashyo.util.di.module.BaseModule
+import com.yueban.splashyo.util.moshi.ApplicationJsonAdapterFactory
+import com.yueban.splashyo.util.moshi.MoshiDateConverter
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
@@ -12,8 +14,16 @@ import javax.inject.Singleton
  * @email fbzhh007@gmail.com
  */
 @Singleton
-@Component(modules = [BaseModule::class])
+@Component
 interface BaseComponent {
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun moshi(moshi: Moshi): Builder
+
+        fun build(): BaseComponent
+    }
+
     fun appExecutors(): AppExecutors
 
     fun moshi(): Moshi
@@ -29,7 +39,11 @@ interface BaseComponent {
         }
 
         private fun buildBaseComponent(): BaseComponent {
-            return DaggerBaseComponent.create()
+            val moshi = Moshi.Builder()
+                .add(MoshiDateConverter())
+                .add(ApplicationJsonAdapterFactory.INSTANCE)
+                .build()
+            return DaggerBaseComponent.builder().moshi(moshi).build()
         }
     }
 }

@@ -14,7 +14,6 @@ import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentCollectionBinding
 import com.yueban.splashyo.ui.base.BaseViewFragment
 import com.yueban.splashyo.ui.main.adapter.CollectionAdapter
-import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.CollectionVM
 import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
 import com.yueban.splashyo.util.ext.autoAnimationOnly
@@ -35,10 +34,6 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     lateinit var collectionVMFactory: CollectionVMFactory
 
     override fun getLayoutId(): Int = R.layout.fragment_collection
-
-    override fun initInjection() {
-        DaggerMainComponent.builder().appComponent(appComponent).build().inject(this)
-    }
 
     override fun initVMAndParams(savedInstanceState: Bundle?) {
         mCollectionVM = ViewModelProviders.of(requireActivity(), collectionVMFactory).get(CollectionVM::class.java)

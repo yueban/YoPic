@@ -18,7 +18,6 @@ abstract class BaseViewActivity<Binding : ViewDataBinding> : BaseActivity() {
 
         mBinding = DataBindingUtil.setContentView(this, getLayoutId())
 
-        initInjection()
         if (!initVMAndParams(savedInstanceState)) {
             return
         }
@@ -29,8 +28,6 @@ abstract class BaseViewActivity<Binding : ViewDataBinding> : BaseActivity() {
 
     @LayoutRes
     abstract fun getLayoutId(): Int
-
-    abstract fun initInjection()
 
     /**
      * @return return true as default;

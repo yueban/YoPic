@@ -10,9 +10,6 @@ import com.yueban.splashyo.ui.base.BaseViewActivity
 class MainActivity : BaseViewActivity<ActivityMainBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_main
 
-    override fun initInjection() {
-    }
-
     override fun initVMAndParams(savedInstanceState: Bundle?): Boolean = true
 
     override fun initView() {

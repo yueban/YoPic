@@ -1,35 +1,43 @@
 package com.yueban.splashyo
 
-import android.app.Application
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
-import com.yueban.splashyo.util.di.module.AppModule
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import dagger.android.DispatchingAndroidInjector
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * @author yueban
  * @date 2018/12/29
  * @email fbzhh007@gmail.com
  */
-class SplashYoApp : Application() {
+class SplashYoApp : DaggerApplication() {
     lateinit var appComponent: AppComponent
+    @Inject
+    lateinit var applicationDispatchingAndroidInjector: DispatchingAndroidInjector<SplashYoApp>
 
     override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-
         appComponent =
             DaggerAppComponent.builder()
                 .baseComponent(BaseComponent.getInstance())
-                .appModule(AppModule(this))
+                .apply { seedInstance(this@SplashYoApp) }
                 .build()
+                .apply { inject(this@SplashYoApp) }
+
+        super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = applicationDispatchingAndroidInjector
 
     companion object {
         init {

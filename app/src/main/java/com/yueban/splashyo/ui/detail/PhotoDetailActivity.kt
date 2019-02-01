@@ -20,7 +20,6 @@ import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.repo.model.Status
 import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
 import com.yueban.splashyo.ui.base.BaseViewActivity
-import com.yueban.splashyo.ui.detail.di.DaggerPhotoDetailComponent
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
@@ -42,10 +41,6 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
     lateinit var photoDetailVMFactory: PhotoDetailVMFactory
 
     override fun getLayoutId(): Int = R.layout.activity_photo_detail
-
-    override fun initInjection() {
-        DaggerPhotoDetailComponent.builder().appComponent(appComponent).build().inject(this)
-    }
 
     override fun initVMAndParams(savedInstanceState: Bundle?): Boolean {
         mVM = ViewModelProviders.of(this, photoDetailVMFactory).get(PhotoDetailVM::class.java)

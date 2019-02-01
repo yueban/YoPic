@@ -87,6 +87,9 @@ dependencies {
     implementation "com.github.tbruyelle:rxpermissions:${rootProject.rxpermissionsVersion}"
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
     kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
+    implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"
+    implementation "com.google.dagger:dagger-android-support:${rootProject.daggerVersion}"
+    kapt "com.google.dagger:dagger-android-processor:${rootProject.daggerVersion}"
     implementation "io.reactivex.rxjava2:rxjava:${rootProject.rxjavaVersion}"
     implementation "io.reactivex.rxjava2:rxkotlin:${rootProject.rxkotlinVersion}"
 }

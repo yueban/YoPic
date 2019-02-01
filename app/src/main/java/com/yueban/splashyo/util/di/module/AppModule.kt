@@ -1,7 +1,7 @@
 package com.yueban.splashyo.util.di.module
 
-import android.app.Application
 import android.content.Context
+import com.yueban.splashyo.SplashYoApp
 import com.yueban.splashyo.util.di.scope.AppScope
 import dagger.Module
 import dagger.Provides
@@ -12,12 +12,8 @@ import dagger.Provides
  * @email fbzhh007@gmail.com
  */
 @Module
-class AppModule(val app: Application) {
+class AppModule {
     @AppScope
     @Provides
-    fun provideApplication(): Application = app
-
-    @AppScope
-    @Provides
-    fun provideApplicationContext(): Context = app
+    fun provideApplicationContext(splashYoApp: SplashYoApp): Context = splashYoApp.applicationContext
 }

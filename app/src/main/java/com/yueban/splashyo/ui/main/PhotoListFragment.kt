@@ -17,7 +17,6 @@ import com.yueban.splashyo.R
 import com.yueban.splashyo.databinding.FragmentPhotoListBinding
 import com.yueban.splashyo.ui.base.BaseViewFragment
 import com.yueban.splashyo.ui.main.adapter.PhotoListAdapter
-import com.yueban.splashyo.ui.main.di.DaggerMainComponent
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.ui.main.vm.PhotoListVMFactory
 import com.yueban.splashyo.util.ext.autoAnimationOnly
@@ -43,10 +42,6 @@ class PhotoListFragment : BaseViewFragment<FragmentPhotoListBinding>() {
     lateinit var photoListVMFactory: PhotoListVMFactory
 
     override fun getLayoutId(): Int = R.layout.fragment_photo_list
-
-    override fun initInjection() {
-        DaggerMainComponent.builder().appComponent(appComponent).build().inject(this)
-    }
 
     override fun initVMAndParams(savedInstanceState: Bundle?) {
         arguments?.let {

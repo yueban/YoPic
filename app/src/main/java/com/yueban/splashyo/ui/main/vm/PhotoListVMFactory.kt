@@ -3,7 +3,7 @@ package com.yueban.splashyo.ui.main.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yueban.splashyo.data.repo.PhotoRepo
-import com.yueban.splashyo.util.di.scope.ActivityScope
+import com.yueban.splashyo.util.di.scope.AppScope
 import javax.inject.Inject
 
 /**
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * @date 2019/1/15
  * @email fbzhh007@gmail.com
  */
-@ActivityScope
+@AppScope
 class PhotoListVMFactory
 @Inject constructor(private val photoRepo: PhotoRepo) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")

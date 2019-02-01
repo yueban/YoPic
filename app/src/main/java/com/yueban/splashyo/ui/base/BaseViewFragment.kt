@@ -23,7 +23,6 @@ abstract class BaseViewFragment<Binding : ViewDataBinding> : BaseFragment() {
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
 
-        initInjection()
         initVMAndParams(savedInstanceState)
 
         return mBinding.root
@@ -39,8 +38,6 @@ abstract class BaseViewFragment<Binding : ViewDataBinding> : BaseFragment() {
 
     @LayoutRes
     abstract fun getLayoutId(): Int
-
-    abstract fun initInjection()
 
     abstract fun initVMAndParams(savedInstanceState: Bundle?)
 
