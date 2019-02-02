@@ -10,7 +10,7 @@ buildscript {
         versionCode = 1
 
         //Library
-        kotlinVersion = '1.3.11'
+        kotlinVersion = '1.3.20'
         coroutinesVersion = '1.0.1'
         coreKtxVersion = '1.0.1'
         appcompatVersion = '1.0.2'
