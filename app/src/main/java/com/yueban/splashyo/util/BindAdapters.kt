@@ -5,6 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.yueban.splashyo.R
+import com.yueban.splashyo.util.GlideOptions.bitmapTransform
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 /**
  * @author yueban
@@ -34,5 +37,21 @@ object BindingAdapters {
     @BindingAdapter("visible")
     fun visible(view: View, visible: Boolean) {
         view.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("avatarUrl")
+    fun displayAvatarImage(view: ImageView, url: String?) {
+        if (url.isNullOrEmpty()) {
+            Glide.with(view).clear(view)
+            view.setImageDrawable(null)
+            return
+        }
+
+        GlideApp.with(view)
+            .load(url)
+            .apply(bitmapTransform(RoundedCornersTransformation(1000, 0)))
+            .placeholder(R.drawable.placeholder_avatar)
+            .into(view)
     }
 }

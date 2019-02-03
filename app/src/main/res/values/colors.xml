@@ -3,4 +3,17 @@
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#CCCCCC</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- 文字 -->
+    <!-- 深色背景下 -->
+    <color name="text_main">#ffffff</color>
+    <color name="text_sub">#e6ffffff</color>
+    <color name="text_label">#99ffffff</color>
+    <!-- 白色背景下 -->
+    <color name="text_main_dark">#202020</color>
+    <color name="text_sub_dark">#9e9e9e</color>
+    <color name="text_label_dark">#b2b2b2</color>
+
+
+    <color name="bg_user_info">#33ffffff</color>
 </resources>

@@ -35,11 +35,30 @@
                 app:navGraph="@navigation/nav_main"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/menu_nav_main"/>
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                app:menu="@menu/menu_nav_main"/>
+
+            <TextView
+                android:id="@+id/unsplash_label"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Photos By Unsplash"
+                tools:ignore="HardcodedText"
+                style="@style/Text.SubTitle.Dark"/>
+        </LinearLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

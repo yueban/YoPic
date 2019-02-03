@@ -193,11 +193,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="6dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/photo_stat_divider"
                     app:visible="@{photoDetail.exif != null}">
+
+                    <LinearLayout
+                        android:id="@+id/user_info"
+                        android:background="@drawable/bg_user_info"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        app:visible="@{photoDetail.user != null}"
+                        style="@style/Layout_Item_PhotoDetail_Camera_Info">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/cd_photographer"
+                            android:foreground="@drawable/fg_avatar"
+                            app:avatarUrl="@{photoDetail.user.profileImage.large}"
+                            tools:src="@drawable/ic_launcher_background"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@{photoDetail.user.photoByLabel}"
+                            tools:text="By Helena Lopes"
+                            style="@style/Text.SubTitle.Camera_Info_Content"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"/>
 
                     <LinearLayout
                         app:visible="@{photoDetail.exif.make != null}"

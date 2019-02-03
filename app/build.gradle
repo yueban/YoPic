@@ -71,6 +71,7 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.designVersion"
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+    implementation "jp.wasabeef:glide-transformations:$rootProject.glideTransformationsVersion"
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"

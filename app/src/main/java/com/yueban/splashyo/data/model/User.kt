@@ -45,4 +45,7 @@ data class User(
     val instagramUsername: String? = "",
     @Json(name = "username") @ColumnInfo(name = "username")
     val username: String = ""
-) : Parcelable
+) : Parcelable {
+    val photoByLabel: String
+        get() = "By $name"
+}

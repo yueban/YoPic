@@ -6,6 +6,7 @@ package com.yueban.splashyo.util
  * @email fbzhh007@gmail.com
  */
 const val API_BASE_URL = "https://api.unsplash.com/"
+const val UNSPLASH_URL = "https://unsplash.com/"
 
 const val UNSPLASH_KEYS_FILENAME = "unsplash_keys.json"
 const val APP_DATABASE_NAME = "db_unsplash"

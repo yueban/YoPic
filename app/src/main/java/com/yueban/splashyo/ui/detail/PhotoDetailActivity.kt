@@ -85,6 +85,13 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
         mBinding.setWallpaper.setOnClickListener {
             showSetWallpaperDialog()
         }
+        mBinding.userInfo.setOnClickListener {
+            Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse(mPhoto.user.links.html + appComponent.unSplashKeys().urlSuffix)
+                startActivity(this)
+            }
+        }
 
         mBinding.photoImage.updateLayoutParams {
             height = screenWidth * mPhoto.height / mPhoto.width
