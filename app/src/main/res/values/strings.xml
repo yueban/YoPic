@@ -30,4 +30,8 @@
     <string name="downloading_fitted_wallpaper">正在下载合适尺寸的壁纸</string>
     <string name="set_wallpaper_success">设置壁纸成功</string>
     <string name="retry">重试</string>
+    <string name="home_screen_and_lock_screen">Home screen and lock screen</string>
+    <string name="home_screen">Home screen</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="set_wallpaper">Set wallpaper</string>
 </resources>

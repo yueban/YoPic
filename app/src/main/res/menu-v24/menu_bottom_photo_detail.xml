@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_set_wallpaper_launcher"
+        android:title="@string/home_screen"/>
+
+    <item
+        android:id="@+id/menu_set_wallpaper_lock_screen"
+        android:title="@string/lock_screen"/>
+
+    <item
+        android:id="@+id/menu_set_wallpaper_both"
+        android:title="@string/home_screen_and_lock_screen"/>
+</menu>

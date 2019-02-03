@@ -17,7 +17,7 @@ import com.yueban.splashyo.util.NullLiveData
 class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
     private val _photoId = MutableLiveData<String>()
     private val _downloadLocation = MutableLiveData<String>()
-    private val _requestWallpaper = MutableLiveData<String>()
+    private val _requestWallpaper = MutableLiveData<WallpaperRequest>()
 
     val photoDetail: LiveData<Resource<PhotoDetail>> = Transformations.switchMap(_photoId) {
         if (it.isNullOrEmpty()) {
@@ -35,11 +35,13 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    val requestWallpaperResult: LiveData<Resource<Any>> = Transformations.switchMap(_requestWallpaper) {
-        if (it.isNullOrEmpty()) {
+    val requestWallpaperResult: LiveData<WallpaperResponse> = Transformations.switchMap(_requestWallpaper) { request ->
+        if (request == null) {
             NullLiveData.create()
         } else {
-            photoRepo.requestDownloadLocation(it)
+            Transformations.map(photoRepo.requestDownloadLocation(request.downloadLocation)) { res ->
+                WallpaperResponse(res, request.setType)
+            }
         }
     }
 
@@ -69,11 +71,12 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    fun requestWallpaper(downloadLocation: String) {
-        if (_requestWallpaper.value == downloadLocation) {
+    fun requestWallpaper(downloadLocation: String, setType: WallpaperSetType) {
+        val newValue = WallpaperRequest(downloadLocation, setType)
+        if (_requestWallpaper.value == newValue) {
             return
         }
-        _requestWallpaper.value = downloadLocation
+        _requestWallpaper.value = newValue
     }
 
     fun retryRequestWallpaper() {
@@ -81,4 +84,12 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
             _requestWallpaper.value = it
         }
     }
+}
+
+data class WallpaperRequest(val downloadLocation: String, val setType: WallpaperSetType)
+
+class WallpaperResponse(val res: Resource<Any>, val setType: WallpaperSetType)
+
+enum class WallpaperSetType {
+    HOME_SCREEN, LOCK_SCREEN, BOTH
 }

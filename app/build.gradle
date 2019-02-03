@@ -92,4 +92,5 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxkotlinVersion"
+    implementation "com.github.Kennyc1012:BottomSheetMenu:$rootProject.BottomSheetMenuVersion"
 }

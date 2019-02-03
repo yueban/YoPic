@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.kennyc.bottomsheet.BottomSheetMenuDialogFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.yueban.splashyo.R
 import com.yueban.splashyo.data.model.Photo
@@ -22,8 +24,10 @@ import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
 import com.yueban.splashyo.ui.base.BaseViewActivity
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
+import com.yueban.splashyo.ui.detail.vm.WallpaperSetType
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
+import com.yueban.splashyo.util.bottomsheet.SimpleBottomSheetListener
 import com.yueban.splashyo.util.screenHeight
 import com.yueban.splashyo.util.screenWidth
 import javax.inject.Inject
@@ -82,7 +86,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             mBinding.fabMenu.collapse()
         }
         mBinding.fabSetAsBackground.setOnClickListener {
-            mVM.requestWallpaper(mPhoto.links.download_location)
+            showSetWallpaperDialog()
             mBinding.fabMenu.collapse()
         }
 
@@ -130,12 +134,12 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                 }
             }
         })
-        mVM.requestWallpaperResult.observe(this, Observer { res ->
-            if (res == null) {
+        mVM.requestWallpaperResult.observe(this, Observer { wallpaperResponse ->
+            if (wallpaperResponse == null) {
                 showSetWallpaperError()
                 return@Observer
             }
-            when (res.status) {
+            when (wallpaperResponse.res.status) {
                 Status.SUCCESS, Status.CACHE -> {
                     appComponent.appExecutors().networkIO().execute {
                         appComponent.appExecutors().mainThread().execute {
@@ -150,9 +154,33 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                             val future = GlideApp.with(this).download(mPhoto.resizeUrl(screenHeight)).submit()
                             val file = future.get()
                             val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-
                             val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(this)
-                            wallpaperManager.setBitmap(bitmap)
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                when (wallpaperResponse.setType) {
+                                    WallpaperSetType.HOME_SCREEN -> wallpaperManager.setBitmap(
+                                        bitmap,
+                                        null,
+                                        true,
+                                        WallpaperManager.FLAG_SYSTEM
+                                    )
+                                    WallpaperSetType.LOCK_SCREEN -> wallpaperManager.setBitmap(
+                                        bitmap,
+                                        null,
+                                        true,
+                                        WallpaperManager.FLAG_LOCK
+                                    )
+                                    WallpaperSetType.BOTH -> wallpaperManager.setBitmap(
+                                        bitmap,
+                                        null,
+                                        true,
+                                        WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
+                                    )
+                                }
+                            } else {
+                                wallpaperManager.setBitmap(bitmap)
+                            }
+
                             bitmap.recycle()
 
                             appComponent.appExecutors().mainThread().execute {
@@ -168,7 +196,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                         }
                     }
                 }
-                Status.ERROR -> showSetWallpaperError(res.message)
+                Status.ERROR -> showSetWallpaperError(wallpaperResponse.res.message)
                 Status.LOADING -> {
                 }
             }
@@ -177,6 +205,32 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
 
     override fun initData() {
         mVM.setPhotoId(mPhoto.id)
+    }
+
+    private fun showSetWallpaperDialog() {
+        BottomSheetMenuDialogFragment.Builder(this)
+            .setSheet(R.menu.menu_bottom_photo_detail)
+            .setTitle(R.string.set_wallpaper)
+            .setListener(object : SimpleBottomSheetListener() {
+                override fun onSheetItemSelected(
+                    bottomSheet: BottomSheetMenuDialogFragment,
+                    item: MenuItem?,
+                    `object`: Any?
+                ) {
+                    when (item?.itemId) {
+                        R.id.menu_set_wallpaper_launcher -> {
+                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.HOME_SCREEN)
+                        }
+                        R.id.menu_set_wallpaper_lock_screen -> {
+                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.LOCK_SCREEN)
+                        }
+                        R.id.menu_set_wallpaper_both -> {
+                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.BOTH)
+                        }
+                    }
+                }
+            })
+            .show(supportFragmentManager)
     }
 
     private fun showGetDetailError(errorMsg: String? = DEFAULT_ERROR_MSG) {

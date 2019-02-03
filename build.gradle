@@ -33,6 +33,7 @@ buildscript {
         daggerVersion = '2.21'
         rxjavaVersion = '2.2.6'
         rxkotlinVersion = '2.3.0'
+        BottomSheetMenuVersion = '3.0.1'
     }
     repositories {
         google()
