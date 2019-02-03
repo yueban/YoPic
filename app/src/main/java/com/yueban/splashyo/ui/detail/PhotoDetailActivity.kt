@@ -65,16 +65,14 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        mBinding.fabShare.setOnClickListener {
+        mBinding.share.setOnClickListener {
             Intent().apply {
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(mPhoto.links.html + appComponent.unSplashKeys().urlSuffix)
                 startActivity(this)
             }
-
-            mBinding.fabMenu.collapse()
         }
-        mBinding.fabDownload.setOnClickListener {
+        mBinding.download.setOnClickListener {
             RxPermissions(this).request(
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -83,11 +81,9 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                     mVM.download(mPhoto.links.download_location)
                 }
             }
-            mBinding.fabMenu.collapse()
         }
-        mBinding.fabSetAsBackground.setOnClickListener {
+        mBinding.setWallpaper.setOnClickListener {
             showSetWallpaperDialog()
-            mBinding.fabMenu.collapse()
         }
 
         mBinding.photoImage.updateLayoutParams {

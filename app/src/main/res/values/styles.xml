@@ -48,7 +48,6 @@
     </style>
 
     <style name="Text">
-        <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
 
@@ -57,12 +56,29 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <style name="Text.Title.SingleLine">
+        <item name="android:lines">1</item>
+    </style>
+
     <style name="Text.SubTitle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#ccffffff</item>
     </style>
 
-    <style name="Text.Title.PhotoDetail_Stat">
+    <style name="Text.SubTitle.SingleLine">
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="Text.Label">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#99ffffff</item>
+    </style>
+
+    <style name="Text.Label.SingleLine">
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="Text.Title.SingleLine.PhotoDetail_Stat">
         <item name="android:layout_marginTop">8dp</item>
     </style>
 
@@ -78,40 +94,28 @@
     <style name="Layout_Item_PhotoDetail_Camera_Info">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingBottom">6dp</item>
     </style>
 
-    <style name="Text.SubTitle.Camera_Info_Label">
-        <item name="android:layout_width">72dp</item>
+    <style name="Text.Label.SingleLine.Camera_Info_Label">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="Text.SubTitle.Camera_Info_Content">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">8dp</item>
+    </style>
+
+    <style name="Layout_PhotoDetail_Action">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="Fab">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="fab_colorNormal">@color/colorPrimary</item>
-        <item name="fab_colorPressed">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="Fab.Menu">
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="fab_addButtonPlusIconColor">@color/colorPrimary</item>
-        <item name="fab_labelsPosition">left</item>
-    </style>
-
-    <style name="Fab.Button">
-        <item name="fab_size">mini</item>
     </style>
 </resources>
