@@ -27,6 +27,7 @@ class MainActivity : BaseViewActivity<ActivityMainBinding>() {
                 data = Uri.parse(UNSPLASH_URL)
                 startActivity(this)
             }
+            mBinding.drawerLayout.closeDrawer(mBinding.navigation)
         }
     }
 
