@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.ActivityNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -44,27 +45,20 @@ class PhotoListFragment : BaseViewFragment<FragmentPhotoListBinding>() {
     override fun getLayoutId(): Int = R.layout.fragment_photo_list
 
     override fun initVMAndParams(savedInstanceState: Bundle?) {
-        arguments?.let {
-            val args = PhotoListFragmentArgs.fromBundle(it)
+        try {
+            val args = navArgs<PhotoListFragmentArgs>().value
             mCollectionId = args.collectionId
             mCollectionTitle = args.collectionTitle
+            mPhotoListVM = ViewModelProviders.of(this, photoListVMFactory).get(PhotoListVM::class.java)
+        } catch (e: IllegalStateException) {
+            mCollectionId = null
+            mCollectionTitle = getString(R.string.all_photos)
+            mPhotoListVM = ViewModelProviders.of(requireActivity(), photoListVMFactory).get(PhotoListVM::class.java)
         }
-
-        mPhotoListVM =
-            if (mCollectionId == null) {
-                ViewModelProviders.of(requireActivity(), photoListVMFactory).get(PhotoListVM::class.java)
-            } else {
-                ViewModelProviders.of(this, photoListVMFactory).get(PhotoListVM::class.java)
-            }
     }
 
     override fun initView() {
-        requireActivity().title =
-            if (mCollectionId == null || mCollectionTitle == null) {
-                getString(R.string.all_photos)
-            } else {
-                mCollectionTitle
-            }
+        requireActivity().title = mCollectionTitle
 
         val spanCount = 3
         val spacing = 6.toPx()

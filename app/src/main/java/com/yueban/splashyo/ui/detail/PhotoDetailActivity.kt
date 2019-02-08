@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.kennyc.bottomsheet.BottomSheetMenuDialogFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -49,14 +50,13 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
     override fun initVMAndParams(savedInstanceState: Bundle?): Boolean {
         mVM = ViewModelProviders.of(this, photoDetailVMFactory).get(PhotoDetailVM::class.java)
 
-        val extras = intent.extras
-        return if (extras == null) {
+        return try {
+            mPhoto = navArgs<PhotoDetailActivityArgs>().value.photo
+            true
+        } catch (e: IllegalStateException) {
             Toast.makeText(this, R.string.photo_do_not_exist, Toast.LENGTH_SHORT).show()
             finish()
             false
-        } else {
-            mPhoto = PhotoDetailActivityArgs.fromBundle(extras).photo
-            true
         }
     }
 
