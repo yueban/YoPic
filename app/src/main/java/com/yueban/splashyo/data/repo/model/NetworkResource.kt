@@ -27,13 +27,14 @@ abstract class NetworkResource<Type> @MainThread constructor(private val appExec
     }
 
     private fun fetchFromNetwork() {
-        val apiResponse = createCall()
+        val apiResponse = loadFromNet()
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
             when (response) {
                 is ApiResponse.ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {
                         val data = processResponse(response)
+                        saveCallResult(data)
                         appExecutors.mainThread().execute {
                             setValue(Resource.success(data))
                         }
@@ -54,13 +55,17 @@ abstract class NetworkResource<Type> @MainThread constructor(private val appExec
         }
     }
 
-    protected open fun onFetchFailed() {}
-
     fun asLiveData() = result as LiveData<Resource<Type>>
+
+    protected open fun onFetchFailed() {}
 
     @MainThread
     protected open fun processResponse(response: ApiResponse.ApiSuccessResponse<Type>) = response.body
 
     @MainThread
-    protected abstract fun createCall(): LiveData<ApiResponse<Type>>
+    protected open fun saveCallResult(data: Type) {
+    }
+
+    @MainThread
+    protected abstract fun loadFromNet(): LiveData<ApiResponse<Type>>
 }

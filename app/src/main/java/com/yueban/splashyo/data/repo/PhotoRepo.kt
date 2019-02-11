@@ -5,7 +5,6 @@ import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoDetail
-import com.yueban.splashyo.data.model.PhotoStatistics
 import com.yueban.splashyo.data.net.ApiResponse
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.data.repo.model.NetworkBoundResource
@@ -35,7 +34,7 @@ class PhotoRepo
         clearCacheOnFirstPage: Boolean = true,
         firstPage: Int = 1
     ): LiveData<Resource<List<Photo>>> {
-        return object : NetworkBoundResource<List<Photo>>(appExecutors) {
+        return object : NetworkResource<List<Photo>>(appExecutors) {
             override fun processResponse(response: ApiResponse.ApiSuccessResponse<List<Photo>>): List<Photo> {
                 response.body.forEach { it.cacheLabel = cacheLabel }
                 return response.body
@@ -49,14 +48,7 @@ class PhotoRepo
                 photoDao.insertPhotos(data)
             }
 
-            override fun shouldFetch(data: List<Photo>?): Boolean {
-                Timber.d("photo list from db: ${data?.size}")
-                return true
-            }
-
-            override fun loadFromCache(): LiveData<List<Photo>> = getPhotosFromCache(cacheLabel)
-
-            override fun createCall(): LiveData<ApiResponse<List<Photo>>> =
+            override fun loadFromNet(): LiveData<ApiResponse<List<Photo>>> =
                 if (cacheLabel == PhotoListVM.CACHE_LABEL_ALL) {
                     service.photos(page)
                 } else {
@@ -73,29 +65,20 @@ class PhotoRepo
         clearCacheOnFirstPage: Boolean = true,
         firstPage: Int = 1
     ): LiveData<Resource<List<PhotoCollection>>> {
-        return object : NetworkBoundResource<List<PhotoCollection>>(appExecutors) {
+        return object : NetworkResource<List<PhotoCollection>>(appExecutors) {
             override fun saveCallResult(data: List<PhotoCollection>) {
                 Timber.d("collection list from api: ${data.size}")
-                // clear cache on get first page
                 if (clearCacheOnFirstPage && page == firstPage) {
                     photoDao.deleteAllCollections()
                 }
                 photoDao.insertCollections(data)
             }
 
-            override fun shouldFetch(data: List<PhotoCollection>?): Boolean {
-                Timber.d("collection list from db: ${data?.size}")
-                return true
+            override fun loadFromNet(): LiveData<ApiResponse<List<PhotoCollection>>> = if (featured) {
+                service.collectionsFeatured(page)
+            } else {
+                service.collections(page)
             }
-
-            override fun loadFromCache(): LiveData<List<PhotoCollection>> = getCollectionsFromCache(featured)
-
-            override fun createCall(): LiveData<ApiResponse<List<PhotoCollection>>> =
-                if (featured) {
-                    service.collectionsFeatured(page)
-                } else {
-                    service.collections(page)
-                }
         }.asLiveData()
     }
 
@@ -105,30 +88,6 @@ class PhotoRepo
         } else {
             photoDao.getCollections()
         }
-
-    fun getPhotoStat(photoId: String): LiveData<Resource<PhotoStatistics>> {
-        return object : NetworkBoundResource<PhotoStatistics>(appExecutors) {
-            override fun saveCallResult(data: PhotoStatistics) {
-                Timber.d("photostat from api: $data")
-                photoDao.insertPhotoStatistics(data)
-            }
-
-            override fun shouldFetch(data: PhotoStatistics?): Boolean {
-                Timber.d("photostat from db: $data")
-                return true
-            }
-
-            override fun resultFromCache(): Boolean {
-                return true
-            }
-
-            override fun loadFromCache(): LiveData<PhotoStatistics> = photoDao.getPhotoStatistics(photoId)
-
-            override fun createCall(): LiveData<ApiResponse<PhotoStatistics>> = service.photoStatistics(photoId)
-        }.asLiveData()
-    }
-
-    fun getPhotoDetailFromCache(photoId: String): LiveData<PhotoDetail> = photoDao.getPhotoDetail(photoId)
 
     fun getPhotoDetail(photoId: String): LiveData<Resource<PhotoDetail>> {
         return object : NetworkBoundResource<PhotoDetail>(appExecutors) {
@@ -145,19 +104,17 @@ class PhotoRepo
                 return true
             }
 
-            override fun loadFromCache(): LiveData<PhotoDetail> = getPhotoDetailFromCache(photoId)
+            override fun preloadCache(data: PhotoDetail?): Boolean = data != null
 
-            override fun resultFromCache(): Boolean = true
+            override fun loadFromCache(): LiveData<PhotoDetail> = photoDao.getPhotoDetail(photoId)
 
-            override fun skipCacheResultWhenFetchFromNet(data: PhotoDetail?): Boolean = data == null
-
-            override fun createCall(): LiveData<ApiResponse<PhotoDetail>> = service.photoDetail(photoId)
+            override fun loadFromNet(): LiveData<ApiResponse<PhotoDetail>> = service.photoDetail(photoId)
         }.asLiveData()
     }
 
     fun requestDownloadLocation(downloadLocation: String): LiveData<Resource<Any>> {
         return object : NetworkResource<Any>(appExecutors) {
-            override fun createCall(): LiveData<ApiResponse<Any>> = service.requestDownloadLocation(downloadLocation)
+            override fun loadFromNet(): LiveData<ApiResponse<Any>> = service.requestDownloadLocation(downloadLocation)
         }.asLiveData()
     }
 }
