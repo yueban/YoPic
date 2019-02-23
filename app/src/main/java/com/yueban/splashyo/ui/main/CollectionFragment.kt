@@ -19,7 +19,7 @@ import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
-import com.yueban.splashyo.util.vm.LoadState
+import com.yueban.splashyo.util.vm.ListLoadState
 import javax.inject.Inject
 
 /**
@@ -67,11 +67,11 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
         mCollectionVM.collections.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
         })
-        mCollectionVM.loadStatus.observe(viewLifecycleOwner, object : Observer<LoadState> {
+        mCollectionVM.loadStatus.observe(viewLifecycleOwner, object : Observer<ListLoadState> {
             //record if last time is refreshing
             private var lastTimeIsRefreshing = false
 
-            override fun onChanged(loadState: LoadState) {
+            override fun onChanged(loadState: ListLoadState) {
                 if (loadState.isRunning) {
                     lastTimeIsRefreshing = loadState.isRefreshing
                     mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)

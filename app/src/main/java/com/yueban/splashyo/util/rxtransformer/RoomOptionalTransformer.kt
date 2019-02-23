@@ -19,9 +19,10 @@ class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
             Optional(it)
         }.onErrorReturn { t ->
             if (t is EmptyResultSetException) {
-                Optional.empty<T>()
+                Optional.empty()
+            } else {
+                throw t
             }
-            throw t
         }
 
     override fun apply(upstream: Flowable<T>): Publisher<Optional<T>> =
@@ -29,9 +30,10 @@ class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
             Optional(it)
         }.onErrorReturn { t ->
             if (t is EmptyResultSetException) {
-                Optional.empty<T>()
+                Optional.empty()
+            } else {
+                throw t
             }
-            throw t
         }
 
     override fun apply(upstream: Single<T>): SingleSource<Optional<T>> =
@@ -39,9 +41,10 @@ class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
             Optional(it)
         }.onErrorReturn { t ->
             if (t is EmptyResultSetException) {
-                Optional.empty<T>()
+                Optional.empty()
+            } else {
+                throw t
             }
-            throw t
         }
 
     override fun apply(upstream: Maybe<T>): MaybeSource<Optional<T>> =
@@ -49,9 +52,10 @@ class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
             Optional(it)
         }.onErrorReturn { t ->
             if (t is EmptyResultSetException) {
-                Optional.empty<T>()
+                Optional.empty()
+            } else {
+                throw t
             }
-            throw t
         }
 
     override fun apply(upstream: Completable): CompletableSource = upstream

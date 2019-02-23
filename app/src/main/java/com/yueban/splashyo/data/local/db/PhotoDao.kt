@@ -1,6 +1,5 @@
 package com.yueban.splashyo.data.local.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -49,11 +48,11 @@ interface PhotoDao {
     fun insertPhotoStatistics(photoStatistics: PhotoStatistics)
 
     @Query("select * from PhotoStatistics where id=:photoId limit 1")
-    fun getPhotoStatistics(photoId: String): LiveData<PhotoStatistics>
+    fun getPhotoStatistics(photoId: String): Single<PhotoStatistics>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoDetail(photoDetail: PhotoDetail)
 
     @Query("select * from PhotoDetail where id=:photoId")
-    fun getPhotoDetail(photoId: String): LiveData<PhotoDetail>
+    fun getPhotoDetail(photoId: String): Single<PhotoDetail>
 }

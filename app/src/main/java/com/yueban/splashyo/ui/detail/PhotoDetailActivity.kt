@@ -26,10 +26,10 @@ import com.yueban.splashyo.ui.base.BaseViewActivity
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
 import com.yueban.splashyo.ui.detail.vm.WallpaperSetType
-import com.yueban.splashyo.util.concurrent.AppExecutors
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
 import com.yueban.splashyo.util.bottomsheet.SimpleBottomSheetListener
+import com.yueban.splashyo.util.concurrent.AppExecutors
 import com.yueban.splashyo.util.screenHeight
 import com.yueban.splashyo.util.screenWidth
 import javax.inject.Inject
@@ -113,7 +113,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                 }
             }
         })
-        mVM.requestDownloadResult.observe(this, Observer { res ->
+        mVM.downloadResult.observe(this, Observer { res ->
             if (res == null) {
                 showDownloadError()
                 return@Observer
@@ -138,22 +138,14 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                 }
             }
         })
-        mVM.requestWallpaperResult.observe(this, Observer { wallpaperResponse ->
-            if (wallpaperResponse == null) {
+        mVM.wallpaperResult.observe(this, Observer { res ->
+            if (res == null) {
                 showSetWallpaperError()
                 return@Observer
             }
-            when (wallpaperResponse.res.status) {
+            when (res.status) {
                 Status.SUCCESS, Status.CACHE -> {
                     AppExecutors.io().execute {
-                        AppExecutors.mainThread().execute {
-                            Snackbar.make(
-                                mBinding.root,
-                                getString(R.string.downloading_fitted_wallpaper),
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
-
                         try {
                             val future = GlideApp.with(this).download(mPhoto.resizeUrl(screenHeight)).submit()
                             val file = future.get()
@@ -161,7 +153,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                             val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(this)
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                when (wallpaperResponse.setType) {
+                                when (res.data!!.setType) {
                                     WallpaperSetType.HOME_SCREEN -> wallpaperManager.setBitmap(
                                         bitmap,
                                         null,
@@ -200,8 +192,13 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                         }
                     }
                 }
-                Status.ERROR -> showSetWallpaperError(wallpaperResponse.res.message)
+                Status.ERROR -> showSetWallpaperError(res.message)
                 Status.LOADING -> {
+                    Snackbar.make(
+                        mBinding.root,
+                        getString(R.string.downloading_fitted_wallpaper),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

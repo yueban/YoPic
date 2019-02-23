@@ -1,6 +1,5 @@
 package com.yueban.splashyo.data.net
 
-import androidx.lifecycle.LiveData
 import com.yueban.splashyo.data.Optional
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
@@ -34,10 +33,10 @@ interface UnSplashService {
      * @param quantity The amount of for each stat. (Optional; default: 30)
      */
     @GET("photos/{id}/statistics")
-    fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): LiveData<ApiResponse<PhotoStatistics>>
+    fun photoStatistics(@Path("id") photoId: String, @Query("resolution") resolution: String = "days", @Query("quantity") quantity: Int = 30): Single<Optional<PhotoStatistics>>
 
     @GET("photos/{id}")
-    fun photoDetail(@Path("id") photoId: String): LiveData<ApiResponse<PhotoDetail>>
+    fun photoDetail(@Path("id") photoId: String): Single<Optional<PhotoDetail>>
 
     @GET("collections")
     fun collections(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): Single<Optional<List<PhotoCollection>>>
@@ -49,5 +48,5 @@ interface UnSplashService {
      * As it declared in UnSplash API guidelines: When your application performs something similar to a download (like when a user chooses the image to include in a blog post, set as a header, etc.), you must send a request to the download endpoint returned under the photo.links.download_location property.
      */
     @GET
-    fun requestDownloadLocation(@Url download_location: String): LiveData<ApiResponse<Any>>
+    fun requestDownloadLocation(@Url download_location: String): Single<Optional<Any>>
 }

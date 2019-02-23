@@ -1,21 +1,17 @@
 package com.yueban.splashyo.data.repo
 
-import androidx.lifecycle.LiveData
 import com.yueban.splashyo.data.Optional
 import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoDetail
-import com.yueban.splashyo.data.net.ApiResponse
 import com.yueban.splashyo.data.net.UnSplashService
-import com.yueban.splashyo.data.repo.model.NetworkBoundResource
-import com.yueban.splashyo.data.repo.model.NetworkResource
-import com.yueban.splashyo.data.repo.model.Resource
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
 import com.yueban.splashyo.util.di.scope.AppScope
 import com.yueban.splashyo.util.rxtransformer.MarkAsCacheTransformer
 import com.yueban.splashyo.util.rxtransformer.RoomOptionalTransformer
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -29,34 +25,28 @@ class PhotoRepo
     private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
-    fun getPhotoDetail(photoId: String): LiveData<Resource<PhotoDetail>> {
-        return object : NetworkBoundResource<PhotoDetail>() {
-            override fun saveCallResult(data: PhotoDetail) {
-                photoDao.insertPhotoDetail(data)
-            }
-
-            override fun shouldFetch(data: PhotoDetail?): Boolean {
-                // cache expired time: 1 minute
-                data?.let {
-                    val timeSpan = System.currentTimeMillis() - it.cacheUpdateAt
-                    return timeSpan > 1000 * 60
+    fun getPhotoDetail(photoId: String): Flowable<Optional<PhotoDetail>> {
+        return photoDao.getPhotoDetail(photoId)
+            .compose(RoomOptionalTransformer())
+            .toFlowable()
+            .flatMap {
+                val cacheExpired = if (it.isNull) {
+                    true
+                } else {
+                    val timeSpan = System.currentTimeMillis() - it.get().cacheUpdateAt
+                    timeSpan > 1000 * 60
                 }
-                return true
+
+                if (!cacheExpired) {
+                    Single.just(it).toFlowable()
+                } else {
+                    Single.just(it).concatWith(service.photoDetail(photoId))
+                }
             }
-
-            override fun preloadCache(data: PhotoDetail?): Boolean = data != null
-
-            override fun loadFromCache(): LiveData<PhotoDetail> = photoDao.getPhotoDetail(photoId)
-
-            override fun loadFromNet(): LiveData<ApiResponse<PhotoDetail>> = service.photoDetail(photoId)
-        }.asLiveData()
     }
 
-    fun requestDownloadLocation(downloadLocation: String): LiveData<Resource<Any>> {
-        return object : NetworkResource<Any>() {
-            override fun loadFromNet(): LiveData<ApiResponse<Any>> = service.requestDownloadLocation(downloadLocation)
-        }.asLiveData()
-    }
+    fun requestDownloadLocation(downloadLocation: String): Single<Optional<Any>> =
+        service.requestDownloadLocation(downloadLocation)
 
     fun getCollections(
         featured: Boolean,
