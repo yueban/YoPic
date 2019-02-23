@@ -27,7 +27,7 @@ class PhotoRepo
 ) {
     fun getPhotoDetail(photoId: String): Flowable<Optional<PhotoDetail>> {
         return photoDao.getPhotoDetail(photoId)
-            .compose(RoomOptionalTransformer())
+            .compose(RoomOptionalTransformer.create())
             .toFlowable()
             .flatMap {
                 val cacheExpired = if (it.isNull) {
@@ -73,8 +73,8 @@ class PhotoRepo
                 photoDao.getFeaturedCollections()
             } else {
                 photoDao.getCollections()
-            }.compose(RoomOptionalTransformer())
-                .compose(MarkAsCacheTransformer())
+            }.compose(RoomOptionalTransformer.create())
+                .compose(MarkAsCacheTransformer.create())
                 .concatWith(netSource)
         } else {
             netSource.toFlowable()
@@ -105,8 +105,8 @@ class PhotoRepo
 
         return if (page == firstPage) {
             photoDao.getPhotos(cacheLabel)
-                .compose(RoomOptionalTransformer())
-                .compose(MarkAsCacheTransformer())
+                .compose(RoomOptionalTransformer.create())
+                .compose(MarkAsCacheTransformer.create())
                 .concatWith(netSource)
         } else {
             netSource.toFlowable()

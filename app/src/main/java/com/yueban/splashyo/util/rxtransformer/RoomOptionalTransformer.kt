@@ -13,7 +13,7 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import org.reactivestreams.Publisher
 
-class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
+class RoomOptionalTransformer<T> private constructor() : CombineTransformer<T, Optional<T>> {
     override fun apply(upstream: Observable<T>): ObservableSource<Optional<T>> =
         upstream.map {
             Optional(it)
@@ -59,4 +59,8 @@ class RoomOptionalTransformer<T> : CombineTransformer<T, Optional<T>> {
         }
 
     override fun apply(upstream: Completable): CompletableSource = upstream
+
+    companion object {
+        fun <T> create() = RoomOptionalTransformer<T>()
+    }
 }

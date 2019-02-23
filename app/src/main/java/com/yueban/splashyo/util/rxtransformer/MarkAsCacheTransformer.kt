@@ -12,7 +12,7 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import org.reactivestreams.Publisher
 
-class MarkAsCacheTransformer<T> : CombineTransformer<Optional<T>, Optional<T>> {
+class MarkAsCacheTransformer<T> private constructor() : CombineTransformer<Optional<T>, Optional<T>> {
     override fun apply(upstream: Observable<Optional<T>>): ObservableSource<Optional<T>> =
         upstream.map {
             if (it.isNull) {
@@ -50,4 +50,8 @@ class MarkAsCacheTransformer<T> : CombineTransformer<Optional<T>, Optional<T>> {
         }
 
     override fun apply(upstream: Completable): CompletableSource = upstream
+
+    companion object {
+        fun <T> create() = MarkAsCacheTransformer<T>()
+    }
 }
