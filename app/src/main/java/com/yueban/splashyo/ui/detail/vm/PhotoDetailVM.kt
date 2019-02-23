@@ -17,9 +17,9 @@ import com.yueban.splashyo.util.rxtransformer.IgnoreErrorTransformer
 class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
     private val _photoId = MutableLiveData<String>()
     private val _photoDetail = MutableLiveData<Resource<PhotoDetail>>()
-    private val _downloadLocation = MutableLiveData<String>()
+    private val _downloadRequest = MutableLiveData<String>()
     private val _downloadResult = MutableLiveData<Resource<Any>>()
-    private val _requestWallpaper = MutableLiveData<WallpaperRequest>()
+    private val _wallpaperRequest = MutableLiveData<WallpaperRequest>()
     private val _wallpaperResult = MutableLiveData<Resource<WallpaperResponse>>()
 
     val photoDetail: LiveData<Resource<PhotoDetail>> = _photoDetail
@@ -56,15 +56,16 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
     }
 
     fun download(downloadLocation: String) {
-        if (_downloadLocation.value == downloadLocation) {
+        if (_downloadRequest.value == downloadLocation) {
+            // TODO("提示 正在下载")
             return
         }
-        _downloadLocation.value = downloadLocation
+        _downloadRequest.value = downloadLocation
         retryDownload()
     }
 
     fun retryDownload() {
-        _downloadLocation.value?.let { downloadLocation ->
+        _downloadRequest.value?.let { downloadLocation ->
             photoRepo.requestDownloadLocation(downloadLocation)
                 .compose(AsyncScheduler.create())
                 .doOnSubscribe {
@@ -72,25 +73,28 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 }
                 .doOnError {
                     _downloadResult.value = Resource.error(it.message.orEmpty(), null)
+                    _downloadRequest.value = null
                 }
                 .compose(IgnoreErrorTransformer.create())
                 .subscribe { it ->
                     _downloadResult.value = Resource.success(it.getNullable())
+                    _downloadRequest.value = null
                 }
         }
     }
 
     fun requestWallpaper(downloadLocation: String, setType: WallpaperSetType) {
         val newValue = WallpaperRequest(downloadLocation, setType)
-        if (_requestWallpaper.value == newValue) {
+        if (_wallpaperRequest.value == newValue) {
+            // TODO("提示 正在下载壁纸")
             return
         }
-        _requestWallpaper.value = newValue
+        _wallpaperRequest.value = newValue
         retryRequestWallpaper()
     }
 
     fun retryRequestWallpaper() {
-        _requestWallpaper.value?.let { request ->
+        _wallpaperRequest.value?.let { request ->
             photoRepo.requestDownloadLocation(request.downloadLocation)
                 .compose(AsyncScheduler.create())
                 .doOnSubscribe {
@@ -98,11 +102,13 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 }
                 .doOnError {
                     _wallpaperResult.value = Resource.error(it.message.orEmpty(), null)
+                    _wallpaperRequest.value = null
                 }
                 .compose(IgnoreErrorTransformer.create())
                 .subscribe { it ->
                     val response = WallpaperResponse(it.getNullable(), request.setType)
                     _wallpaperResult.value = Resource.success(response)
+                    _wallpaperRequest.value = null
                 }
         }
     }
