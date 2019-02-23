@@ -2,19 +2,14 @@ package com.yueban.splashyo.ui.main.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.repo.PhotoRepo
-import com.yueban.splashyo.data.repo.model.Resource
-import com.yueban.splashyo.data.repo.model.Status.CACHE
-import com.yueban.splashyo.data.repo.model.Status.ERROR
-import com.yueban.splashyo.data.repo.model.Status.LOADING
-import com.yueban.splashyo.data.repo.model.Status.SUCCESS
-import com.yueban.splashyo.util.NullLiveData
 import com.yueban.splashyo.util.PAGE_SIZE
+import com.yueban.splashyo.util.ext.emptyListIfNull
+import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.vm.LoadState
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 /**
@@ -28,19 +23,11 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
     }
 
     private val _cacheLabel = MutableLiveData<String>()
-    private val nextPageHandler = NextPageHandler(photoRepo)
+    private val _photos = MutableLiveData<List<Photo>>()
+    private val nextPageHandler = NextPageHandler(_photos, photoRepo)
 
     val cacheLabel: LiveData<String> = _cacheLabel
-    val photos: LiveData<List<Photo>> = Transformations.switchMap(_cacheLabel) { it ->
-        if (it == null) {
-            NullLiveData.create()
-        } else {
-            photoRepo.getPhotosFromCache(it).also {
-                nextPageHandler.reset()
-                loadNextPage()
-            }
-        }
-    }
+    val photos: LiveData<List<Photo>> = _photos
 
     val loadStatus: LiveData<LoadState>
         get() = nextPageHandler.loadState
@@ -53,11 +40,13 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
             return
         }
         _cacheLabel.value = cacheLabel
+        refresh()
     }
 
     fun refresh() {
         _cacheLabel.value?.let {
-            _cacheLabel.value = _cacheLabel.value
+            nextPageHandler.reset()
+            nextPageHandler.queryNextPage(it)
         }
     }
 
@@ -67,13 +56,16 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    class NextPageHandler(private val photoRepo: PhotoRepo) : Observer<Resource<List<Photo>>> {
+    class NextPageHandler(
+        private val photos: MutableLiveData<List<Photo>>,
+        private val photoRepo: PhotoRepo
+    ) {
         var loadState = MutableLiveData<LoadState>()
         val hasMore: Boolean
             get() = _hasMore
 
+        private var nextPageDisposable: Disposable? = null
         private val firstPage = 1
-        private var nextPageLiveData: LiveData<Resource<List<Photo>>>? = null
         private var _hasMore: Boolean = false
         private var nextPage = firstPage
 
@@ -105,30 +97,42 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
             }
 
             unregister()
-            nextPageLiveData = photoRepo.getPhotos(cacheLabel, nextPage)
-            loadState.value = LoadState(
-                isRefreshing = nextPage == firstPage,
-                isLoadingMore = nextPage != firstPage,
-                errorMsg = null
-            )
-            nextPageLiveData?.observeForever(this)
-        }
+            nextPageDisposable = photoRepo.getPhotos(cacheLabel, nextPage)
+                .compose(AsyncScheduler.create())
+                .doOnSubscribe {
+                    loadState.value = LoadState(
+                        isRefreshing = nextPage == firstPage,
+                        isLoadingMore = nextPage != firstPage,
+                        errorMsg = null
+                    )
+                }
+                .doOnError {
+                    _hasMore = true
+                    loadState.value = LoadState(
+                        isRefreshing = false,
+                        isLoadingMore = false,
+                        errorMsg = it.message
+                    )
+                }
+                .subscribe { result ->
+                    if (result.isCache) {
+                        photos.value = result.getNullable().emptyListIfNull()
+                    } else {
+                        if (nextPage == firstPage) {
+                            photos.value = result.getNullable().emptyListIfNull()
+                        } else if (!result.isNull) {
+                            photos.apply {
+                                value = value!!.plus(result.get())
+                            }
+                        }
+                    }
 
-        override fun onChanged(result: Resource<List<Photo>>?) {
-            if (result == null) {
-                reset()
-                return
-            }
-
-            when (result.status) {
-                SUCCESS -> {
                     _hasMore =
-                        if (result.data == null) {
+                        if (result.isNull) {
                             false
                         } else {
-                            result.data.size >= PAGE_SIZE
+                            result.get().size >= PAGE_SIZE
                         }
-                    unregister()
 
                     loadState.value =
                         LoadState(
@@ -136,27 +140,18 @@ class PhotoListVM(private val photoRepo: PhotoRepo) : ViewModel() {
                             isLoadingMore = false,
                             errorMsg = null
                         )
+
                     nextPage++
                 }
-                CACHE -> {
-                }
-                ERROR -> {
-                    _hasMore = true
-                    unregister()
-                    loadState.value = LoadState(
-                        isRefreshing = false,
-                        isLoadingMore = false,
-                        errorMsg = result.message
-                    )
-                }
-                LOADING -> {
-                }
-            }
         }
 
         private fun unregister() {
-            nextPageLiveData?.removeObserver(this)
-            nextPageLiveData = null
+            nextPageDisposable?.apply {
+                if (!isDisposed) {
+                    dispose()
+                }
+                nextPageDisposable = null
+            }
         }
     }
 }

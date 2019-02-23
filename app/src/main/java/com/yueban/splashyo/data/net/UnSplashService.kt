@@ -23,10 +23,10 @@ interface UnSplashService {
      * @param order_by How to sort the photos. Optional. (Valid values: latest, oldest, popular; default: latest)
      */
     @GET("photos")
-    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE, @Query("order_by") order_by: String = "latest"): LiveData<ApiResponse<List<Photo>>>
+    fun photos(@Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE, @Query("order_by") order_by: String = "latest"): Single<Optional<List<Photo>>>
 
     @GET("/collections/{id}/photos")
-    fun photosByCollection(@Path("id") collectionId: String, @Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): LiveData<ApiResponse<List<Photo>>>
+    fun photosByCollection(@Path("id") collectionId: String, @Query("page") page: Int, @Query("per_page") per_page: Int = PAGE_SIZE): Single<Optional<List<Photo>>>
 
     /**
      * @param photoId

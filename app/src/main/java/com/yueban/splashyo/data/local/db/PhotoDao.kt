@@ -31,7 +31,7 @@ interface PhotoDao {
      * @param cacheLabel 用以区分不同场景下的缓存数据
      */
     @Query("select * from photo where cache_label=:cacheLabel")
-    fun getPhotos(cacheLabel: String): LiveData<List<Photo>>
+    fun getPhotos(cacheLabel: String): Single<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<PhotoCollection>): List<Long>

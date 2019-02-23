@@ -16,7 +16,6 @@ import com.yueban.splashyo.util.di.scope.AppScope
 import com.yueban.splashyo.util.rxtransformer.MarkAsCacheTransformer
 import com.yueban.splashyo.util.rxtransformer.RoomOptionalTransformer
 import io.reactivex.Flowable
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -30,37 +29,6 @@ class PhotoRepo
     private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
-    fun getPhotos(
-        cacheLabel: String,
-        page: Int,
-        clearCacheOnFirstPage: Boolean = true,
-        firstPage: Int = 1
-    ): LiveData<Resource<List<Photo>>> {
-        return object : NetworkResource<List<Photo>>() {
-            override fun processResponse(response: ApiResponse.ApiSuccessResponse<List<Photo>>): List<Photo> {
-                response.body.forEach { it.cacheLabel = cacheLabel }
-                return response.body
-            }
-
-            override fun saveCallResult(data: List<Photo>) {
-                Timber.d("photo list from api: ${data.size}")
-                if (clearCacheOnFirstPage && page == firstPage) {
-                    photoDao.deleteAllPhotos(cacheLabel)
-                }
-                photoDao.insertPhotos(data)
-            }
-
-            override fun loadFromNet(): LiveData<ApiResponse<List<Photo>>> =
-                if (cacheLabel == PhotoListVM.CACHE_LABEL_ALL) {
-                    service.photos(page)
-                } else {
-                    service.photosByCollection(cacheLabel, page)
-                }
-        }.asLiveData()
-    }
-
-    fun getPhotosFromCache(cacheLabel: String): LiveData<List<Photo>> = photoDao.getPhotos(cacheLabel)
-
     fun getPhotoDetail(photoId: String): LiveData<Resource<PhotoDetail>> {
         return object : NetworkBoundResource<PhotoDetail>() {
             override fun saveCallResult(data: PhotoDetail) {
@@ -116,6 +84,38 @@ class PhotoRepo
             } else {
                 photoDao.getCollections()
             }.compose(RoomOptionalTransformer())
+                .compose(MarkAsCacheTransformer())
+                .concatWith(netSource)
+        } else {
+            netSource.toFlowable()
+        }
+    }
+
+    fun getPhotos(
+        cacheLabel: String,
+        page: Int,
+        clearCacheOnFirstPage: Boolean = true,
+        firstPage: Int = 1
+    ): Flowable<Optional<List<Photo>>> {
+        val netSource =
+            if (cacheLabel == PhotoListVM.CACHE_LABEL_ALL) {
+                service.photos(page)
+            } else {
+                service.photosByCollection(cacheLabel, page)
+            }.doOnSuccess {
+                if (!it.isNull) {
+                    // add cache label
+                    it.get().forEach { photo -> photo.cacheLabel = cacheLabel }
+                    if (clearCacheOnFirstPage && page == firstPage) {
+                        photoDao.deleteAllPhotos(cacheLabel)
+                    }
+                    photoDao.insertPhotos(it.get())
+                }
+            }
+
+        return if (page == firstPage) {
+            photoDao.getPhotos(cacheLabel)
+                .compose(RoomOptionalTransformer())
                 .compose(MarkAsCacheTransformer())
                 .concatWith(netSource)
         } else {

@@ -119,8 +119,9 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
                         if (nextPage == firstPage) {
                             collections.value = result.getNullable().emptyListIfNull()
                         } else if (!result.isNull) {
-                            val list = collections.value!!.plus(result.get())
-                            collections.value = list
+                            collections.apply {
+                                value = collections.value!!.plus(result.get())
+                            }
                         }
 
                         _hasMore =
@@ -136,6 +137,7 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
                                 isLoadingMore = false,
                                 errorMsg = null
                             )
+
                         nextPage++
                     }
                 }
