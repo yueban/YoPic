@@ -41,7 +41,7 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     }
 
     override fun initView() {
-        mAdapter = CollectionAdapter(appComponent.appExecutors())
+        mAdapter = CollectionAdapter()
         mBinding.rvCollections.adapter = mAdapter
 
         mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
@@ -97,6 +97,7 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
 
     override fun initData() {
         mCollectionVM.setFeatured(true)
+        mBinding.refreshLayout.autoRefresh()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

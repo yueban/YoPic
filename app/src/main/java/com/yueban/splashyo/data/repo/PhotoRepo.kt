@@ -1,6 +1,7 @@
 package com.yueban.splashyo.data.repo
 
 import androidx.lifecycle.LiveData
+import com.yueban.splashyo.data.Optional
 import com.yueban.splashyo.data.local.db.PhotoDao
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
@@ -11,8 +12,10 @@ import com.yueban.splashyo.data.repo.model.NetworkBoundResource
 import com.yueban.splashyo.data.repo.model.NetworkResource
 import com.yueban.splashyo.data.repo.model.Resource
 import com.yueban.splashyo.ui.main.vm.PhotoListVM
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.di.scope.AppScope
+import com.yueban.splashyo.util.rxtransformer.MarkAsCacheTransformer
+import com.yueban.splashyo.util.rxtransformer.RoomOptionalTransformer
+import io.reactivex.Flowable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,7 +27,6 @@ import javax.inject.Inject
 @AppScope
 class PhotoRepo
 @Inject constructor(
-    private val appExecutors: AppExecutors,
     private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
@@ -34,7 +36,7 @@ class PhotoRepo
         clearCacheOnFirstPage: Boolean = true,
         firstPage: Int = 1
     ): LiveData<Resource<List<Photo>>> {
-        return object : NetworkResource<List<Photo>>(appExecutors) {
+        return object : NetworkResource<List<Photo>>() {
             override fun processResponse(response: ApiResponse.ApiSuccessResponse<List<Photo>>): List<Photo> {
                 response.body.forEach { it.cacheLabel = cacheLabel }
                 return response.body
@@ -59,38 +61,8 @@ class PhotoRepo
 
     fun getPhotosFromCache(cacheLabel: String): LiveData<List<Photo>> = photoDao.getPhotos(cacheLabel)
 
-    fun getCollections(
-        featured: Boolean,
-        page: Int,
-        clearCacheOnFirstPage: Boolean = true,
-        firstPage: Int = 1
-    ): LiveData<Resource<List<PhotoCollection>>> {
-        return object : NetworkResource<List<PhotoCollection>>(appExecutors) {
-            override fun saveCallResult(data: List<PhotoCollection>) {
-                Timber.d("collection list from api: ${data.size}")
-                if (clearCacheOnFirstPage && page == firstPage) {
-                    photoDao.deleteAllCollections()
-                }
-                photoDao.insertCollections(data)
-            }
-
-            override fun loadFromNet(): LiveData<ApiResponse<List<PhotoCollection>>> = if (featured) {
-                service.collectionsFeatured(page)
-            } else {
-                service.collections(page)
-            }
-        }.asLiveData()
-    }
-
-    fun getCollectionsFromCache(featured: Boolean): LiveData<List<PhotoCollection>> =
-        if (featured) {
-            photoDao.getFeaturedCollections()
-        } else {
-            photoDao.getCollections()
-        }
-
     fun getPhotoDetail(photoId: String): LiveData<Resource<PhotoDetail>> {
-        return object : NetworkBoundResource<PhotoDetail>(appExecutors) {
+        return object : NetworkBoundResource<PhotoDetail>() {
             override fun saveCallResult(data: PhotoDetail) {
                 photoDao.insertPhotoDetail(data)
             }
@@ -113,8 +85,41 @@ class PhotoRepo
     }
 
     fun requestDownloadLocation(downloadLocation: String): LiveData<Resource<Any>> {
-        return object : NetworkResource<Any>(appExecutors) {
+        return object : NetworkResource<Any>() {
             override fun loadFromNet(): LiveData<ApiResponse<Any>> = service.requestDownloadLocation(downloadLocation)
         }.asLiveData()
+    }
+
+    fun getCollections(
+        featured: Boolean,
+        page: Int,
+        clearCacheOnFirstPage: Boolean = true,
+        firstPage: Int = 1
+    ): Flowable<Optional<List<PhotoCollection>>> {
+        val netSource =
+            if (featured) {
+                service.collectionsFeatured(page)
+            } else {
+                service.collections(page)
+            }.doOnSuccess {
+                if (!it.isNull) {
+                    if (clearCacheOnFirstPage && page == firstPage) {
+                        photoDao.deleteAllCollections()
+                    }
+                    photoDao.insertCollections(it.get())
+                }
+            }
+
+        return if (page == firstPage) {
+            if (featured) {
+                photoDao.getFeaturedCollections()
+            } else {
+                photoDao.getCollections()
+            }.compose(RoomOptionalTransformer())
+                .compose(MarkAsCacheTransformer())
+                .concatWith(netSource)
+        } else {
+            netSource.toFlowable()
+        }
     }
 }

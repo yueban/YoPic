@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.yueban.splashyo.util.concurrent.AppExecutors
 
 /**
  * @author yueban
@@ -12,11 +13,10 @@ import androidx.recyclerview.widget.ListAdapter
  * @email fbzhh007@gmail.com
  */
 abstract class BaseBindingListAdapter<T, V : ViewDataBinding>(
-    appExecutors: AppExecutors,
     diffCallback: DiffUtil.ItemCallback<T>
 ) : ListAdapter<T, BaseBindingViewHolder<V>>(
     AsyncDifferConfig.Builder<T>(diffCallback)
-        .setBackgroundThreadExecutor(appExecutors.diskIO())
+        .setBackgroundThreadExecutor(AppExecutors.singleton())
         .build()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<V> {

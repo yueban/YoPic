@@ -82,7 +82,7 @@ class PhotoListFragment : BaseViewFragment<FragmentPhotoListBinding>() {
                 }
             }
         })
-        mAdapter = PhotoListAdapter(appComponent.appExecutors(), spanCount, spacing)
+        mAdapter = PhotoListAdapter(spanCount, spacing)
         mBinding.rvPhotos.adapter = mAdapter
 
         mBinding.refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {

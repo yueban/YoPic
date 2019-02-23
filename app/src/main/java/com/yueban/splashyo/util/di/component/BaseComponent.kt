@@ -1,7 +1,6 @@
 package com.yueban.splashyo.util.di.component
 
 import com.squareup.moshi.Moshi
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.moshi.ApplicationJsonAdapterFactory
 import com.yueban.splashyo.util.moshi.MoshiDateConverter
 import dagger.BindsInstance
@@ -23,8 +22,6 @@ interface BaseComponent {
 
         fun build(): BaseComponent
     }
-
-    fun appExecutors(): AppExecutors
 
     fun moshi(): Moshi
 

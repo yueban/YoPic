@@ -26,6 +26,7 @@ import com.yueban.splashyo.ui.base.BaseViewActivity
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
 import com.yueban.splashyo.ui.detail.vm.WallpaperSetType
+import com.yueban.splashyo.util.concurrent.AppExecutors
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
 import com.yueban.splashyo.util.bottomsheet.SimpleBottomSheetListener
@@ -144,8 +145,8 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             }
             when (wallpaperResponse.res.status) {
                 Status.SUCCESS, Status.CACHE -> {
-                    appComponent.appExecutors().networkIO().execute {
-                        appComponent.appExecutors().mainThread().execute {
+                    AppExecutors.io().execute {
+                        AppExecutors.mainThread().execute {
                             Snackbar.make(
                                 mBinding.root,
                                 getString(R.string.downloading_fitted_wallpaper),
@@ -186,7 +187,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
 
                             bitmap.recycle()
 
-                            appComponent.appExecutors().mainThread().execute {
+                            AppExecutors.mainThread().execute {
                                 Snackbar.make(
                                     mBinding.root,
                                     getString(R.string.set_wallpaper_success),

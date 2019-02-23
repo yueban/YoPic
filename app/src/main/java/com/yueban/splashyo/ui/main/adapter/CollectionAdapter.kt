@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import com.yueban.splashyo.R
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.databinding.ItemCollectionBinding
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.BaseBindingListAdapter
 
 /**
@@ -16,10 +15,8 @@ import com.yueban.splashyo.util.BaseBindingListAdapter
  * @email fbzhh007@gmail.com
  */
 class CollectionAdapter(
-    appExecutors: AppExecutors,
     var itemClickListener: ((PhotoCollection) -> Unit)? = null
 ) : BaseBindingListAdapter<PhotoCollection, ItemCollectionBinding>(
-    appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<PhotoCollection>() {
         override fun areItemsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
             return oldItem.id == newItem.id

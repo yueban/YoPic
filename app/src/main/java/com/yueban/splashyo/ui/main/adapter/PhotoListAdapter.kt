@@ -6,7 +6,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.databinding.ItemPhotoBinding
-import com.yueban.splashyo.util.AppExecutors
 import com.yueban.splashyo.util.BaseBindingListAdapter
 import com.yueban.splashyo.util.screenWidth
 
@@ -16,12 +15,10 @@ import com.yueban.splashyo.util.screenWidth
  * @email fbzhh007@gmail.com
  */
 class PhotoListAdapter(
-    appExecutors: AppExecutors,
     private val spanCount: Int,
     private val itemSpacing: Int,
     var itemClickListener: ((imgView: ImageView, photo: Photo) -> Unit)? = null
 ) : BaseBindingListAdapter<Photo, ItemPhotoBinding>(
-    appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<Photo>() {
         override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
             return oldItem.id == newItem.id

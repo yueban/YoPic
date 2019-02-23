@@ -9,6 +9,7 @@ import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.model.PhotoDetail
 import com.yueban.splashyo.data.model.PhotoStatistics
+import io.reactivex.Single
 
 /**
  * @author yueban
@@ -36,10 +37,10 @@ interface PhotoDao {
     fun insertCollections(collections: List<PhotoCollection>): List<Long>
 
     @Query("select * from collection")
-    fun getCollections(): LiveData<List<PhotoCollection>>
+    fun getCollections(): Single<List<PhotoCollection>>
 
     @Query("select * from collection where featured=1")
-    fun getFeaturedCollections(): LiveData<List<PhotoCollection>>
+    fun getFeaturedCollections(): Single<List<PhotoCollection>>
 
     @Query("delete from collection")
     fun deleteAllCollections()

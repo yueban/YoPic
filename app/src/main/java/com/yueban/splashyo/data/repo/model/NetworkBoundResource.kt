@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.yueban.splashyo.data.net.ApiResponse
-import com.yueban.splashyo.util.AppExecutors
+import com.yueban.splashyo.util.concurrent.AppExecutors
 
 /**
  * @author yueban
@@ -12,7 +12,7 @@ import com.yueban.splashyo.util.AppExecutors
  * @email fbzhh007@gmail.com
  */
 abstract class NetworkBoundResource<Type>
-@MainThread constructor(private val appExecutors: AppExecutors) : NetworkResource<Type>(appExecutors) {
+@MainThread constructor() : NetworkResource<Type>() {
     private val result = MediatorLiveData<Resource<Type>>()
 
     init {
@@ -51,10 +51,10 @@ abstract class NetworkBoundResource<Type>
             result.removeSource(dbSource)
             when (response) {
                 is ApiResponse.ApiSuccessResponse -> {
-                    appExecutors.diskIO().execute {
+                    AppExecutors.singleton().execute {
                         val data = processResponse(response)
                         saveCallResult(data)
-                        appExecutors.mainThread().execute {
+                        AppExecutors.mainThread().execute {
                             // request a new liveData from db, cause we have already saveCallResult in db. This can make result always use dbSource as its dataSource
                             result.addSource(loadFromCache()) { newData ->
                                 setValue(Resource.success(newData))
@@ -64,7 +64,7 @@ abstract class NetworkBoundResource<Type>
                 }
 
                 is ApiResponse.ApiEmptyResponse -> {
-                    appExecutors.mainThread().execute {
+                    AppExecutors.mainThread().execute {
                         // reload cache from db if api response is empty
                         result.addSource(loadFromCache()) { newData ->
                             setValue(Resource.success(newData))

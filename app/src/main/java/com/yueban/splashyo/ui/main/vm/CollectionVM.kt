@@ -2,19 +2,15 @@ package com.yueban.splashyo.ui.main.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.repo.PhotoRepo
-import com.yueban.splashyo.data.repo.model.Resource
-import com.yueban.splashyo.data.repo.model.Status.CACHE
-import com.yueban.splashyo.data.repo.model.Status.ERROR
-import com.yueban.splashyo.data.repo.model.Status.LOADING
-import com.yueban.splashyo.data.repo.model.Status.SUCCESS
-import com.yueban.splashyo.util.NullLiveData
 import com.yueban.splashyo.util.PAGE_SIZE
+import com.yueban.splashyo.util.ext.emptyListIfNull
+import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
+import com.yueban.splashyo.util.rxtransformer.IgnoreErrorTransformer
 import com.yueban.splashyo.util.vm.LoadState
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 /**
@@ -22,23 +18,13 @@ import timber.log.Timber
  * @date 2019/1/5
  * @email fbzhh007@gmail.com
  */
-class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
-    private val nextPageHandler = NextPageHandler(photoRepo)
+class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
     private val _featured = MutableLiveData<Boolean>()
+    private val _collections = MutableLiveData<List<PhotoCollection>>()
+    private val nextPageHandler = NextPageHandler(_collections, photoRepo)
 
     val featured: LiveData<Boolean> = _featured
-
-    // result
-    val collections: LiveData<List<PhotoCollection>> = Transformations.switchMap(_featured) { featured ->
-        if (featured == null) {
-            NullLiveData.create()
-        } else {
-            photoRepo.getCollectionsFromCache(featured).also {
-                nextPageHandler.reset()
-                loadNextPage()
-            }
-        }
-    }
+    val collections: LiveData<List<PhotoCollection>> = _collections
 
     val loadStatus: LiveData<LoadState>
         get() = nextPageHandler.loadState
@@ -51,11 +37,13 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
             return
         }
         _featured.value = featured
+        refresh()
     }
 
     fun refresh() {
         _featured.value?.let {
-            _featured.value = it
+            nextPageHandler.reset()
+            nextPageHandler.queryNextPage(it)
         }
     }
 
@@ -65,13 +53,16 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    class NextPageHandler(private val photoRepo: PhotoRepo) : Observer<Resource<List<PhotoCollection>>> {
+    class NextPageHandler(
+        private val collections: MutableLiveData<List<PhotoCollection>>,
+        private val photoRepo: PhotoRepo
+    ) {
         val loadState = MutableLiveData<LoadState>()
         val hasMore: Boolean
             get() = _hasMore
 
+        private var nextPageDisposable: Disposable? = null
         private val firstPage = 1
-        private var nextPageLiveData: LiveData<Resource<List<PhotoCollection>>>? = null
         private var _hasMore: Boolean = false
         private var nextPage = firstPage
 
@@ -102,58 +93,61 @@ class CollectionVM(private val photoRepo: PhotoRepo) : ViewModel() {
                 return
             }
             unregister()
-            nextPageLiveData = photoRepo.getCollections(featured, nextPage)
-            loadState.value = LoadState(
-                isRefreshing = nextPage == firstPage,
-                isLoadingMore = nextPage != firstPage,
-                errorMsg = null
-            )
-            nextPageLiveData?.observeForever(this)
-        }
 
-        override fun onChanged(result: Resource<List<PhotoCollection>>?) {
-            if (result == null) {
-                reset()
-                return
-            }
-            when (result.status) {
-                SUCCESS -> {
-                    _hasMore =
-                        if (result.data == null) {
-                            false
-                        } else {
-                            result.data.size >= PAGE_SIZE
-                        }
-                    unregister()
-
-                    loadState.value =
-                        LoadState(
-                            isRefreshing = false,
-                            isLoadingMore = false,
-                            errorMsg = null
-                        )
-                    nextPage++
+            nextPageDisposable = photoRepo.getCollections(featured, nextPage)
+                .compose(AsyncScheduler.create())
+                .compose(IgnoreErrorTransformer.create())
+                .doOnSubscribe {
+                    loadState.value = LoadState(
+                        isRefreshing = nextPage == firstPage,
+                        isLoadingMore = nextPage != firstPage,
+                        errorMsg = null
+                    )
                 }
-                CACHE -> {
-                }
-                ERROR -> {
+                .doOnError {
                     _hasMore = true
-                    unregister()
                     loadState.value = LoadState(
                         isRefreshing = false,
                         isLoadingMore = false,
-                        errorMsg = result.message
+                        errorMsg = it.message
                     )
                 }
-                LOADING -> {
-                    //ignore
+                .subscribe { result ->
+                    if (result.isCache) {
+                        collections.value = result.getNullable().emptyListIfNull()
+                    } else {
+                        if (nextPage == firstPage) {
+                            collections.value = result.getNullable().emptyListIfNull()
+                        } else if (!result.isNull) {
+                            val list = collections.value!!.plus(result.get())
+                            collections.value = list
+                        }
+
+                        _hasMore =
+                            if (result.isNull) {
+                                false
+                            } else {
+                                result.get().size >= PAGE_SIZE
+                            }
+
+                        loadState.value =
+                            LoadState(
+                                isRefreshing = false,
+                                isLoadingMore = false,
+                                errorMsg = null
+                            )
+                        nextPage++
+                    }
                 }
-            }
         }
 
         private fun unregister() {
-            nextPageLiveData?.removeObserver(this)
-            nextPageLiveData = null
+            nextPageDisposable?.apply {
+                if (!isDisposed) {
+                    dispose()
+                }
+                nextPageDisposable = null
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ package com.yueban.splashyo.util.di.module
 
 import com.squareup.moshi.Moshi
 import com.yueban.splashyo.data.model.UnSplashKeys
-import com.yueban.splashyo.data.net.LiveDataCallAdapterFactory
+import com.yueban.splashyo.data.net.RxJava2CallAdapterFactory
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.util.API_BASE_URL
 import com.yueban.splashyo.util.di.scope.AppScope
@@ -24,7 +24,7 @@ class ApiServiceModule {
     @Provides
     fun provideOkHttpClient(unSplashKeys: UnSplashKeys): OkHttpClient {
         val logger = HttpLoggingInterceptor()
-        logger.level = HttpLoggingInterceptor.Level.BODY
+        logger.level = HttpLoggingInterceptor.Level.HEADERS
         return OkHttpClient.Builder()
             .addInterceptor(logger)
             .addNetworkInterceptor { chain ->
@@ -44,7 +44,7 @@ class ApiServiceModule {
             .baseUrl(API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
             .create(UnSplashService::class.java)
     }

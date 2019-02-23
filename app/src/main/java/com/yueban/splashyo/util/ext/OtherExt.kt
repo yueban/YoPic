@@ -35,3 +35,5 @@ fun Float.toPx(): Int = (this / displayMetrics.density).toInt()
 fun Int.toDp(): Int = (this * displayMetrics.density).toInt()
 
 fun Int.toPx(): Int = (this / displayMetrics.density).toInt()
+
+fun <T> List<T>?.emptyListIfNull(): List<T> = this ?: emptyList()
