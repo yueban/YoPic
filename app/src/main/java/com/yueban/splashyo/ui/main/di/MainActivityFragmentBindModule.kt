@@ -2,7 +2,7 @@ package com.yueban.splashyo.ui.main.di
 
 import com.yueban.splashyo.ui.main.CollectionFragment
 import com.yueban.splashyo.ui.main.PhotoListFragment
-import com.yueban.splashyo.util.di.scope.ActivityScope
+import com.yueban.splashyo.util.di.scope.FragmentScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -13,11 +13,11 @@ import dagger.android.ContributesAndroidInjector
  */
 @Module
 abstract class MainActivityFragmentBindModule {
-    @ActivityScope
+    @FragmentScope
     @ContributesAndroidInjector
     abstract fun collectionFragment(): CollectionFragment
 
-    @ActivityScope
+    @FragmentScope
     @ContributesAndroidInjector
     abstract fun photoListFragment(): PhotoListFragment
 }
