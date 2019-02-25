@@ -3,6 +3,7 @@ package com.yueban.splashyo.ui.base
 import com.yueban.splashyo.ui.detail.PhotoDetailActivity
 import com.yueban.splashyo.ui.main.MainActivity
 import com.yueban.splashyo.ui.main.di.MainActivityFragmentBindModule
+import com.yueban.splashyo.ui.setting.SettingActivity
 import com.yueban.splashyo.util.di.scope.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -21,4 +22,8 @@ abstract class ActivityBindModule {
     @ActivityScope
     @ContributesAndroidInjector
     abstract fun photoDetailActivityInjector(): PhotoDetailActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    abstract fun settingActivityInjector(): SettingActivity
 }

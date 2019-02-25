@@ -28,5 +28,6 @@
     <string name="lock_screen">Lock screen</string>
     <string name="set_wallpaper">Set wallpaper</string>
     <string name="photographer">Photographer</string>
+    <string name="setting">Setting</string>
 
 </resources>

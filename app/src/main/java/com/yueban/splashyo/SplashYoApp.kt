@@ -6,6 +6,7 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
+import com.yueban.splashyo.worker.WorkerUtil
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
@@ -21,6 +22,8 @@ class SplashYoApp : DaggerApplication() {
     lateinit var appComponent: AppComponent
     @Inject
     lateinit var applicationDispatchingAndroidInjector: DispatchingAndroidInjector<SplashYoApp>
+    @Inject
+    lateinit var workerUtil: WorkerUtil
 
     override fun onCreate() {
         appComponent =
@@ -32,9 +35,18 @@ class SplashYoApp : DaggerApplication() {
 
         super.onCreate()
 
+        initTimber()
+        initWorker()
+    }
+
+    private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun initWorker() {
+        workerUtil.startWallpaperChangeTask()
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> = applicationDispatchingAndroidInjector

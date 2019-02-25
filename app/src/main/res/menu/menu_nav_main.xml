@@ -10,4 +10,11 @@
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/photos"/>
     </group>
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@id/settingActivity"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/setting"/>
+    </group>
 </menu>

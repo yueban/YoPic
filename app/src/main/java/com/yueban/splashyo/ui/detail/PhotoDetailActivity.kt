@@ -1,12 +1,10 @@
 package com.yueban.splashyo.ui.detail
 
 import android.app.DownloadManager
-import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.MenuItem
@@ -25,9 +23,10 @@ import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
 import com.yueban.splashyo.ui.base.BaseViewActivity
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
-import com.yueban.splashyo.ui.detail.vm.WallpaperSetType
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
+import com.yueban.splashyo.util.PrefValue
+import com.yueban.splashyo.util.WallpaperUtil
 import com.yueban.splashyo.util.bottomsheet.SimpleBottomSheetListener
 import com.yueban.splashyo.util.concurrent.AppExecutors
 import com.yueban.splashyo.util.screenHeight
@@ -150,33 +149,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                             val future = GlideApp.with(this).download(mPhoto.resizeUrl(screenHeight)).submit()
                             val file = future.get()
                             val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                            val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(this)
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                when (res.data!!.setType) {
-                                    WallpaperSetType.HOME_SCREEN -> wallpaperManager.setBitmap(
-                                        bitmap,
-                                        null,
-                                        true,
-                                        WallpaperManager.FLAG_SYSTEM
-                                    )
-                                    WallpaperSetType.LOCK_SCREEN -> wallpaperManager.setBitmap(
-                                        bitmap,
-                                        null,
-                                        true,
-                                        WallpaperManager.FLAG_LOCK
-                                    )
-                                    WallpaperSetType.BOTH -> wallpaperManager.setBitmap(
-                                        bitmap,
-                                        null,
-                                        true,
-                                        WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
-                                    )
-                                }
-                            } else {
-                                wallpaperManager.setBitmap(bitmap)
-                            }
-
+                            WallpaperUtil.setWallpaper(this, bitmap, res.data!!.setType)
                             bitmap.recycle()
 
                             AppExecutors.mainThread().execute {
@@ -220,13 +193,19 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                 ) {
                     when (item?.itemId) {
                         R.id.menu_set_wallpaper_launcher -> {
-                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.HOME_SCREEN)
+                            mVM.requestWallpaper(
+                                mPhoto.links.download_location,
+                                PrefValue.Wallpaper.SetType.HOME_SCREEN
+                            )
                         }
                         R.id.menu_set_wallpaper_lock_screen -> {
-                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.LOCK_SCREEN)
+                            mVM.requestWallpaper(
+                                mPhoto.links.download_location,
+                                PrefValue.Wallpaper.SetType.LOCK_SCREEN
+                            )
                         }
                         R.id.menu_set_wallpaper_both -> {
-                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSetType.BOTH)
+                            mVM.requestWallpaper(mPhoto.links.download_location, PrefValue.Wallpaper.SetType.BOTH)
                         }
                     }
                 }

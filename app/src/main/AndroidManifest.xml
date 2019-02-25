@@ -17,6 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:enabled="false"
+            android:exported="false"
+            tools:node="remove"
+            tools:replace="android:authorities"/>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,6 +38,8 @@
         <activity
             android:name=".ui.detail.PhotoDetailActivity"
             android:theme="@style/AppTheme.NoActionBar.Detail"/>
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
-
 </manifest>

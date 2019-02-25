@@ -2,40 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_main"
-            app:startDestination="@id/collectionFragment">
+            app:startDestination="@id/nested_main">
 
-    <fragment
-        android:id="@+id/collectionFragment"
-        android:name="com.yueban.splashyo.ui.main.CollectionFragment"
-        android:label="CollectionFragment">
-        <action
-            android:id="@+id/action_collectionFragment_to_photoListFragment"
-            app:destination="@id/photoListFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-    </fragment>
-    <fragment
-        android:id="@+id/photoListFragment"
-        android:name="com.yueban.splashyo.ui.main.PhotoListFragment"
-        android:label="PhotoListFragment">
-        <argument
-            android:name="collectionId"
-            app:argType="string"
-            app:nullable="true"/>
-        <argument
-            android:name="collectionTitle"
-            app:argType="string"
-            app:nullable="true"/>
-        <action
-            android:id="@+id/action_photoListFragment_to_photoDetailActivity"
-            app:destination="@id/photoDetailActivity"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-    </fragment>
     <activity
         android:id="@+id/photoDetailActivity"
         android:name="com.yueban.splashyo.ui.detail.PhotoDetailActivity"
@@ -44,4 +12,48 @@
             android:name="photo"
             app:argType="com.yueban.splashyo.data.model.Photo"/>
     </activity>
+
+    <navigation
+        android:id="@+id/nested_main"
+        app:startDestination="@id/collectionFragment">
+        <fragment
+            android:id="@+id/collectionFragment"
+            android:name="com.yueban.splashyo.ui.main.CollectionFragment"
+            android:label="CollectionFragment">
+            <action
+                android:id="@+id/action_collectionFragment_to_photoListFragment"
+                app:destination="@id/photoListFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        </fragment>
+        <fragment
+            android:id="@+id/photoListFragment"
+            android:name="com.yueban.splashyo.ui.main.PhotoListFragment"
+            android:label="PhotoListFragment">
+            <argument
+                android:name="collectionId"
+                app:argType="string"
+                app:nullable="true"/>
+            <argument
+                android:name="collectionTitle"
+                app:argType="string"
+                app:nullable="true"/>
+            <action
+                android:id="@+id/action_photoListFragment_to_photoDetailActivity"
+                app:destination="@id/photoDetailActivity"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        </fragment>
+        <action
+            android:id="@+id/action_global_settingActivity"
+            app:destination="@id/settingActivity"/>
+    </navigation>
+    <activity
+        android:id="@+id/settingActivity"
+        android:name="com.yueban.splashyo.ui.setting.SettingActivity"
+        android:label="SettingActivity"/>
 </navigation>
