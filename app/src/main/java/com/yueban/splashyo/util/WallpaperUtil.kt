@@ -4,6 +4,7 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 
 /**
  * @author yueban
@@ -11,24 +12,24 @@ import android.os.Build
  * @email fbzhh007@gmail.com
  */
 object WallpaperUtil {
-    fun setWallpaper(context: Context, bitmap: Bitmap, @PrefValue.Wallpaper.SetType setType: Int) {
+    fun setWallpaper(context: Context, bitmap: Bitmap, @WallpaperSwitchOption.SetType setType: Int) {
         val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(context)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             when (setType) {
-                PrefValue.Wallpaper.SetType.HOME_SCREEN -> wallpaperManager.setBitmap(
+                WallpaperSwitchOption.SetType.HOME_SCREEN -> wallpaperManager.setBitmap(
                     bitmap,
                     null,
                     true,
                     WallpaperManager.FLAG_SYSTEM
                 )
-                PrefValue.Wallpaper.SetType.LOCK_SCREEN -> wallpaperManager.setBitmap(
+                WallpaperSwitchOption.SetType.LOCK_SCREEN -> wallpaperManager.setBitmap(
                     bitmap,
                     null,
                     true,
                     WallpaperManager.FLAG_LOCK
                 )
-                PrefValue.Wallpaper.SetType.BOTH -> wallpaperManager.setBitmap(
+                WallpaperSwitchOption.SetType.BOTH -> wallpaperManager.setBitmap(
                     bitmap,
                     null,
                     true,

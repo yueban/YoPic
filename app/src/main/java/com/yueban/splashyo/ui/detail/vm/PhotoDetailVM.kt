@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yueban.splashyo.data.model.PhotoDetail
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.data.repo.model.Resource
-import com.yueban.splashyo.util.PrefValue
 import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.rxtransformer.IgnoreErrorTransformer
 
@@ -84,7 +84,7 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
         }
     }
 
-    fun requestWallpaper(downloadLocation: String, @PrefValue.Wallpaper.SetType setType: Int) {
+    fun requestWallpaper(downloadLocation: String, @WallpaperSwitchOption.SetType setType: Int) {
         val newValue = WallpaperRequest(downloadLocation, setType)
         if (_wallpaperRequest.value == newValue) {
             // TODO("提示 正在下载壁纸")
@@ -115,6 +115,6 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
     }
 }
 
-data class WallpaperRequest(val downloadLocation: String, @PrefValue.Wallpaper.SetType val setType: Int)
+data class WallpaperRequest(val downloadLocation: String, @WallpaperSwitchOption.SetType val setType: Int)
 
-class WallpaperResponse(val res: Any?, @PrefValue.Wallpaper.SetType val setType: Int)
+class WallpaperResponse(val res: Any?, @WallpaperSwitchOption.SetType val setType: Int)

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".ui.setting.SettingActivity">
 
     <data>
 
@@ -15,5 +17,103 @@
             tools:ignore="MissingConstraints"
             style="@style/Toolbar.Constraint"/>
 
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="@string/auto_switch_wallpaper"
+                    style="@style/Text.Label.Dark.Setting"/>
+
+                <RelativeLayout
+                    android:id="@+id/layout_wallpaper_enabled"
+                    style="@style/Layout_Item_Setting">
+
+                    <Switch
+                        android:id="@+id/sw_wallpaper_enabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"/>
+
+                    <TextView
+                        android:layout_toStartOf="@id/sw_wallpaper_enabled"
+                        android:text="@string/enabled"
+                        style="@style/Text.Title.Dark.Setting"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_wallpaper_source"
+                    style="@style/Layout_Item_Setting">
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_source_label"
+                        android:text="@string/wallpaper_source"
+                        style="@style/Text.Title.Dark.Setting"/>
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_source"
+                        android:layout_below="@id/tv_wallpaper_source_label"
+                        tools:text="All photos"
+                        style="@style/Text.SubTitle.Dark.Setting"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_wallpaper_set_type"
+                    style="@style/Layout_Item_Setting">
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_set_type_label"
+                        android:text="@string/wallpaper_set_type"
+                        style="@style/Text.Title.Dark.Setting"/>
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_set_type"
+                        android:layout_below="@id/tv_wallpaper_set_type_label"
+                        tools:text="Home screen"
+                        style="@style/Text.SubTitle.Dark.Setting"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_wallpaper_period"
+                    style="@style/Layout_Item_Setting">
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_period_label"
+                        android:text="@string/switch_period"
+                        style="@style/Text.Title.Dark.Setting"/>
+
+                    <TextView
+                        android:id="@+id/tv_wallpaper_period"
+                        android:layout_below="@id/tv_wallpaper_period_label"
+                        tools:text="30 minutes"
+                        style="@style/Text.SubTitle.Dark.Setting"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_wallpaper_only_wifi"
+                    style="@style/Layout_Item_Setting">
+
+                    <Switch
+                        android:id="@+id/sw_wallpaper_only_wifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"/>
+
+                    <TextView
+                        android:layout_toStartOf="@id/sw_wallpaper_only_wifi"
+                        android:text="@string/only_switch_under_wifi"
+                        style="@style/Text.Title.Dark.Setting"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

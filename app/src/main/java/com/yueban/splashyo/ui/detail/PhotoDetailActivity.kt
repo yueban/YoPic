@@ -18,6 +18,7 @@ import com.kennyc.bottomsheet.BottomSheetMenuDialogFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.yueban.splashyo.R
 import com.yueban.splashyo.data.model.Photo
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.data.repo.model.Status
 import com.yueban.splashyo.databinding.ActivityPhotoDetailBinding
 import com.yueban.splashyo.ui.base.BaseViewActivity
@@ -25,7 +26,6 @@ import com.yueban.splashyo.ui.detail.vm.PhotoDetailVM
 import com.yueban.splashyo.ui.detail.vm.PhotoDetailVMFactory
 import com.yueban.splashyo.util.DEFAULT_ERROR_MSG
 import com.yueban.splashyo.util.GlideApp
-import com.yueban.splashyo.util.PrefValue
 import com.yueban.splashyo.util.WallpaperUtil
 import com.yueban.splashyo.util.bottomsheet.SimpleBottomSheetListener
 import com.yueban.splashyo.util.concurrent.AppExecutors
@@ -195,17 +195,17 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                         R.id.menu_set_wallpaper_launcher -> {
                             mVM.requestWallpaper(
                                 mPhoto.links.download_location,
-                                PrefValue.Wallpaper.SetType.HOME_SCREEN
+                                WallpaperSwitchOption.SetType.HOME_SCREEN
                             )
                         }
                         R.id.menu_set_wallpaper_lock_screen -> {
                             mVM.requestWallpaper(
                                 mPhoto.links.download_location,
-                                PrefValue.Wallpaper.SetType.LOCK_SCREEN
+                                WallpaperSwitchOption.SetType.LOCK_SCREEN
                             )
                         }
                         R.id.menu_set_wallpaper_both -> {
-                            mVM.requestWallpaper(mPhoto.links.download_location, PrefValue.Wallpaper.SetType.BOTH)
+                            mVM.requestWallpaper(mPhoto.links.download_location, WallpaperSwitchOption.SetType.BOTH)
                         }
                     }
                 }

@@ -6,12 +6,12 @@ import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import com.yueban.splashyo.data.Optional
 import com.yueban.splashyo.data.model.Photo
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.util.GlideApp
 import com.yueban.splashyo.util.PAGE_SIZE
 import com.yueban.splashyo.util.PrefKey
 import com.yueban.splashyo.util.PrefManager
-import com.yueban.splashyo.util.PrefValue
 import com.yueban.splashyo.util.WallpaperUtil
 import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.screenHeight
@@ -25,24 +25,23 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
     lateinit var prefManager: PrefManager
 
     override fun createWork(): Single<Result> {
-        Timber.d("executing work: changeWallpaper, photoRepo: $service")
+        val option: WallpaperSwitchOption =
+            prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
+                ?: WallpaperSwitchOption()
 
-        val sourceType = prefManager.getInt(PrefKey.Wallpaper.SOURCE_TYPE)
-        val observable: Single<Optional<List<Photo>>>
-        when (sourceType) {
-            PrefValue.Wallpaper.SourceType.ALL_PHOTOS -> {
-                observable = service.photos(1, PAGE_SIZE)
+        val observable: Single<Optional<List<Photo>>> = when (option.sourceType) {
+            WallpaperSwitchOption.SourceType.ALL_PHOTOS -> {
+                service.photos(1, PAGE_SIZE)
             }
-            PrefValue.Wallpaper.SourceType.COLLECTION -> {
-                val sourceId = prefManager.getString(PrefKey.Wallpaper.SOURCE_ID)
-                observable = if (sourceId.isNullOrEmpty()) {
+            WallpaperSwitchOption.SourceType.COLLECTION -> {
+                if (option.collectionId.isNullOrEmpty()) {
                     Single.error(IllegalArgumentException("collectionId is null or empty"))
                 } else {
-                    service.photosByCollection(sourceId, PAGE_SIZE)
+                    service.photosByCollection(option.collectionId, PAGE_SIZE)
                 }
             }
             else -> {
-                observable = Single.error(IllegalArgumentException("sourceType value is illegal: $sourceType"))
+                Single.error(IllegalArgumentException("sourceType value is illegal: ${option.sourceType}"))
             }
         }
 
@@ -52,7 +51,6 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             } else {
                 val photos = it.get()
                 // get a photo different from current wallpaper
-                val currentId = prefManager.getString(PrefKey.Wallpaper.CURRENT_ID)
                 val photo: Photo
                 if (photos.size == 1) {
                     photo = photos[0]
@@ -60,7 +58,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
                     while (true) {
                         val random = Random(System.currentTimeMillis())
                         val randomIndex = random.nextInt(0 until photos.size)
-                        if (photos[randomIndex].id != currentId) {
+                        if (photos[randomIndex].id != option.currentId) {
                             photo = photos[randomIndex]
                             break
                         }
@@ -74,8 +72,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             val future = GlideApp.with(applicationContext).download(photo.resizeUrl(screenHeight)).submit()
             val file = future.get()
             val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-            val setType = prefManager.getInt(PrefKey.Wallpaper.SET_TYPE)
-            WallpaperUtil.setWallpaper(applicationContext, bitmap, setType)
+            WallpaperUtil.setWallpaper(applicationContext, bitmap, option.setType)
             bitmap.recycle()
             Single.just(Result.success())
         }.onErrorReturn {

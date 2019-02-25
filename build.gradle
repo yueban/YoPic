@@ -36,6 +36,8 @@ buildscript {
         rxkotlinVersion = '2.3.0'
         BottomSheetMenuVersion = '3.0.1'
         trayVersion = '0.12.0'
+        rxbindingVersion = '3.0.0-alpha2'
+        rxlifecycleVersion = '3.0.0'
     }
     repositories {
         google()

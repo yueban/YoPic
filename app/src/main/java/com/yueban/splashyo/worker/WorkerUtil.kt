@@ -7,6 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.util.PrefKey
 import com.yueban.splashyo.util.PrefManager
 import com.yueban.splashyo.util.di.scope.AppScope
@@ -35,32 +36,40 @@ class WorkerUtil
     private val workManager = WorkManager.getInstance()
 
     fun startWallpaperChangeTask(replace: Boolean = false) {
-        val period = prefManager.getInt(PrefKey.Wallpaper.PERIOD, 0)
-        if (period != 0) {
-            val onlyInWifi = prefManager.getBoolean(PrefKey.Wallpaper.ONLY_IN_WIFI, false)
+        val option: WallpaperSwitchOption =
+            prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
+                ?: WallpaperSwitchOption()
 
-            val constraints = if (onlyInWifi) {
-                Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED)
-            } else {
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
-            }.build()
+        if (!option.enabled) {
+            return
+        }
 
-            val wallpaperWorker = PeriodicWorkRequestBuilder<ChangeWallpaperWorker>(period.toLong(), TimeUnit.MINUTES)
+        if (option.period == 0) {
+            return
+        }
+
+        val constraints = if (option.onlyInWifi) {
+            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED)
+        } else {
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
+        }.build()
+
+        val existingPolicy = if (replace) {
+            ExistingPeriodicWorkPolicy.REPLACE
+        } else {
+            ExistingPeriodicWorkPolicy.KEEP
+        }
+
+        val wallpaperWorker =
+            PeriodicWorkRequestBuilder<ChangeWallpaperWorker>(option.period.toLong(), TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
 
-            val existingPolicy = if (replace) {
-                ExistingPeriodicWorkPolicy.REPLACE
-            } else {
-                ExistingPeriodicWorkPolicy.KEEP
-            }
-
-            workManager.enqueueUniquePeriodicWork(
-                NAME_WALLPAPER_CHANGE,
-                existingPolicy,
-                wallpaperWorker
-            )
-        }
+        workManager.enqueueUniquePeriodicWork(
+            NAME_WALLPAPER_CHANGE,
+            existingPolicy,
+            wallpaperWorker
+        )
     }
 
     fun stopWallpaperChangeTask() {
