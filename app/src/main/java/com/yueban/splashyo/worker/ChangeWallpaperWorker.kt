@@ -9,7 +9,6 @@ import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.util.GlideApp
-import com.yueban.splashyo.util.PAGE_SIZE
 import com.yueban.splashyo.util.PrefKey
 import com.yueban.splashyo.util.PrefManager
 import com.yueban.splashyo.util.WallpaperUtil
@@ -35,13 +34,13 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
 
         val observable: Single<Optional<List<Photo>>> = when (option.sourceType) {
             WallpaperSwitchOption.SourceType.ALL_PHOTOS -> {
-                service.photos(1, PAGE_SIZE)
+                service.photos(1)
             }
             WallpaperSwitchOption.SourceType.COLLECTION -> {
                 if (option.collectionId.isNullOrEmpty()) {
                     Single.error(IllegalArgumentException("collectionId is null or empty"))
                 } else {
-                    service.photosByCollection(option.collectionId, PAGE_SIZE)
+                    service.photosByCollection(option.collectionId, 1)
                 }
             }
             else -> {
