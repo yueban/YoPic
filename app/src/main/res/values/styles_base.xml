@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@android:color/white</item>
         <!-- transitions -->
         <item name="android:windowContentTransitions">true</item>
         <!--<item name="android:windowEnterTransition">@android:transition/explode</item>-->
@@ -18,6 +19,15 @@
         <!--<item name="android:windowSharedElementReturnTransition">@android:transition/move</item>-->
         <item name="android:fragmentSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:fragmentSharedElementReturnTransition">@android:transition/move</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Detail">
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
     <style name="Toolbar">
@@ -36,15 +46,6 @@
 
     <style name="Toolbar.Coordinator">
         <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.Detail">
-        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
     <style name="Text">

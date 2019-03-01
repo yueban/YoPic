@@ -18,10 +18,13 @@ data class WallpaperSwitchOption(
     @Period
     val period: Int = Period.HOUR_12,
     @SetType
-    val setType: Int = SetType.BOTH,
+    val setType: Int = SetType.HOME_SCREEN,
     val onlyInWifi: Boolean = false,
     val currentId: String? = null
 ) : Parcelable {
+    val isEnabledAndValid: Boolean
+        get() = enabled && period != 0
+
     @Retention(AnnotationRetention.SOURCE)
     @IntDef(SourceType.ALL_PHOTOS, SourceType.COLLECTION)
     annotation class SourceType {

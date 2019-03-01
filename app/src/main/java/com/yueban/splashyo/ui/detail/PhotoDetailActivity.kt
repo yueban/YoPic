@@ -183,7 +183,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
 
     private fun showSetWallpaperDialog() {
         BottomSheetMenuDialogFragment.Builder(this)
-            .setSheet(R.menu.menu_bottom_photo_detail)
+            .setSheet(R.menu.menu_wallpaper_set_type)
             .setTitle(R.string.set_wallpaper)
             .setListener(object : SimpleBottomSheetListener() {
                 override fun onSheetItemSelected(

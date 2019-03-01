@@ -46,7 +46,7 @@ class SplashYoApp : DaggerApplication() {
     }
 
     private fun initWorker() {
-        workerUtil.startWallpaperChangeTask()
+        workerUtil.refreshWallpaperChangeTask()
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> = applicationDispatchingAndroidInjector

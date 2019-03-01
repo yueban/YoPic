@@ -35,45 +35,37 @@ class WorkerUtil
 
     private val workManager = WorkManager.getInstance()
 
-    fun startWallpaperChangeTask(replace: Boolean = false) {
+    fun refreshWallpaperChangeTask(replace: Boolean = false) {
         val option: WallpaperSwitchOption =
             prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
                 ?: WallpaperSwitchOption()
 
-        if (!option.enabled) {
-            return
-        }
-
-        if (option.period == 0) {
-            return
-        }
-
-        val constraints = if (option.onlyInWifi) {
-            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED)
+        if (!option.isEnabledAndValid) {
+            workManager.cancelUniqueWork(NAME_WALLPAPER_CHANGE)
         } else {
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
-        }.build()
+            val constraints = if (option.onlyInWifi) {
+                Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED)
+            } else {
+                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
+            }.build()
 
-        val existingPolicy = if (replace) {
-            ExistingPeriodicWorkPolicy.REPLACE
-        } else {
-            ExistingPeriodicWorkPolicy.KEEP
+            val existingPolicy = if (replace) {
+                ExistingPeriodicWorkPolicy.REPLACE
+            } else {
+                ExistingPeriodicWorkPolicy.KEEP
+            }
+
+            val wallpaperWorker =
+                PeriodicWorkRequestBuilder<ChangeWallpaperWorker>(option.period.toLong(), TimeUnit.MINUTES)
+                    .setConstraints(constraints)
+                    .build()
+
+            workManager.enqueueUniquePeriodicWork(
+                NAME_WALLPAPER_CHANGE,
+                existingPolicy,
+                wallpaperWorker
+            )
         }
-
-        val wallpaperWorker =
-            PeriodicWorkRequestBuilder<ChangeWallpaperWorker>(option.period.toLong(), TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-
-        workManager.enqueueUniquePeriodicWork(
-            NAME_WALLPAPER_CHANGE,
-            existingPolicy,
-            wallpaperWorker
-        )
-    }
-
-    fun stopWallpaperChangeTask() {
-        workManager.cancelUniqueWork(Companion.NAME_WALLPAPER_CHANGE)
     }
 
     companion object {

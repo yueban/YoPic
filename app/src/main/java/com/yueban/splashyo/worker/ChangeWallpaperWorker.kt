@@ -29,6 +29,10 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
                 ?: WallpaperSwitchOption()
 
+        if (!option.isEnabledAndValid) {
+            return Single.just(Result.failure())
+        }
+
         val observable: Single<Optional<List<Photo>>> = when (option.sourceType) {
             WallpaperSwitchOption.SourceType.ALL_PHOTOS -> {
                 service.photos(1, PAGE_SIZE)
@@ -37,7 +41,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
                 if (option.collectionId.isNullOrEmpty()) {
                     Single.error(IllegalArgumentException("collectionId is null or empty"))
                 } else {
-                    service.photosByCollection(option.collectionId, PAGE_SIZE)
+                    service.photosByCollection(option.collectionId!!, PAGE_SIZE)
                 }
             }
             else -> {
@@ -77,7 +81,11 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             Single.just(Result.success())
         }.onErrorReturn {
             Timber.e(it)
-            Result.failure()
+            if (it is NullPointerException) {
+                Result.failure()
+            } else {
+                Result.retry()
+            }
         }.compose(AsyncScheduler.create())
     }
 }

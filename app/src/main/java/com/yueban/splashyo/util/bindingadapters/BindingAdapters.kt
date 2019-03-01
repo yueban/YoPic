@@ -1,4 +1,4 @@
-package com.yueban.splashyo.util
+package com.yueban.splashyo.util.bindingadapters
 
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.yueban.splashyo.R
+import com.yueban.splashyo.util.GlideApp
 import com.yueban.splashyo.util.GlideOptions.bitmapTransform
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
@@ -25,7 +26,8 @@ object BindingAdapters {
         }
 
         if (!previewUrl.isNullOrEmpty()) {
-            GlideApp.with(view).load(url).thumbnail(GlideApp.with(view).load(previewUrl)).into(view)
+            GlideApp.with(view)
+                .load(url).thumbnail(GlideApp.with(view).load(previewUrl)).into(view)
         } else if (previewColor != null) {
             GlideApp.with(view).load(url).placeholder(ColorDrawable(previewColor)).into(view)
         } else {

@@ -40,5 +40,6 @@
     <string name="three_hours">3 hours</string>
     <string name="twelve_hours">12 hours</string>
     <string name="twenty_four_hours">24 hours</string>
+    <string name="select_a_collection">select a Collection</string>
 
 </resources>
