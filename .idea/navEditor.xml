@@ -35,8 +35,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-4" />
-                            <option name="y" value="50" />
+                            <option name="x" value="12" />
+                            <option name="y" value="127" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -98,8 +98,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="453" />
-                            <option name="y" value="-51" />
+                            <option name="x" value="252" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -110,9 +110,39 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-6" />
-                            <option name="y" value="236" />
+                            <option name="x" value="252" />
+                            <option name="y" value="368" />
                           </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </LayoutPositions>
+          </value>
+        </entry>
+        <entry key="nav_setting.xml">
+          <value>
+            <LayoutPositions>
+              <option name="myPositions">
+                <map>
+                  <entry key="collectionFragmentForSetting">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="settingFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_settingFragment_to_collectionFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

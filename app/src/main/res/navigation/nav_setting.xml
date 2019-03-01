@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_setting"
+            app:startDestination="@id/settingFragment">
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.yueban.splashyo.ui.setting.SettingFragment"
+        android:label="SettingFragment">
+        <action
+            android:id="@+id/action_settingFragment_to_collectionFragment"
+            app:destination="@id/collectionFragmentForSetting"/>
+    </fragment>
+    <fragment
+        android:id="@+id/collectionFragmentForSetting"
+        android:name="com.yueban.splashyo.ui.main.CollectionFragment"
+        android:label="CollectionFragment">
+        <argument
+            android:name="forSetting"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
+</navigation>

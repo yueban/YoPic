@@ -11,11 +11,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.yueban.splashyo.R
+import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.databinding.FragmentCollectionBinding
 import com.yueban.splashyo.ui.base.BaseViewFragment
 import com.yueban.splashyo.ui.main.adapter.CollectionAdapter
 import com.yueban.splashyo.ui.main.vm.CollectionVM
 import com.yueban.splashyo.ui.main.vm.CollectionVMFactory
+import com.yueban.splashyo.ui.setting.vm.SettingVM
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
@@ -30,13 +32,26 @@ import javax.inject.Inject
 class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     private lateinit var mAdapter: CollectionAdapter
     private lateinit var mCollectionVM: CollectionVM
+    private lateinit var mSettingVM: SettingVM
+    private var forSetting = false
     @Inject
     lateinit var collectionVMFactory: CollectionVMFactory
+    @Inject
+    lateinit var settingVMFactory: CollectionVMFactory
 
     override fun getLayoutId(): Int = R.layout.fragment_collection
 
     override fun initVMAndParams(savedInstanceState: Bundle?) {
         mCollectionVM = ViewModelProviders.of(requireActivity(), collectionVMFactory).get(CollectionVM::class.java)
+
+        arguments?.let {
+            val args = CollectionFragmentArgs.fromBundle(it)
+            forSetting = args.forSetting
+            if (forSetting) {
+                mSettingVM = ViewModelProviders.of(requireActivity(), settingVMFactory).get(SettingVM::class.java)
+            }
+        }
+
         setHasOptionsMenu(true)
     }
 
@@ -54,12 +69,22 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
             }
         })
         mAdapter.itemClickListener = { collection ->
-            findNavController().navigate(
-                CollectionFragmentDirections.actionCollectionFragmentToPhotoListFragment(
-                    collection.id.toString(),
-                    collection.title
+            if (forSetting) {
+                mSettingVM.optionObservable.apply {
+                    collectionId = collection.id.toString()
+                    collectionName = collection.title
+                    sourceType = WallpaperSwitchOption.SourceType.COLLECTION
+                    findNavController().navigateUp()
+                }
+            } else {
+                findNavController().navigate(
+                    CollectionFragmentDirections.actionCollectionFragmentToPhotoListFragment(
+                        collection.id.toString(),
+                        collection.title
+                    )
                 )
-            )
+            }
+
         }
     }
 

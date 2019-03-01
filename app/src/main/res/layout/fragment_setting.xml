@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".ui.setting.SettingActivity">
+
+    <data>
+
+        <variable
+            name="option"
+            type="com.yueban.splashyo.data.model.util.WallpaperSwitchOptionObservable"/>
+
+        <import type="android.os.Build"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="@string/auto_switch_wallpaper"
+                style="@style/Text.Label.Dark.Setting"/>
+
+            <RelativeLayout
+                android:id="@+id/layout_wallpaper_enabled"
+                android:enabled="@{option!=null}"
+                style="@style/Layout_Item_Setting">
+
+                <Switch
+                    android:id="@+id/sw_wallpaper_enabled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:checked="@={option.enabled}"
+                    android:clickable="false"
+                    android:enabled="@{option!=null}"/>
+
+                <TextView
+                    android:layout_toStartOf="@id/sw_wallpaper_enabled"
+                    android:text="@string/enabled"
+                    style="@style/Text.Title.Dark.Setting"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_wallpaper_source"
+                android:enabled="@{option.enabled}"
+                style="@style/Layout_Item_Setting">
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_source_label"
+                    android:text="@string/wallpaper_source"
+                    style="@style/Text.Title.Dark.Setting"/>
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_source"
+                    android:layout_below="@id/tv_wallpaper_source_label"
+                    tools:text="All photos"
+                    wallpaperSource="@{option}"
+                    style="@style/Text.SubTitle.Dark.Setting"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_wallpaper_set_type"
+                android:enabled="@{option.enabled}"
+                app:visible="@{Build.VERSION.SDK_INT >= Build.VERSION_CODES.N}"
+                style="@style/Layout_Item_Setting">
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_set_type_label"
+                    android:text="@string/wallpaper_set_type"
+                    style="@style/Text.Title.Dark.Setting"/>
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_set_type"
+                    android:layout_below="@id/tv_wallpaper_set_type_label"
+                    app:wallpaperSetType="@{option.setType}"
+                    tools:text="Home screen"
+                    style="@style/Text.SubTitle.Dark.Setting"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_wallpaper_period"
+                android:enabled="@{option.enabled}"
+                style="@style/Layout_Item_Setting">
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_period_label"
+                    android:text="@string/switch_period"
+                    style="@style/Text.Title.Dark.Setting"/>
+
+                <TextView
+                    android:id="@+id/tv_wallpaper_period"
+                    android:layout_below="@id/tv_wallpaper_period_label"
+                    app:wallpaperPeriod="@{option.period}"
+                    tools:text="30 minutes"
+                    style="@style/Text.SubTitle.Dark.Setting"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_wallpaper_only_wifi"
+                android:enabled="@{option.enabled}"
+                style="@style/Layout_Item_Setting">
+
+                <Switch
+                    android:id="@+id/sw_wallpaper_only_wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:checked="@={option.onlyInWifi}"
+                    android:enabled="@{option.enabled}"/>
+
+                <TextView
+                    android:layout_toStartOf="@id/sw_wallpaper_only_wifi"
+                    android:clickable="false"
+                    android:text="@string/only_switch_under_wifi"
+                    style="@style/Text.Title.Dark.Setting"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

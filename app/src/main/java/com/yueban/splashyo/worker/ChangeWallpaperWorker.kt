@@ -41,7 +41,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
                 if (option.collectionId.isNullOrEmpty()) {
                     Single.error(IllegalArgumentException("collectionId is null or empty"))
                 } else {
-                    service.photosByCollection(option.collectionId!!, PAGE_SIZE)
+                    service.photosByCollection(option.collectionId, PAGE_SIZE)
                 }
             }
             else -> {
