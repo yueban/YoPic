@@ -121,8 +121,6 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     }
 
     override fun initData() {
-        mCollectionVM.setFeatured(true)
-        mBinding.refreshLayout.autoRefresh()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

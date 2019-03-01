@@ -32,6 +32,10 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
     val hasMore: Boolean
         get() = nextPageHandler.hasMore
 
+    init {
+        setFeatured(true)
+    }
+
     fun setFeatured(featured: Boolean) {
         if (_featured.value == featured) {
             return
