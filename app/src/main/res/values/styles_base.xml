@@ -19,6 +19,11 @@
         <!--<item name="android:windowSharedElementReturnTransition">@android:transition/move</item>-->
         <item name="android:fragmentSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:fragmentSharedElementReturnTransition">@android:transition/move</item>
+        <item name="drawerArrowStyle">@style/DrawerIcon</item>
+    </style>
+
+    <style name="DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/black</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -33,6 +38,8 @@
     <style name="Toolbar">
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/colorPrimary</item>
+        <!-- drawer icon color -->
+        <item name="android:colorControlNormal">@android:color/black</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
