@@ -93,50 +93,51 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
             }
             unregister()
 
-            nextPageDisposable = photoRepo.getCollections(featured, nextPage)
-                .compose(AsyncScheduler.create())
-                .doOnSubscribe {
-                    loadState.value = LoadState(
-                        if (nextPage == firstPage) LoadState.State.Refreshing else LoadState.State.LoadingMore,
-                        null
-                    )
-                }
-                .doOnError {
-                    _hasMore = true
-                    loadState.value = LoadState(
-                        LoadState.State.Error,
-                        it.message
-                    )
-                }
-                .compose(IgnoreErrorTransformer.create())
-                .subscribe { result ->
-                    if (result.isCache) {
-                        collections.value = result.getNullable().orEmpty()
-                    } else {
-                        if (nextPage == firstPage) {
-                            collections.value = result.getNullable().orEmpty()
-                        } else if (!result.isNull) {
-                            collections.apply {
-                                value = collections.value!!.plus(result.get())
-                            }
-                        }
-
-                        _hasMore =
-                            if (result.isNull) {
-                                false
-                            } else {
-                                result.get().size >= PAGE_SIZE
-                            }
-
-                        loadState.value =
-                            LoadState(
-                                LoadState.State.Success,
-                                null
-                            )
-
-                        nextPage++
+            nextPageDisposable =
+                photoRepo.getCollections(featured, nextPage, loadCacheOnFirstPage = collections.value.isNullOrEmpty())
+                    .compose(AsyncScheduler.create())
+                    .doOnSubscribe {
+                        loadState.value = LoadState(
+                            if (nextPage == firstPage) LoadState.State.Refreshing else LoadState.State.LoadingMore,
+                            null
+                        )
                     }
-                }
+                    .doOnError {
+                        _hasMore = true
+                        loadState.value = LoadState(
+                            LoadState.State.Error,
+                            it.message
+                        )
+                    }
+                    .compose(IgnoreErrorTransformer.create())
+                    .subscribe { result ->
+                        if (result.isCache) {
+                            collections.value = result.getNullable().orEmpty()
+                        } else {
+                            if (nextPage == firstPage) {
+                                collections.value = result.getNullable().orEmpty()
+                            } else if (!result.isNull) {
+                                collections.apply {
+                                    value = collections.value!!.plus(result.get())
+                                }
+                            }
+
+                            _hasMore =
+                                if (result.isNull) {
+                                    false
+                                } else {
+                                    result.get().size >= PAGE_SIZE
+                                }
+
+                            loadState.value =
+                                LoadState(
+                                    LoadState.State.Success,
+                                    null
+                                )
+
+                            nextPage++
+                        }
+                    }
         }
 
         private fun unregister() {

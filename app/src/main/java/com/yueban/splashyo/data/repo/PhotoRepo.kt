@@ -51,8 +51,9 @@ class PhotoRepo
     fun getCollections(
         featured: Boolean,
         page: Int,
-        clearCacheOnFirstPage: Boolean = true,
-        firstPage: Int = 1
+        firstPage: Int = 1,
+        loadCacheOnFirstPage: Boolean = true,
+        clearCacheOnFirstPage: Boolean = true
     ): Flowable<Optional<List<PhotoCollection>>> {
         val netSource =
             if (featured) {
@@ -68,7 +69,7 @@ class PhotoRepo
                 }
             }
 
-        return if (page == firstPage) {
+        return if (page == firstPage && loadCacheOnFirstPage) {
             if (featured) {
                 photoDao.getFeaturedCollections()
             } else {
@@ -84,8 +85,9 @@ class PhotoRepo
     fun getPhotos(
         cacheLabel: String,
         page: Int,
-        clearCacheOnFirstPage: Boolean = true,
-        firstPage: Int = 1
+        firstPage: Int = 1,
+        loadCacheOnFirstPage: Boolean = true,
+        clearCacheOnFirstPage: Boolean = true
     ): Flowable<Optional<List<Photo>>> {
         val netSource =
             if (cacheLabel == PhotoListVM.CACHE_LABEL_ALL) {
