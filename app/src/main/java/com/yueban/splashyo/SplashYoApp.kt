@@ -2,10 +2,10 @@ package com.yueban.splashyo
 
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
+import com.yueban.splashyo.util.ui.DefaultRefreshFooter
 import com.yueban.splashyo.worker.WorkerUtil
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -61,7 +61,7 @@ class SplashYoApp : DaggerApplication() {
             }
             //设置全局的Footer构建器
             SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
-                ClassicsFooter(context).setDrawableSize(20f).setFinishDuration(0)
+                DefaultRefreshFooter(context)
             }
         }
     }

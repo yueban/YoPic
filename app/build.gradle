@@ -101,4 +101,5 @@ dependencies {
     implementation "com.trello.rxlifecycle3:rxlifecycle:$rootProject.rxlifecycleVersion"
     implementation "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:$rootProject.rxlifecycleVersion"
     implementation "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle-kotlin:$rootProject.rxlifecycleVersion"
+    implementation "com.github.ybq:Android-SpinKit:$rootProject.spinKitVersion"
 }

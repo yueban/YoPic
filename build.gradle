@@ -38,6 +38,7 @@ buildscript {
         trayVersion = '0.12.0'
         rxbindingVersion = '3.0.0-alpha2'
         rxlifecycleVersion = '3.0.0'
+        spinKitVersion = '1.2.0'
     }
     repositories {
         google()
