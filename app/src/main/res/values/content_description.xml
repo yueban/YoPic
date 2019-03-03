@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cd_cover_image">cover_image</string>
-    <string name="cd_photo_image">photo_image</string>
+    <string name="cd_cover_image">cover image</string>
+    <string name="cd_photo_image">photo image</string>
     <string name="cd_set_wallpaper">set wallpaper</string>
     <string name="cd_download">download</string>
     <string name="cd_share">share</string>
     <string name="cd_photographer">photographer</string>
+    <string name="cd_header_image">header image</string>
 </resources>
