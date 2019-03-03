@@ -9,7 +9,7 @@ import com.yueban.splashyo.util.PAGE_SIZE
 import com.yueban.splashyo.util.ext.orEmpty
 import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.rxtransformer.IgnoreErrorTransformer
-import com.yueban.splashyo.util.vm.ListLoadState
+import com.yueban.splashyo.util.vm.LoadState
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
@@ -30,7 +30,7 @@ class PhotoListVM(photoRepo: PhotoRepo) : ViewModel() {
     val cacheLabel: LiveData<String> = _cacheLabel
     val photos: LiveData<List<Photo>> = _photos
 
-    val loadStatus: LiveData<ListLoadState>
+    val loadState: LiveData<LoadState>
         get() = nextPageHandler.loadState
 
     val hasMore: Boolean
@@ -61,7 +61,7 @@ class PhotoListVM(photoRepo: PhotoRepo) : ViewModel() {
         private val photos: MutableLiveData<List<Photo>>,
         private val photoRepo: PhotoRepo
     ) {
-        var loadState = MutableLiveData<ListLoadState>()
+        var loadState = MutableLiveData<LoadState>()
         val hasMore: Boolean
             get() = _hasMore
 
@@ -78,10 +78,9 @@ class PhotoListVM(photoRepo: PhotoRepo) : ViewModel() {
             unregister()
             nextPage = firstPage
             _hasMore = true
-            loadState.value = ListLoadState(
-                isRefreshing = false,
-                isLoadingMore = false,
-                errorMsg = null
+            loadState.value = LoadState(
+                LoadState.State.Idle,
+                null
             )
         }
 
@@ -101,18 +100,16 @@ class PhotoListVM(photoRepo: PhotoRepo) : ViewModel() {
             nextPageDisposable = photoRepo.getPhotos(cacheLabel, nextPage)
                 .compose(AsyncScheduler.create())
                 .doOnSubscribe {
-                    loadState.value = ListLoadState(
-                        isRefreshing = nextPage == firstPage,
-                        isLoadingMore = nextPage != firstPage,
-                        errorMsg = null
+                    loadState.value = LoadState(
+                        if (nextPage == firstPage) LoadState.State.Refreshing else LoadState.State.LoadingMore,
+                        null
                     )
                 }
                 .doOnError {
                     _hasMore = true
-                    loadState.value = ListLoadState(
-                        isRefreshing = false,
-                        isLoadingMore = false,
-                        errorMsg = it.message
+                    loadState.value = LoadState(
+                        LoadState.State.Error,
+                        it.message
                     )
                 }
                 .compose(IgnoreErrorTransformer.create())
@@ -137,10 +134,9 @@ class PhotoListVM(photoRepo: PhotoRepo) : ViewModel() {
                         }
 
                     loadState.value =
-                        ListLoadState(
-                            isRefreshing = false,
-                            isLoadingMore = false,
-                            errorMsg = null
+                        LoadState(
+                            LoadState.State.Success,
+                            null
                         )
 
                     nextPage++

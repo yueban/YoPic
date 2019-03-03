@@ -110,12 +110,11 @@ class PhotoListFragment : BaseViewFragment<FragmentPhotoListBinding>() {
 
     override fun observeVM() {
         mPhotoListVM.photos.observe(viewLifecycleOwner, Observer(mAdapter::submitList))
-        mPhotoListVM.loadStatus.observe(viewLifecycleOwner, Observer { loadState ->
+        mPhotoListVM.loadState.observe(viewLifecycleOwner, Observer { loadState ->
             if (loadState.isRunning) {
                 mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
             } else {
-                val hasMore = mPhotoListVM.hasMore
-                mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
+                mBinding.refreshLayout.finishRefreshAndLoadMore(loadState.isSuccess, mPhotoListVM.hasMore)
             }
 
             loadState.errorMsgIfNotHandled?.let {

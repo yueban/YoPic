@@ -10,13 +10,9 @@ import com.yueban.splashyo.util.displayMetrics
  * @date 2019/1/14
  * @email fbzhh007@gmail.com
  */
-fun SmartRefreshLayout.finishRefreshAndLoadMore(hasMore: Boolean = true) {
-    finishRefresh()
-    if (hasMore) {
-        finishLoadMore()
-    } else {
-        finishLoadMoreWithNoMoreData()
-    }
+fun SmartRefreshLayout.finishRefreshAndLoadMore(success: Boolean = true, hasMore: Boolean = true) {
+    finishRefresh(0, success)
+    finishLoadMore(0, success, !hasMore)
 }
 
 fun SmartRefreshLayout.autoAnimationOnly(refresh: Boolean = false, loadMore: Boolean = false) {

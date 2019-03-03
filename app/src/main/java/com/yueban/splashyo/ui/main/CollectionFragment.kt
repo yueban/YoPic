@@ -21,7 +21,7 @@ import com.yueban.splashyo.ui.setting.vm.SettingVM
 import com.yueban.splashyo.util.ext.autoAnimationOnly
 import com.yueban.splashyo.util.ext.finishRefreshAndLoadMore
 import com.yueban.splashyo.util.ext.scrollToTop
-import com.yueban.splashyo.util.vm.ListLoadState
+import com.yueban.splashyo.util.vm.LoadState
 import javax.inject.Inject
 
 /**
@@ -92,11 +92,11 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
         mCollectionVM.collections.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
         })
-        mCollectionVM.loadStatus.observe(viewLifecycleOwner, object : Observer<ListLoadState> {
+        mCollectionVM.loadState.observe(viewLifecycleOwner, object : Observer<LoadState> {
             //record if last time is refreshing
             private var lastTimeIsRefreshing = false
 
-            override fun onChanged(loadState: ListLoadState) {
+            override fun onChanged(loadState: LoadState) {
                 if (loadState.isRunning) {
                     lastTimeIsRefreshing = loadState.isRefreshing
                     mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
@@ -105,8 +105,7 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
                         mBinding.rvCollections.scrollToTop()
                         lastTimeIsRefreshing = false
                     }
-                    val hasMore = mCollectionVM.hasMore
-                    mBinding.refreshLayout.finishRefreshAndLoadMore(hasMore)
+                    mBinding.refreshLayout.finishRefreshAndLoadMore(loadState.isSuccess, mCollectionVM.hasMore)
                 }
 
                 loadState.errorMsgIfNotHandled?.let {
