@@ -3,18 +3,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@id/collectionFragment"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@drawable/outline_collections_24px"
             android:title="@string/collections"/>
         <item
             android:id="@id/photoListFragment"
-            android:icon="@android:drawable/ic_menu_gallery"
+            android:icon="@drawable/outline_photo_24px"
             android:title="@string/photos"/>
     </group>
 
     <group android:checkableBehavior="none">
         <item
             android:id="@id/settingActivity"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@drawable/outline_settings_24px"
             android:title="@string/setting"/>
     </group>
 </menu>
