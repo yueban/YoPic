@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_collection_featured"
-        android:title="@string/only_featured"
+        android:title="@string/featured"
         android:visible="false"/>
 
     <item
         android:id="@+id/menu_collection_all"
-        android:title="@string/view_all"
+        android:title="@string/all"
         android:visible="true"/>
 </menu>

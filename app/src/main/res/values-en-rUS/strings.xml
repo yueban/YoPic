@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">SplashYo</string>
+    <string formatted="false" name="photos_count">&#160;·&#160;%d photos</string>
+    <string formatted="false" name="curated_by">curated by %s</string>
+    <string name="collections">Collections</string>
+    <string name="photos">Photos</string>
+    <string name="all_collections">All Collections</string>
+    <string name="featured">Featured</string>
+    <string name="all_photos">All Photos</string>
+    <string name="photo_do_not_exist">photo does not exist.</string>
+    <string name="views">Views</string>
+    <string name="downloads">Downloads</string>
+    <string name="likes">Likes</string>
+    <string name="camera_make">Camera Make</string>
+    <string name="camera_model">Camera Model</string>
+    <string name="focal_length">Focal Length</string>
+    <string name="aperture">Aperture</string>
+    <string name="shutter_speed">Shutter Speed</string>
+    <string name="iso">ISO</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="downloading_appropriate_wallpaper">Downloading appropriate wallpaper</string>
+    <string name="set_wallpaper_success">Set wallpaper success</string>
+    <string name="retry">retry</string>
+    <string name="home_screen_and_lock_screen">Home screen and lock screen</string>
+    <string name="home_screen">Home screen</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="set_wallpaper">Set wallpaper</string>
+    <string name="photographer">Photographer</string>
+    <string name="setting">Setting</string>
+    <string name="auto_switch_wallpaper">Wallpaper auto switch</string>
+    <string name="enabled">Enabled</string>
+    <string name="wallpaper_source">Wallpaper source</string>
+    <string name="only_switch_under_wifi">Only switch under wifi</string>
+    <string name="wallpaper_set_type">Wallpaper set type</string>
+    <string name="switch_period">Switch period</string>
+    <string name="thirty_minutes">30 minutes</string>
+    <string name="one_hour">1 hour</string>
+    <string name="three_hours">3 hours</string>
+    <string name="twelve_hours">12 hours</string>
+    <string name="twenty_four_hours">24 hours</string>
+    <string name="select_a_collection">select a Collection</string>
+    <string name="all">All</string>
+
+</resources>

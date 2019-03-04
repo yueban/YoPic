@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_cover_image">封面图</string>
+    <string name="cd_photo_image">照片</string>
+    <string name="cd_set_wallpaper">设置壁纸</string>
+    <string name="cd_download">下载</string>
+    <string name="cd_share">分享</string>
+    <string name="cd_photographer">摄影师</string>
+    <string name="cd_header_image">顶部图片</string>
+</resources>

@@ -169,7 +169,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                 Status.LOADING -> {
                     Snackbar.make(
                         mBinding.root,
-                        getString(R.string.downloading_fitted_wallpaper),
+                        getString(R.string.downloading_appropriate_wallpaper),
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
