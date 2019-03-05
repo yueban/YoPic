@@ -23,7 +23,7 @@ class CollectionAdapter(
         }
 
         override fun areContentsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
-            return oldItem == newItem
+            return oldItem.copy(rowId = 0) == newItem.copy(rowId = 0)
         }
     }
 ) {

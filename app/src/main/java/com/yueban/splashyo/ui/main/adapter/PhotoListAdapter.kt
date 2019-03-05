@@ -25,7 +25,7 @@ class PhotoListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
-            return oldItem == newItem
+            return oldItem.copy(rowId = 0) == newItem.copy(rowId = 0)
         }
     }
 ) {
