@@ -110,7 +110,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:previewUrl="@{photo.smallImageUrl}"
+                    app:previewUrl="@{photo.thumbImageUrl}"
                     tools:layout_height="240dp"/>
 
                 <!-- photo statistic info -->

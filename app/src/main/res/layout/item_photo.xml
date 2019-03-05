@@ -18,7 +18,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:scaleType="centerCrop"
         android:transitionName="@string/transition_img_photo"
-        app:imgUrl="@{photo.smallImageUrl}"
+        app:imgUrl="@{photo.thumbImageUrl}"
         app:previewColor="@{photo.previewColor}"
         tools:src="#cc000000"/>
 </layout>

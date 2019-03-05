@@ -60,12 +60,6 @@ data class PhotoCollection(
     val smallCoverImageUrl: String?
         get() = coverPhoto?.urls?.small
 
-    val normalCoverImageUrl: String?
-        get() = coverPhoto?.urls?.regular
-
-    val originCoverImageUrl: String?
-        get() = coverPhoto?.urls?.full
-
     val previewColor: Int?
         @SuppressLint("Range")
         get() = coverPhoto?.previewColor

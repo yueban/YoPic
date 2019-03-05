@@ -63,20 +63,8 @@ data class Photo(
     @Json(name = "cache_label") @ColumnInfo(name = "cache_label")
     var cacheLabel: String? = ""
 ) : Parcelable {
-    val userName: String
-        get() = user.name
-
-    val sponsorName: String
-        get() {
-            return if (sponsored && sponsoredBy != null) {
-                sponsoredBy.name
-            } else {
-                ""
-            }
-        }
-
-    val smallImageUrl: String
-        get() = urls.small
+    val thumbImageUrl: String
+        get() = urls.thumb
 
     val normalImageUrl: String
         get() = urls.regular
