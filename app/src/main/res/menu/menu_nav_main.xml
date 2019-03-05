@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_group_photos"
+        android:checkableBehavior="single">
+
         <item
             android:id="@id/collectionFragment"
             android:icon="@drawable/outline_collections_24px"
@@ -11,10 +14,18 @@
             android:title="@string/photos"/>
     </group>
 
-    <group android:checkableBehavior="none">
+    <group
+        android:id="@+id/nav_group_settings"
+        android:checkableBehavior="none">
+
         <item
             android:id="@id/settingActivity"
             android:icon="@drawable/outline_settings_24px"
             android:title="@string/setting"/>
+
+        <item
+            android:id="@id/aboutActivity"
+            android:icon="@drawable/outline_info_24px"
+            android:title="@string/about_app"/>
     </group>
 </menu>

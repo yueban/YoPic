@@ -51,9 +51,16 @@
         <action
             android:id="@+id/action_global_settingActivity"
             app:destination="@id/settingActivity"/>
+        <action
+            android:id="@+id/action_global_aboutActivity"
+            app:destination="@id/aboutActivity"/>
     </navigation>
     <activity
         android:id="@+id/settingActivity"
         android:name="com.yueban.splashyo.ui.setting.SettingActivity"
         android:label="SettingActivity"/>
+    <activity
+        android:id="@+id/aboutActivity"
+        android:name="com.yueban.splashyo.ui.setting.AboutActivity"
+        android:label="AboutActivity"/>
 </navigation>

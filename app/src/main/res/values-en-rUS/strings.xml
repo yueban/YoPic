@@ -40,5 +40,7 @@
     <string name="twenty_four_hours">24 hours</string>
     <string name="select_a_collection">select a Collection</string>
     <string name="all">All</string>
+    <string name="about_app_desc">A wallpaper gallery\npowered by Unsplash API</string>
+    <string name="about_app">About SplashYo</string>
 
 </resources>

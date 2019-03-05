@@ -122,34 +122,29 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
     override fun initData() {
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val featured = mCollectionVM.featured.value
         featured?.let {
-            inflater?.inflate(R.menu.menu_collection_view, menu)
-            menu?.let {
-                val menuFeatured = menu.findItem(R.id.menu_collection_featured)
-                val menuAll = menu.findItem(R.id.menu_collection_all)
-                menuFeatured.isVisible = !featured
-                menuAll.isVisible = featured
-            }
+            inflater.inflate(R.menu.menu_collection_view, menu)
+            val menuFeatured = menu.findItem(R.id.menu_collection_featured)
+            val menuAll = menu.findItem(R.id.menu_collection_all)
+            menuFeatured.isVisible = !featured
+            menuAll.isVisible = featured
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        item?.let {
-            return when (item.itemId) {
-                R.id.menu_collection_featured -> {
-                    mCollectionVM.setFeatured(true)
-                    true
-                }
-                R.id.menu_collection_all -> {
-                    mCollectionVM.setFeatured(false)
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_collection_featured -> {
+                mCollectionVM.setFeatured(true)
+                true
             }
+            R.id.menu_collection_all -> {
+                mCollectionVM.setFeatured(false)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 }

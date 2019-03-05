@@ -41,5 +41,8 @@
         <activity
             android:name=".ui.setting.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.setting.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar.About"/>
     </application>
 </manifest>

@@ -30,6 +30,12 @@
         <item name="android:windowBackground">@android:color/black</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.About">
+        <item name="aboutPageHeaderBackground">@android:color/white</item>
+        <item name="aboutPageHeaderTextColor">@android:color/black</item>
+        <item name="aboutPageNavigationIcon">@drawable/outline_close_24px</item>
+    </style>
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <!-- drawer icon color -->
         <item name="android:colorControlNormal">@android:color/black</item>
