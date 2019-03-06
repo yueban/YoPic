@@ -12,6 +12,8 @@ import com.yueban.splashyo.util.FileUtils
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
+import com.yueban.splashyo.util.log.LogBorderFormatter
+import com.yueban.splashyo.util.log.LogFlattener
 import com.yueban.splashyo.util.ui.DefaultRefreshFooter
 import com.yueban.splashyo.worker.WorkerUtil
 import dagger.android.AndroidInjector
@@ -55,6 +57,7 @@ class SplashYoApp : DaggerApplication() {
             )
             .tag("SplashYo")
             .b()
+            .borderFormatter(LogBorderFormatter())
             .build()
 
         val androidPrinter = AndroidPrinter()
@@ -62,6 +65,7 @@ class SplashYoApp : DaggerApplication() {
         if (!logFileFolder.isEmpty()) {
             val filePrinter = FilePrinter.Builder(logFileFolder)
                 .fileNameGenerator(DateFileNameGenerator())
+                .flattener(LogFlattener())
                 .build()
             XLog.init(
                 config,

@@ -24,6 +24,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
     lateinit var prefManager: PrefManager
 
     override fun createWork(): Single<Result> {
+        XLog.d("ChangeWallpaperWorker, create work")
         val option: WallpaperSwitchOption =
             prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
                 ?: WallpaperSwitchOption()
@@ -77,12 +78,15 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             val bitmap = BitmapFactory.decodeFile(file.absolutePath)
             WallpaperUtil.setWallpaper(applicationContext, bitmap, option.setType)
             bitmap.recycle()
+            XLog.d("ChangeWallpaperWorker, result success")
             Single.just(Result.success())
         }.onErrorReturn {
             XLog.e(it)
             if (it is NullPointerException) {
+                XLog.d("ChangeWallpaperWorker, result failure")
                 Result.failure()
             } else {
+                XLog.d("ChangeWallpaperWorker, result retry")
                 Result.retry()
             }
         }.compose(AsyncScheduler.create())
