@@ -73,14 +73,13 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             }
         }
         mBinding.download.setOnClickListener {
-            RxPermissions(this).request(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ).subscribe { granted ->
-                if (granted) {
-                    mVM.download(mPhoto.links.download_location)
+            RxPermissions(this)
+                .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe { granted ->
+                    if (granted) {
+                        mVM.download(mPhoto.links.download_location)
+                    }
                 }
-            }
         }
         mBinding.setWallpaper.setOnClickListener {
             showSetWallpaperDialog()

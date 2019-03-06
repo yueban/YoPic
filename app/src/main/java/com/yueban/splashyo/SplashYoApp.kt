@@ -1,7 +1,15 @@
 package com.yueban.splashyo
 
+import com.elvishew.xlog.LogConfiguration
+import com.elvishew.xlog.LogLevel
+import com.elvishew.xlog.XLog
+import com.elvishew.xlog.printer.AndroidPrinter
+import com.elvishew.xlog.printer.file.FilePrinter
+import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.yueban.splashyo.util.FileUtils
+import com.yueban.splashyo.util.PermissionUtils
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
@@ -10,7 +18,6 @@ import com.yueban.splashyo.worker.WorkerUtil
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -35,13 +42,37 @@ class SplashYoApp : DaggerApplication() {
 
         super.onCreate()
 
-        initTimber()
+        initXLog()
         initWorker()
     }
 
-    private fun initTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+    private fun initXLog() {
+        val config = LogConfiguration.Builder()
+            .logLevel(
+                if (BuildConfig.DEBUG)
+                    LogLevel.ALL
+                else
+                    LogLevel.NONE
+            )
+            .tag("SplashYo")
+            .b()
+            .build()
+
+        val androidPrinter = AndroidPrinter()
+        if (PermissionUtils.isGranted(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            val filePrinter = FilePrinter.Builder(FileUtils.getLogFileFolder(this))
+                .fileNameGenerator(DateFileNameGenerator())
+                .build()
+            XLog.init(
+                config,
+                androidPrinter,
+                filePrinter
+            )
+        } else {
+            XLog.init(
+                config,
+                androidPrinter
+            )
         }
     }
 

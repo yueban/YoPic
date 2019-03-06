@@ -77,7 +77,6 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$rootProject.retrofitVersion"
-    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
     implementation "com.scwang.smartrefresh:SmartRefreshLayout:$rootProject.smartRefreshLayoutVerison"
     implementation "com.scwang.smartrefresh:SmartRefreshHeader:$rootProject.smartRefreshLayoutVerison"
     implementation "com.squareup.moshi:moshi:$rootProject.moshiVersion"
@@ -101,4 +100,5 @@ dependencies {
     implementation "com.github.ybq:Android-SpinKit:$rootProject.spinKitVersion"
     implementation "me.drakeet.multitype:multitype:$rootProject.multitypeVersion"
     implementation "me.drakeet.support:about:$rootProject.aboutVersion"
+    implementation "com.elvishew:xlog:$rootProject.xlogVersion"
 }

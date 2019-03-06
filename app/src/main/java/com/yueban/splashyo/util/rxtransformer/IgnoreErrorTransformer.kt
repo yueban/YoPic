@@ -1,5 +1,6 @@
 package com.yueban.splashyo.util.rxtransformer
 
+import com.elvishew.xlog.XLog
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.Flowable
@@ -11,14 +12,13 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.internal.operators.completable.CompletableEmpty
 import org.reactivestreams.Publisher
-import timber.log.Timber
 
 class IgnoreErrorTransformer<T>
 private constructor(private val printError: Boolean) : CombineTransformer<T, T> {
     override fun apply(upstream: Observable<T>): ObservableSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                Timber.e(throwable)
+                XLog.e(throwable)
             }
         }.onErrorResumeNext(Observable.empty())
     }
@@ -26,7 +26,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Flowable<T>): Publisher<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                Timber.e(throwable)
+                XLog.e(throwable)
             }
         }.onErrorResumeNext(Flowable.empty())
     }
@@ -34,7 +34,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Single<T>): SingleSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                Timber.e(throwable)
+                XLog.e(throwable)
             }
         }.onErrorResumeNext(Maybe.empty<T>().toSingle())
     }
@@ -42,7 +42,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Maybe<T>): MaybeSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                Timber.e(throwable)
+                XLog.e(throwable)
             }
         }.onErrorResumeNext(Maybe.empty())
     }
@@ -50,7 +50,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Completable): CompletableSource {
         return upstream.doOnError { throwable ->
             if (printError) {
-                Timber.e(throwable)
+                XLog.e(throwable)
             }
         }.onErrorResumeNext { CompletableEmpty.INSTANCE }
     }

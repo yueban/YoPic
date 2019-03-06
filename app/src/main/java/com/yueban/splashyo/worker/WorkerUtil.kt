@@ -7,6 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.elvishew.xlog.XLog
 import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
 import com.yueban.splashyo.util.PrefKey
 import com.yueban.splashyo.util.PrefManager
@@ -35,13 +36,18 @@ class WorkerUtil
 
     private val workManager = WorkManager.getInstance()
 
+    /**
+     * @param replace replace current work with a new one
+     */
     fun refreshWallpaperChangeTask(replace: Boolean = false) {
         val option: WallpaperSwitchOption =
             prefManager.getObject(PrefKey.WALLPAPER_SWITCH_OPTION, WallpaperSwitchOption::class.java)
                 ?: WallpaperSwitchOption()
 
+        XLog.d("refreshWallpaperChangeTask start, replace: $replace\n$option")
         if (!option.isEnabledAndValid) {
             workManager.cancelUniqueWork(NAME_WALLPAPER_CHANGE)
+            XLog.d("refreshWallpaperChangeTask start failed: option invalid, work canceled")
         } else {
             val constraints = if (option.onlyInWifi) {
                 Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED)
@@ -65,6 +71,7 @@ class WorkerUtil
                 existingPolicy,
                 wallpaperWorker
             )
+            XLog.d("refreshWallpaperChangeTask start success")
         }
     }
 

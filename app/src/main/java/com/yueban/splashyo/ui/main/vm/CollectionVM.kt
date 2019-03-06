@@ -3,6 +3,7 @@ package com.yueban.splashyo.ui.main.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.elvishew.xlog.XLog
 import com.yueban.splashyo.data.model.PhotoCollection
 import com.yueban.splashyo.data.repo.PhotoRepo
 import com.yueban.splashyo.util.PAGE_SIZE
@@ -11,7 +12,6 @@ import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.rxtransformer.IgnoreErrorTransformer
 import com.yueban.splashyo.util.vm.LoadState
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 
 /**
  * @author yueban
@@ -82,13 +82,13 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
 
         fun queryNextPage(featured: Boolean) {
             if (!_hasMore) {
-                Timber.d("queryNextPage: no more")
+                XLog.d("queryNextPage: no more")
                 return
             }
 
             val state = loadState.value
             if (state != null && state.isRunning) {
-                Timber.d("queryNextPage: isRunning")
+                XLog.d("queryNextPage: isRunning")
                 return
             }
             unregister()

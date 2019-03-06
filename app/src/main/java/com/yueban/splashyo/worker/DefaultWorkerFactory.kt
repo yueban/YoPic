@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.elvishew.xlog.XLog
 import com.yueban.splashyo.data.net.UnSplashService
 import com.yueban.splashyo.util.PrefManager
 import com.yueban.splashyo.util.di.scope.AppScope
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -30,7 +30,7 @@ class DefaultWorkerFactory
         try {
             clazz = Class.forName(workerClassName).asSubclass(ListenableWorker::class.java)
         } catch (var8: ClassNotFoundException) {
-            Timber.e("$TAG: Class not found: $workerClassName ${emptyArray<Throwable>()}")
+            XLog.e("$TAG: Class not found: $workerClassName ${emptyArray<Throwable>()}")
             return null
         }
 
@@ -45,7 +45,7 @@ class DefaultWorkerFactory
             }
             worker
         } catch (e: Exception) {
-            Timber.e("$TAG: Could not instantiate $workerClassName $e")
+            XLog.e("$TAG: Could not instantiate $workerClassName $e")
             null
         }
     }

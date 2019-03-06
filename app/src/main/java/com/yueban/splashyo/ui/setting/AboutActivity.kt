@@ -66,7 +66,6 @@ class AboutActivity : AbsAboutActivity() {
         )
         items.add(License("okhttp", "square", License.APACHE_2, "https://github.com/square/okhttp"))
         items.add(License("retrofit", "square", License.APACHE_2, "https://github.com/square/retrofit"))
-        items.add(License("timber", "JakeWharton", License.APACHE_2, "https://github.com/JakeWharton/timber"))
         items.add(
             License(
                 "SmartRefreshLayout",
@@ -94,5 +93,6 @@ class AboutActivity : AbsAboutActivity() {
         items.add(License("Android-SpinKit", "ybq", License.MIT, "https://github.com/ybq/Android-SpinKit"))
         items.add(License("MultiType", "drakeet", License.APACHE_2, "https://github.com/drakeet/MultiType"))
         items.add(License("about-page", "drakeet", License.APACHE_2, "https://github.com/drakeet/about-page"))
+        items.add(License("xlog", "elvishew", License.APACHE_2, "https://github.com/elvishew/xLog"))
     }
 }

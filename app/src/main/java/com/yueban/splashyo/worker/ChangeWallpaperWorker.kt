@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
+import com.elvishew.xlog.XLog
 import com.yueban.splashyo.data.Optional
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
@@ -15,7 +16,6 @@ import com.yueban.splashyo.util.WallpaperUtil
 import com.yueban.splashyo.util.rxtransformer.AsyncScheduler
 import com.yueban.splashyo.util.screenHeight
 import io.reactivex.Single
-import timber.log.Timber
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -79,7 +79,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             bitmap.recycle()
             Single.just(Result.success())
         }.onErrorReturn {
-            Timber.e(it)
+            XLog.e(it)
             if (it is NullPointerException) {
                 Result.failure()
             } else {
