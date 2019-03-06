@@ -105,7 +105,7 @@ class PhotoRepo
                 }
             }
 
-        return if (page == firstPage) {
+        return if (page == firstPage && loadCacheOnFirstPage) {
             photoDao.getPhotos(cacheLabel)
                 .compose(RoomOptionalTransformer.create())
                 .compose(MarkAsCacheTransformer.create())
