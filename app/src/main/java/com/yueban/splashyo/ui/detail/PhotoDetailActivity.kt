@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.kennyc.bottomsheet.BottomSheetMenuDialogFragment
-import com.tbruyelle.rxpermissions2.RxPermissions
 import com.yueban.splashyo.R
 import com.yueban.splashyo.data.model.Photo
 import com.yueban.splashyo.data.model.util.WallpaperSwitchOption
@@ -73,13 +72,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             }
         }
         mBinding.download.setOnClickListener {
-            RxPermissions(this)
-                .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe { granted ->
-                    if (granted) {
-                        mVM.download(mPhoto.links.download_location)
-                    }
-                }
+            mVM.download(mPhoto.links.download_location)
         }
         mBinding.setWallpaper.setOnClickListener {
             showSetWallpaperDialog()

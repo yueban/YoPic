@@ -9,7 +9,6 @@ import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.yueban.splashyo.util.FileUtils
-import com.yueban.splashyo.util.PermissionUtils
 import com.yueban.splashyo.util.di.component.AppComponent
 import com.yueban.splashyo.util.di.component.BaseComponent
 import com.yueban.splashyo.util.di.component.DaggerAppComponent
@@ -59,8 +58,9 @@ class SplashYoApp : DaggerApplication() {
             .build()
 
         val androidPrinter = AndroidPrinter()
-        if (PermissionUtils.isGranted(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            val filePrinter = FilePrinter.Builder(FileUtils.getLogFileFolder(this))
+        val logFileFolder = FileUtils.getLogFileFolder(this)
+        if (!logFileFolder.isEmpty()) {
+            val filePrinter = FilePrinter.Builder(logFileFolder)
                 .fileNameGenerator(DateFileNameGenerator())
                 .build()
             XLog.init(
