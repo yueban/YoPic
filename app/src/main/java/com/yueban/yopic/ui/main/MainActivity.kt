@@ -3,6 +3,7 @@ package com.yueban.yopic.ui.main
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.yueban.yopic.R
@@ -38,5 +39,13 @@ class MainActivity : BaseViewActivity<ActivityMainBinding>() {
     }
 
     override fun initData() {
+    }
+
+    override fun onBackPressed() {
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START)
+            return
+        }
+        super.onBackPressed()
     }
 }
