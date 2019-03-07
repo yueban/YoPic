@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.yueban.splashyo.ui.setting.SettingFragment"
+        android:name="com.yueban.yopic.ui.setting.SettingFragment"
         android:label="SettingFragment">
         <action
             android:id="@+id/action_settingFragment_to_collectionFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/collectionFragmentForSetting"
-        android:name="com.yueban.splashyo.ui.main.CollectionFragment"
+        android:name="com.yueban.yopic.ui.main.CollectionFragment"
         android:label="CollectionFragment">
         <argument
             android:name="forSetting"

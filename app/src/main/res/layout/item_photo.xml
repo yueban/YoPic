@@ -7,7 +7,7 @@
 
         <variable
             name="photo"
-            type="com.yueban.splashyo.data.model.Photo"/>
+            type="com.yueban.yopic.data.model.Photo"/>
     </data>
 
     <ImageView

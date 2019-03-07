@@ -9,11 +9,11 @@
         <!-- for preview -->
         <variable
             name="photo"
-            type="com.yueban.splashyo.data.model.Photo"/>
+            type="com.yueban.yopic.data.model.Photo"/>
 
         <variable
             name="photoDetail"
-            type="com.yueban.splashyo.data.model.PhotoDetail"/>
+            type="com.yueban.yopic.data.model.PhotoDetail"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -213,7 +213,7 @@
                             android:contentDescription="@string/cd_photographer"
                             android:foreground="@drawable/fg_avatar"
                             app:avatarUrl="@{photoDetail.user.profileImage.large}"
-                            tools:src="@drawable/ic_launcher_background"/>
+                            tools:src="@mipmap/ic_launcher"/>
 
                         <TextView
                             android:layout_width="wrap_content"

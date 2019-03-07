@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.yueban.splashyo">
+          package="com.yueban.yopic">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
 
     <application
-        android:name=".SplashYoApp"
+        android:name="com.yueban.yopic.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -25,7 +24,7 @@
             tools:replace="android:authorities"/>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="com.yueban.yopic.ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,13 +33,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.detail.PhotoDetailActivity"
+            android:name="com.yueban.yopic.ui.detail.PhotoDetailActivity"
             android:theme="@style/AppTheme.NoActionBar.Detail"/>
         <activity
-            android:name=".ui.setting.SettingActivity"
+            android:name="com.yueban.yopic.ui.setting.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.setting.AboutActivity"
+            android:name="com.yueban.yopic.ui.setting.AboutActivity"
             android:theme="@style/AppTheme.NoActionBar.About"/>
     </application>
 </manifest>

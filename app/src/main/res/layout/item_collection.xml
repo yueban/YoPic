@@ -7,7 +7,7 @@
 
         <variable
             name="collection"
-            type="com.yueban.splashyo.data.model.PhotoCollection"/>
+            type="com.yueban.yopic.data.model.PhotoCollection"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

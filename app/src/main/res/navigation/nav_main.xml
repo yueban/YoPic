@@ -6,11 +6,11 @@
 
     <activity
         android:id="@+id/photoDetailActivity"
-        android:name="com.yueban.splashyo.ui.detail.PhotoDetailActivity"
+        android:name="com.yueban.yopic.ui.detail.PhotoDetailActivity"
         android:label="PhotoDetailActivity">
         <argument
             android:name="photo"
-            app:argType="com.yueban.splashyo.data.model.Photo"/>
+            app:argType="com.yueban.yopic.data.model.Photo"/>
     </activity>
 
     <navigation
@@ -18,7 +18,7 @@
         app:startDestination="@id/collectionFragment">
         <fragment
             android:id="@+id/collectionFragment"
-            android:name="com.yueban.splashyo.ui.main.CollectionFragment"
+            android:name="com.yueban.yopic.ui.main.CollectionFragment"
             android:label="CollectionFragment">
             <action
                 android:id="@+id/action_collectionFragment_to_photoListFragment"
@@ -30,7 +30,7 @@
         </fragment>
         <fragment
             android:id="@+id/photoListFragment"
-            android:name="com.yueban.splashyo.ui.main.PhotoListFragment"
+            android:name="com.yueban.yopic.ui.main.PhotoListFragment"
             android:label="PhotoListFragment">
             <argument
                 android:name="collectionId"
@@ -57,10 +57,10 @@
     </navigation>
     <activity
         android:id="@+id/settingActivity"
-        android:name="com.yueban.splashyo.ui.setting.SettingActivity"
+        android:name="com.yueban.yopic.ui.setting.SettingActivity"
         android:label="SettingActivity"/>
     <activity
         android:id="@+id/aboutActivity"
-        android:name="com.yueban.splashyo.ui.setting.AboutActivity"
+        android:name="com.yueban.yopic.ui.setting.AboutActivity"
         android:label="AboutActivity"/>
 </navigation>

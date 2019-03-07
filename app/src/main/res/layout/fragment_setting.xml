@@ -8,7 +8,7 @@
 
         <variable
             name="option"
-            type="com.yueban.splashyo.data.model.util.WallpaperSwitchOptionObservable"/>
+            type="com.yueban.yopic.data.model.util.WallpaperSwitchOptionObservable"/>
 
         <import type="android.os.Build"/>
     </data>

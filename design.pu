@@ -1,4 +1,4 @@
-@startuml SplashYo design diagram
+@startuml YoPic design diagram
 
 start
 partition MainActivity(NavigationDrawer/BottomNavigation) {

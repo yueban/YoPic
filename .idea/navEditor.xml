@@ -35,8 +35,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="61" />
-                            <option name="y" value="359" />
+                            <option name="x" value="252" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -48,7 +48,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="12" />
-                            <option name="y" value="127" />
+                            <option name="y" value="130" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -66,12 +66,6 @@
                             <entry key="collectionFragment">
                               <value>
                                 <LayoutPositions>
-                                  <option name="myPosition">
-                                    <Point>
-                                      <option name="x" value="12" />
-                                      <option name="y" value="12" />
-                                    </Point>
-                                  </option>
                                   <option name="myPositions">
                                     <map>
                                       <entry key="action_collectionFragment_to_photoListFragment">
@@ -87,12 +81,6 @@
                             <entry key="photoListFragment">
                               <value>
                                 <LayoutPositions>
-                                  <option name="myPosition">
-                                    <Point>
-                                      <option name="x" value="256" />
-                                      <option name="y" value="12" />
-                                    </Point>
-                                  </option>
                                   <option name="myPositions">
                                     <map>
                                       <entry key="action_photoListFragment_to_photoDetailActivity">
@@ -116,7 +104,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="252" />
-                            <option name="y" value="12" />
+                            <option name="y" value="368" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -128,7 +116,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="252" />
-                            <option name="y" value="368" />
+                            <option name="y" value="724" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -146,12 +134,25 @@
                 <map>
                   <entry key="collectionFragmentForSetting">
                     <value>
-                      <LayoutPositions />
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="settingFragment">
                     <value>
                       <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_settingFragment_to_collectionFragment">

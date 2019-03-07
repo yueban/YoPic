@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SplashYo</string>
+    <string name="app_name" translatable="false">YoPic</string>
     <string formatted="false" name="photos_count">&#160;·&#160;%d 张照片</string>
     <string formatted="false" name="curated_by">由 %s 策划</string>
     <string name="collections">集合</string>
@@ -41,6 +41,6 @@
     <string name="select_a_collection">选择照片集</string>
     <string name="all">全部</string>
     <string name="about_app_desc">一款基于 Unsplash API 的壁纸集</string>
-    <string name="about_app">关于 SplashYo</string>
+    <string formatted="false" name="about_app">关于 %s</string>
 
 </resources>

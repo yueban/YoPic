@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">SplashYo</string>
     <string formatted="false" name="photos_count">&#160;·&#160;%d photos</string>
     <string formatted="false" name="curated_by">curated by %s</string>
     <string name="collections">Collections</string>
@@ -41,6 +40,6 @@
     <string name="select_a_collection">select a Collection</string>
     <string name="all">All</string>
     <string name="about_app_desc">A wallpaper gallery\npowered by Unsplash API</string>
-    <string name="about_app">About SplashYo</string>
+    <string formatted="false" name="about_app">About %s</string>
 
 </resources>
