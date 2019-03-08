@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.gyf.barlibrary.ImmersionBar
 import com.yueban.yopic.R
 import com.yueban.yopic.databinding.ActivityMainBinding
 import com.yueban.yopic.ui.base.BaseViewActivity
@@ -15,6 +16,9 @@ class MainActivity : BaseViewActivity<ActivityMainBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun initVMAndParams(savedInstanceState: Bundle?): Boolean = true
+
+    override fun initStatusBar(): ImmersionBar =
+        ImmersionBar.with(this)
 
     override fun initView() {
         mBinding.navigation.menu.findItem(R.id.aboutActivity).title =

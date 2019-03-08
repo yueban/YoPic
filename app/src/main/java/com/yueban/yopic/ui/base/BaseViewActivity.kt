@@ -5,9 +5,11 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
+import com.gyf.barlibrary.ImmersionBar
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
 import com.trello.rxlifecycle3.LifecycleProvider
 import com.trello.rxlifecycle3.LifecycleTransformer
+import com.yueban.yopic.R
 import io.reactivex.Observable
 
 /**
@@ -28,9 +30,20 @@ abstract class BaseViewActivity<Binding : ViewDataBinding> : BaseActivity(), Lif
         if (!initVMAndParams(savedInstanceState)) {
             return
         }
+        initStatusBar().init()
         initView()
         observeVM()
         initData()
+    }
+
+    protected open fun initStatusBar(): ImmersionBar =
+        ImmersionBar.with(this)
+            .fitsSystemWindows(true)
+            .statusBarColor(R.color.colorPrimary, 0.2f)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ImmersionBar.with(this).destroy()
     }
 
     @LayoutRes
