@@ -36,6 +36,7 @@
         <item name="aboutPageNavigationIcon">@drawable/outline_close_24px</item>
     </style>
 
+    <!-- toolbar -->
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <!-- drawer icon color -->
         <item name="android:colorControlNormal">@android:color/black</item>
@@ -61,17 +62,18 @@
         <item name="android:layout_width">match_parent</item>
     </style>
 
+    <!-- text -->
     <style name="Text">
         <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Text.Title">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">@dimen/text_main</item>
+        <item name="android:textColor">@color/sel_text_main</item>
     </style>
 
     <style name="Text.Title.Dark">
-        <item name="android:textColor">@color/text_main_dark</item>
+        <item name="android:textColor">@color/sel_text_main_dark</item>
     </style>
 
     <style name="Text.Title.SingleLine">
@@ -79,12 +81,12 @@
     </style>
 
     <style name="Text.SubTitle">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_sub</item>
+        <item name="android:textSize">@dimen/text_sub</item>
+        <item name="android:textColor">@color/sel_text_sub</item>
     </style>
 
     <style name="Text.SubTitle.Dark">
-        <item name="android:textColor">@color/text_sub_dark</item>
+        <item name="android:textColor">@color/sel_text_sub_dark</item>
     </style>
 
     <style name="Text.SubTitle.SingleLine">
@@ -92,7 +94,7 @@
     </style>
 
     <style name="Text.Label">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/text_label</item>
         <item name="android:textColor">@color/text_label</item>
     </style>
 
@@ -100,7 +102,14 @@
         <item name="android:textColor">@color/text_label_dark</item>
     </style>
 
-    <style name="Text.Label.SingleLine">
-        <item name="android:lines">1</item>
+    <!-- switch -->
+    <style name="Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Switch.UnClick">
+        <item name="android:background">@null</item>
+        <item name="android:clickable">false</item>
     </style>
 </resources>

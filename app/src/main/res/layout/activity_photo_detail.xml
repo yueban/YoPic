@@ -244,7 +244,7 @@
 
                         <TextView
                             android:text="@string/camera_make"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.exif.make}"
@@ -258,7 +258,7 @@
 
                         <TextView
                             android:text="@string/camera_model"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.exif.model}"
@@ -272,7 +272,7 @@
 
                         <TextView
                             android:text="@string/focal_length"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.exif.focalLength}"
@@ -287,7 +287,7 @@
 
                         <TextView
                             android:text="@string/aperture"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.exif.aperture}"
@@ -301,7 +301,7 @@
 
                         <TextView
                             android:text="@string/shutter_speed"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.exif.exposureTime}"
@@ -315,7 +315,7 @@
 
                         <TextView
                             android:text="@string/iso"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{String.valueOf(safeUnbox(photoDetail.exif.iso))}"
@@ -328,7 +328,7 @@
 
                         <TextView
                             android:text="@string/dimensions"
-                            style="@style/Text.Label.SingleLine.Camera_Info_Label"/>
+                            style="@style/Text.Label.Camera_Info_Label"/>
 
                         <TextView
                             android:text="@{photoDetail.dimensions}"

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- text -->
+    <dimen name="text_main">16sp</dimen>
+    <dimen name="text_sub">14sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+
     <dimen name="item_collection_height">240dp</dimen>
     <dimen name="item_photo_item_image_height">120dp</dimen>
 </resources>

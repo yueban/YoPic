@@ -23,7 +23,8 @@
         <item name="android:paddingBottom">6dp</item>
     </style>
 
-    <style name="Text.Label.SingleLine.Camera_Info_Label">
+    <style name="Text.Label.Camera_Info_Label">
+        <item name="android:lines">1</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>

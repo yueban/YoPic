@@ -2,18 +2,21 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#CCCCCC</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#46C9C8</color>
 
     <!-- 文字 -->
     <!-- 深色背景下 -->
-    <color name="text_main">#ffffff</color>
-    <color name="text_sub">#e6ffffff</color>
-    <color name="text_label">#99ffffff</color>
+    <color name="text_main">#deffffff</color>
+    <color name="text_sub">#99ffffff</color>
+    <color name="text_label">#61ffffff</color>
+    <color name="text_disabled">#61ffffff</color>
     <!-- 白色背景下 -->
-    <color name="text_main_dark">#202020</color>
-    <color name="text_sub_dark">#9e9e9e</color>
-    <color name="text_label_dark">#b2b2b2</color>
+    <color name="text_main_dark">#de000000</color>
+    <color name="text_sub_dark">#99000000</color>
+    <color name="text_label_dark">#61000000</color>
+    <color name="text_disabled_dark">#61000000</color>
 
+    <style name="text_error_helper">#B00020</style>
 
     <color name="bg_user_info">#33ffffff</color>
 </resources>
