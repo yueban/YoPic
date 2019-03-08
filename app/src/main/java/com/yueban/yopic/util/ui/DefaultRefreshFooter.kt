@@ -15,6 +15,8 @@ import com.yueban.yopic.R
 import com.yueban.yopic.databinding.LayoutRefreshFooterBinding
 
 class DefaultRefreshFooter : FrameLayout, RefreshFooter {
+    private lateinit var mBinding: LayoutRefreshFooterBinding
+
     constructor(context: Context) : super(context) {
         initView(context)
     }
@@ -28,7 +30,7 @@ class DefaultRefreshFooter : FrameLayout, RefreshFooter {
     }
 
     private fun initView(context: Context) {
-        DataBindingUtil.inflate<LayoutRefreshFooterBinding>(
+        mBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.layout_refresh_footer,
             this,
@@ -46,7 +48,10 @@ class DefaultRefreshFooter : FrameLayout, RefreshFooter {
     override fun onHorizontalDrag(percentX: Float, offsetX: Int, offsetMax: Int) {
     }
 
-    override fun setNoMoreData(noMoreData: Boolean): Boolean = false
+    override fun setNoMoreData(noMoreData: Boolean): Boolean {
+        mBinding.noMoreData = noMoreData
+        return true
+    }
 
     override fun onReleased(refreshLayout: RefreshLayout, height: Int, maxDragHeight: Int) {
     }

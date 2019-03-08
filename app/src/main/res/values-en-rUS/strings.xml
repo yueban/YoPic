@@ -41,5 +41,6 @@
     <string name="all">All</string>
     <string name="about_app_desc">A wallpaper gallery\npowered by Unsplash API</string>
     <string formatted="false" name="about_app">About %s</string>
+    <string name="no_more">~ no more ~</string>
 
 </resources>
