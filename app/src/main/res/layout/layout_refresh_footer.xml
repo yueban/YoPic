@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:SpinKit_Color="@color/text_sub_dark"
-            app:visible="@{!noMoreData}"
+            app:visible="@{!safeUnbox(noMoreData)}"
             style="@style/SpinKitView.Large.Wave"/>
 
         <TextView
@@ -33,6 +33,6 @@
             android:text="@string/no_more"
             android:textColor="@color/text_sub_dark"
             android:textSize="16sp"
-            app:visible="@{noMoreData}"/>
+            app:visible="@{safeUnbox(noMoreData)}"/>
     </FrameLayout>
 </layout>
