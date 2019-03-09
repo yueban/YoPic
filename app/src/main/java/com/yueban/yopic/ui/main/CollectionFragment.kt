@@ -102,7 +102,7 @@ class CollectionFragment : BaseViewFragment<FragmentCollectionBinding>() {
                     mBinding.refreshLayout.autoAnimationOnly(loadState.isRefreshing, loadState.isLoadingMore)
                 } else {
                     if (lastTimeIsRefreshing) {
-                        mBinding.rvCollections.scrollToTop()
+                        mBinding.rvCollections.scrollToTop(true)
                         lastTimeIsRefreshing = false
                     }
                     mBinding.refreshLayout.finishRefreshAndLoadMore(loadState.isSuccess, mCollectionVM.hasMore)

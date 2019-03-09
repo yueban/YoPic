@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
  * @date 2019/1/14
  * @email fbzhh007@gmail.com
  */
-fun RecyclerView.scrollToTop(stopScroll: Boolean = true): Boolean {
-    if (stopScroll) {
-        stopScroll()
+fun RecyclerView.scrollToTop(skipOnScrolling: Boolean = false): Boolean {
+    if (isScrolling() && skipOnScrolling) {
+        return false
     }
+
+    stopScroll()
     return when (layoutManager) {
         is LinearLayoutManager -> {
             (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
@@ -20,3 +22,5 @@ fun RecyclerView.scrollToTop(stopScroll: Boolean = true): Boolean {
         else -> false
     }
 }
+
+fun RecyclerView.isScrolling() = scrollState != RecyclerView.SCROLL_STATE_IDLE
