@@ -10,14 +10,13 @@ import com.yueban.yopic.data.model.Photo
 import com.yueban.yopic.data.model.util.WallpaperSwitchOption
 import com.yueban.yopic.data.net.UnSplashService
 import com.yueban.yopic.util.GlideApp
+import com.yueban.yopic.util.PAGE_SIZE
 import com.yueban.yopic.util.PrefKey
 import com.yueban.yopic.util.PrefManager
 import com.yueban.yopic.util.WallpaperUtil
 import com.yueban.yopic.util.rxtransformer.AsyncScheduler
 import com.yueban.yopic.util.screenHeight
 import io.reactivex.Single
-import kotlin.random.Random
-import kotlin.random.nextInt
 
 class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWorker(context, params) {
     lateinit var service: UnSplashService
@@ -35,13 +34,23 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
 
         val observable: Single<Optional<List<Photo>>> = when (option.sourceType) {
             WallpaperSwitchOption.SourceType.ALL_PHOTOS -> {
-                service.photos(1)
+                // pick a random page from 1 to 10
+                val page = (1..10).random()
+                service.photos(page)
             }
             WallpaperSwitchOption.SourceType.COLLECTION -> {
                 if (option.collectionId.isNullOrEmpty()) {
                     Single.error(IllegalArgumentException("collectionId is null or empty"))
                 } else {
-                    service.photosByCollection(option.collectionId, 1)
+                    service.collection(option.collectionId.toInt()).flatMap { collection ->
+                        if (collection.isNull) {
+                            throw NullPointerException("collection is null")
+                        } else {
+                            val totalPage = Math.ceil(collection.get().totalPhotos * 1.0 / PAGE_SIZE).toInt()
+                            val page = (1..totalPage).random()
+                            service.photosByCollection(option.collectionId, page)
+                        }
+                    }
                 }
             }
             else -> {
@@ -60,8 +69,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
                     photo = photos[0]
                 } else {
                     while (true) {
-                        val random = Random(System.currentTimeMillis())
-                        val randomIndex = random.nextInt(0 until photos.size)
+                        val randomIndex = (0 until photos.size).random()
                         if (photos[randomIndex].id != option.currentId) {
                             photo = photos[randomIndex]
                             break

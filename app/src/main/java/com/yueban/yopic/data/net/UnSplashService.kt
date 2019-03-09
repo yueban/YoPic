@@ -49,4 +49,7 @@ interface UnSplashService {
      */
     @GET
     fun requestDownloadLocation(@Url download_location: String): Single<Optional<Any>>
+
+    @GET("collections/{id}")
+    fun collection(@Path("id") collectionId: Int): Single<Optional<PhotoCollection>>
 }
