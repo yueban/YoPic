@@ -18,7 +18,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Observable<T>): ObservableSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                XLog.e(throwable)
+                XLog.e(null, null, throwable)
             }
         }.onErrorResumeNext(Observable.empty())
     }
@@ -26,7 +26,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Flowable<T>): Publisher<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                XLog.e(throwable)
+                XLog.e(null, throwable)
             }
         }.onErrorResumeNext(Flowable.empty())
     }
@@ -34,7 +34,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Single<T>): SingleSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                XLog.e(throwable)
+                XLog.e(null, throwable)
             }
         }.onErrorResumeNext(Maybe.empty<T>().toSingle())
     }
@@ -42,7 +42,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Maybe<T>): MaybeSource<T> {
         return upstream.doOnError { throwable ->
             if (printError) {
-                XLog.e(throwable)
+                XLog.e(null, throwable)
             }
         }.onErrorResumeNext(Maybe.empty())
     }
@@ -50,7 +50,7 @@ private constructor(private val printError: Boolean) : CombineTransformer<T, T> 
     override fun apply(upstream: Completable): CompletableSource {
         return upstream.doOnError { throwable ->
             if (printError) {
-                XLog.e(throwable)
+                XLog.e(null, throwable)
             }
         }.onErrorResumeNext { CompletableEmpty.INSTANCE }
     }

@@ -89,7 +89,7 @@ class ChangeWallpaperWorker(context: Context, params: WorkerParameters) : RxWork
             XLog.d("ChangeWallpaperWorker, result success")
             Single.just(Result.success())
         }.onErrorReturn {
-            XLog.e(it)
+            XLog.e(null, it)
             if (it is NullPointerException) {
                 XLog.d("ChangeWallpaperWorker, result failure")
                 Result.failure()

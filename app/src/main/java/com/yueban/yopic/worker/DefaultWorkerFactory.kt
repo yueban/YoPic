@@ -30,7 +30,7 @@ class DefaultWorkerFactory
         try {
             clazz = Class.forName(workerClassName).asSubclass(ListenableWorker::class.java)
         } catch (var8: ClassNotFoundException) {
-            XLog.e("$TAG: Class not found: $workerClassName ${emptyArray<Throwable>()}")
+            XLog.e("$TAG: Class not found: $workerClassName", Exception())
             return null
         }
 
@@ -45,7 +45,7 @@ class DefaultWorkerFactory
             }
             worker
         } catch (e: Exception) {
-            XLog.e("$TAG: Could not instantiate $workerClassName $e")
+            XLog.e("$TAG: Could not instantiate $workerClassName", e)
             null
         }
     }
