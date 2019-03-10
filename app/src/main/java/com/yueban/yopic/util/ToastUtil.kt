@@ -4,19 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
 
-/**
- * @author yueban
- * @date 2019-03-10
- * @email fbzhh007@gmail.com
- */
-/**
- * <pre>
- * author: Blankj
- * blog  : http://blankj.com
- * time  : 2016/09/29
- * desc  : utils about toast
-</pre> *
- */
 object ToastUtils {
     private var toast: Toast? = null
 

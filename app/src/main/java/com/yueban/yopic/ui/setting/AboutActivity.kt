@@ -10,6 +10,7 @@ import me.drakeet.support.about.Category
 import me.drakeet.support.about.Contributor
 import me.drakeet.support.about.License
 
+@Suppress("SpellCheckingInspection")
 class AboutActivity : AbsAboutActivity() {
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
         icon.setImageResource(R.mipmap.ic_launcher)

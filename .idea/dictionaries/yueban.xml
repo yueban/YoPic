@@ -2,14 +2,20 @@
   <dictionary name="yueban">
     <words>
       <w>enduml</w>
+      <w>flattener</w>
+      <w>flowable</w>
       <w>instagram</w>
       <w>jetpack</w>
       <w>moshi</w>
       <w>recyclerview</w>
       <w>rowid</w>
+      <w>skaggs</w>
       <w>splashyo</w>
       <w>startuml</w>
+      <w>unbox</w>
       <w>unsplash</w>
+      <w>workmanager</w>
+      <w>yopic</w>
     </words>
   </dictionary>
 </component>

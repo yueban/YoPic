@@ -14,5 +14,5 @@ abstract class SettingActivityFragmentBindModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun collectionFragmnet(): CollectionFragment
+    abstract fun collectionFragment(): CollectionFragment
 }
