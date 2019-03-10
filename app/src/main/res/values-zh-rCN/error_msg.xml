@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="err_unknown">未知错误</string>
+    <string name="err_network">网络请求错误</string>
+</resources>

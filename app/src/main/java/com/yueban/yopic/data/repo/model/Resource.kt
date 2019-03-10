@@ -8,7 +8,7 @@ package com.yueban.yopic.data.repo.model
 data class Resource<out T>(
     val status: Status,
     val data: T?,
-    val message: String?
+    val tr: Throwable?
 ) {
     companion object {
         fun <T> success(data: T?): Resource<T> {
@@ -19,8 +19,8 @@ data class Resource<out T>(
             return Resource(Status.CACHE, data, null)
         }
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
-            return Resource(Status.ERROR, data, msg)
+        fun <T> error(tr: Throwable, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, tr)
         }
 
         fun <T> loading(data: T?): Resource<T> {

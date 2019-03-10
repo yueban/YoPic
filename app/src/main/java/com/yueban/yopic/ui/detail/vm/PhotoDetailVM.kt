@@ -43,7 +43,7 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     _photoDetail.value = Resource.loading(null)
                 }
                 .doOnError {
-                    _photoDetail.value = Resource.error(it.message.orEmpty(), null)
+                    _photoDetail.value = Resource.error(it, null)
                 }
                 .compose(IgnoreErrorTransformer.create())
                 .subscribe { result ->
@@ -73,7 +73,7 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     _downloadResult.value = Resource.loading(null)
                 }
                 .doOnError {
-                    _downloadResult.value = Resource.error(it.message.orEmpty(), null)
+                    _downloadResult.value = Resource.error(it, null)
                     _downloadRequest.value = null
                 }
                 .compose(IgnoreErrorTransformer.create())
@@ -102,7 +102,7 @@ class PhotoDetailVM(private val photoRepo: PhotoRepo) : ViewModel() {
                     _wallpaperResult.value = Resource.loading(null)
                 }
                 .doOnError {
-                    _wallpaperResult.value = Resource.error(it.message.orEmpty(), null)
+                    _wallpaperResult.value = Resource.error(it, null)
                     _wallpaperRequest.value = null
                 }
                 .compose(IgnoreErrorTransformer.create())

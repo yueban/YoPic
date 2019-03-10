@@ -1,5 +1,6 @@
 package com.yueban.yopic.ui.main.vm
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yueban.yopic.data.repo.PhotoRepo
@@ -13,9 +14,10 @@ import javax.inject.Inject
  */
 @AppScope
 class PhotoListVMFactory
-@Inject constructor(private val photoRepo: PhotoRepo) : ViewModelProvider.Factory {
+@Inject constructor(private val app: Application, private val photoRepo: PhotoRepo) :
+    ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return PhotoListVM(photoRepo) as T
+        return PhotoListVM(app, photoRepo) as T
     }
 }

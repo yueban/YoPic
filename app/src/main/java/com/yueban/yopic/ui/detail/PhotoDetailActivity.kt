@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,8 +22,9 @@ import com.yueban.yopic.databinding.ActivityPhotoDetailBinding
 import com.yueban.yopic.ui.base.BaseViewActivity
 import com.yueban.yopic.ui.detail.vm.PhotoDetailVM
 import com.yueban.yopic.ui.detail.vm.PhotoDetailVMFactory
-import com.yueban.yopic.util.DEFAULT_ERROR_MSG
+import com.yueban.yopic.util.ErrorMsgFactory
 import com.yueban.yopic.util.GlideApp
+import com.yueban.yopic.util.ToastUtils
 import com.yueban.yopic.util.WallpaperUtil
 import com.yueban.yopic.util.bottomsheet.SimpleBottomSheetListener
 import com.yueban.yopic.util.concurrent.AppExecutors
@@ -53,7 +53,7 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             mPhoto = navArgs<PhotoDetailActivityArgs>().value.photo
             true
         } catch (e: IllegalStateException) {
-            Toast.makeText(this, R.string.photo_do_not_exist, Toast.LENGTH_SHORT).show()
+            ToastUtils.show(this, R.string.photo_do_not_exist)
             finish()
             false
         }
@@ -93,23 +93,15 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
 
     override fun observeVM() {
         mVM.photoDetail.observe(this, Observer { res ->
-            if (res == null) {
-                showGetDetailError()
-                return@Observer
-            }
-            when (res.status) {
+            when (res?.status) {
                 Status.SUCCESS, Status.CACHE -> mBinding.photoDetail = res.data
-                Status.ERROR -> showGetDetailError(res.message)
+                Status.ERROR -> showGetDetailError(ErrorMsgFactory.msg(this, res.tr))
                 Status.LOADING -> {
                 }
             }
         })
         mVM.downloadResult.observe(this, Observer { res ->
-            if (res == null) {
-                showDownloadError()
-                return@Observer
-            }
-            when (res.status) {
+            when (res?.status) {
                 Status.SUCCESS, Status.CACHE -> {
                     val downloadManager: DownloadManager =
                         getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -124,17 +116,13 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                     request.setMimeType("image/jpeg")
                     downloadManager.enqueue(request)
                 }
-                Status.ERROR -> showDownloadError(res.message)
+                Status.ERROR -> showDownloadError(ErrorMsgFactory.msg(this, res.tr))
                 Status.LOADING -> {
                 }
             }
         })
         mVM.wallpaperResult.observe(this, Observer { res ->
-            if (res == null) {
-                showSetWallpaperError()
-                return@Observer
-            }
-            when (res.status) {
+            when (res?.status) {
                 Status.SUCCESS, Status.CACHE -> {
                     AppExecutors.io().execute {
                         try {
@@ -153,15 +141,15 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
                                     .show()
                             }
                         } catch (e: Exception) {
-                            showSetWallpaperError(e.message)
+                            showSetWallpaperError(ErrorMsgFactory.msg(this, e))
                         }
                     }
                 }
-                Status.ERROR -> showSetWallpaperError(res.message)
+                Status.ERROR -> showSetWallpaperError(ErrorMsgFactory.msg(this, res.tr))
                 Status.LOADING -> {
                     Snackbar.make(
                         mBinding.root,
-                        getString(R.string.downloading_appropriate_wallpaper),
+                        R.string.downloading_appropriate_wallpaper,
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
@@ -205,25 +193,25 @@ class PhotoDetailActivity : BaseViewActivity<ActivityPhotoDetailBinding>() {
             .show(supportFragmentManager)
     }
 
-    private fun showGetDetailError(errorMsg: String? = DEFAULT_ERROR_MSG) {
-        val msg = errorMsg ?: DEFAULT_ERROR_MSG
-        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).setAction(getString(R.string.retry)) {
-            mVM.retryGetDetail()
-        }.show()
+    private fun showGetDetailError(errorMsg: String) {
+        Snackbar.make(mBinding.root, errorMsg, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.retry) {
+                mVM.retryGetDetail()
+            }.show()
     }
 
-    private fun showDownloadError(errorMsg: String? = DEFAULT_ERROR_MSG) {
-        val msg = errorMsg ?: DEFAULT_ERROR_MSG
-        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).setAction(getString(R.string.retry)) {
-            mVM.retryDownload()
-        }.show()
+    private fun showDownloadError(errorMsg: String) {
+        Snackbar.make(mBinding.root, errorMsg, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.retry) {
+                mVM.retryDownload()
+            }.show()
     }
 
-    private fun showSetWallpaperError(errorMsg: String? = DEFAULT_ERROR_MSG) {
-        val msg = errorMsg ?: DEFAULT_ERROR_MSG
-        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).setAction(getString(R.string.retry)) {
-            mVM.retryRequestWallpaper()
-        }.show()
+    private fun showSetWallpaperError(errorMsg: String) {
+        Snackbar.make(mBinding.root, errorMsg, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.retry) {
+                mVM.retryRequestWallpaper()
+            }.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

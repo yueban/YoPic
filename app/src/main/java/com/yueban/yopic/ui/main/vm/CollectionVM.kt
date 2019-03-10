@@ -1,11 +1,14 @@
 package com.yueban.yopic.ui.main.vm
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.elvishew.xlog.XLog
 import com.yueban.yopic.data.model.PhotoCollection
 import com.yueban.yopic.data.repo.PhotoRepo
+import com.yueban.yopic.util.ErrorMsgFactory
 import com.yueban.yopic.util.PAGE_SIZE
 import com.yueban.yopic.util.ext.orEmpty
 import com.yueban.yopic.util.rxtransformer.AsyncScheduler
@@ -18,10 +21,10 @@ import io.reactivex.disposables.Disposable
  * @date 2019/1/5
  * @email fbzhh007@gmail.com
  */
-class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
+class CollectionVM(app: Application, photoRepo: PhotoRepo) : AndroidViewModel(app) {
     private val _featured = MutableLiveData<Boolean>()
     private val _collections = MutableLiveData<List<PhotoCollection>>()
-    private val nextPageHandler = NextPageHandler(_collections, photoRepo)
+    private val nextPageHandler = NextPageHandler(app, _collections, photoRepo)
 
     val featured: LiveData<Boolean> = _featured
     val collections: LiveData<List<PhotoCollection>> = _collections
@@ -58,6 +61,7 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
     }
 
     class NextPageHandler(
+        private val context: Context,
         private val collections: MutableLiveData<List<PhotoCollection>>,
         private val photoRepo: PhotoRepo
     ) {
@@ -106,7 +110,7 @@ class CollectionVM(photoRepo: PhotoRepo) : ViewModel() {
                         _hasMore = true
                         loadState.value = LoadState(
                             LoadState.State.Error,
-                            it.message
+                            ErrorMsgFactory.msg(context, it)
                         )
                     }
                     .compose(IgnoreErrorTransformer.create())

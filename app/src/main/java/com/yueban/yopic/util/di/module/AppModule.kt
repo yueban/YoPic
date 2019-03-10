@@ -1,5 +1,6 @@
 package com.yueban.yopic.util.di.module
 
+import android.app.Application
 import android.content.Context
 import com.yueban.yopic.App
 import com.yueban.yopic.util.di.scope.AppScope
@@ -16,4 +17,8 @@ class AppModule {
     @AppScope
     @Provides
     fun provideApplicationContext(app: App): Context = app.applicationContext
+
+    @AppScope
+    @Provides
+    fun provideApplication(app: App): Application = app
 }
