@@ -94,5 +94,15 @@ class AboutActivity : AbsAboutActivity() {
         items.add(License("MultiType", "drakeet", License.APACHE_2, "https://github.com/drakeet/MultiType"))
         items.add(License("about-page", "drakeet", License.APACHE_2, "https://github.com/drakeet/about-page"))
         items.add(License("xlog", "elvishew", License.APACHE_2, "https://github.com/elvishew/xLog"))
+        items.add(License("ImmersionBar", "gyf-dev", License.APACHE_2, "https://github.com/gyf-dev/ImmersionBar"))
+        items.add(License("bouquet", "quanturium", License.APACHE_2, "https://github.com/quanturium/bouquet"))
+        items.add(
+            License(
+                "ForegroundViews",
+                "Commit451",
+                License.APACHE_2,
+                "https://github.com/Commit451/ForegroundViews"
+            )
+        )
     }
 }
