@@ -219,12 +219,13 @@
                         app:visible="@{photoDetail.user != null}"
                         style="@style/Layout_Item_PhotoDetail_Camera_Info">
 
-                        <ImageView
+                        <com.commit451.foregroundviews.ForegroundImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@string/cd_photographer"
                             android:foreground="@drawable/fg_avatar"
                             app:avatarUrl="@{photoDetail.user.profileImage.large}"
+                            tools:ignore="UnusedAttribute"
                             tools:src="@mipmap/ic_launcher"/>
 
                         <TextView

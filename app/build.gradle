@@ -103,4 +103,5 @@ dependencies {
     implementation "me.drakeet.support:about:$rootProject.aboutVersion"
     implementation "com.elvishew:xlog:$rootProject.xlogVersion"
     implementation "com.gyf.immersionbar:immersionbar:$rootProject.immersionbarVersion"
+    implementation "com.github.Commit451.ForegroundViews:foregroundviews:$rootProject.foregroundviewsVersion"
 }

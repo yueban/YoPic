@@ -10,7 +10,7 @@
             type="com.yueban.yopic.data.model.Photo"/>
     </data>
 
-    <ImageView
+    <com.commit451.foregroundviews.ForegroundImageView
         android:id="@+id/photo_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_photo_item_image_height"
@@ -20,5 +20,6 @@
         android:transitionName="@string/transition_img_photo"
         app:imgUrl="@{photo.thumbImageUrl}"
         app:previewColor="@{photo.previewColor}"
+        tools:ignore="UnusedAttribute"
         tools:src="#cc000000"/>
 </layout>
