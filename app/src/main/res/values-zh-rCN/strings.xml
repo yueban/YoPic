@@ -1,6 +1,8 @@
 <resources>
-    <string formatted="false" name="photos_count">&#160;·&#160;%d 张照片</string>
-    <string formatted="false" name="curated_by">由 %s 策划</string>
+    <plurals name="photos_count">
+        <item quantity="other">&#160;·&#160;%d 张照片</item>
+    </plurals>
+    <string name="curated_by">由 %s 策划</string>
     <string name="collections">集合</string>
     <string name="photos">照片</string>
     <string name="all_collections">所有集合</string>
@@ -40,7 +42,7 @@
     <string name="select_a_collection">选择照片集</string>
     <string name="all">全部</string>
     <string name="about_app_desc">一款基于 Unsplash API 的壁纸应用</string>
-    <string formatted="false" name="about_app">关于 %s</string>
+    <string name="about_app">关于 %s</string>
     <string name="no_more">~ 没有更多 ~</string>
 
 </resources>

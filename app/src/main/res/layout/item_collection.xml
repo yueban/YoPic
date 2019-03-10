@@ -33,7 +33,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="@{String.format(@string/photos_count, collection.totalPhotos)}"
+            android:text="@{@plurals/photos_count(collection.totalPhotos,collection.totalPhotos)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             tools:text=" · 36 photos"
