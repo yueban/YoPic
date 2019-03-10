@@ -58,10 +58,6 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
     </style>
 
-    <style name="Toolbar.Coordinator">
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
     <!-- text -->
     <style name="Text">
         <item name="android:ellipsize">end</item>
