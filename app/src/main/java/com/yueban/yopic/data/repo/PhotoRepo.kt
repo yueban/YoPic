@@ -1,5 +1,6 @@
 package com.yueban.yopic.data.repo
 
+import com.quanturium.bouquet.annotations.RxLogger
 import com.yueban.yopic.data.Optional
 import com.yueban.yopic.data.local.db.PhotoDao
 import com.yueban.yopic.data.model.Photo
@@ -25,6 +26,7 @@ class PhotoRepo
     private val photoDao: PhotoDao,
     private val service: UnSplashService
 ) {
+    @RxLogger(RxLogger.Scope.SUMMARY)
     fun getPhotoDetail(photoId: String): Flowable<Optional<PhotoDetail>> {
         return photoDao.getPhotoDetail(photoId)
             .compose(RoomOptionalTransformer.create())
@@ -45,9 +47,11 @@ class PhotoRepo
             }
     }
 
+    @RxLogger(RxLogger.Scope.SUMMARY)
     fun requestDownloadLocation(downloadLocation: String): Single<Optional<Any>> =
         service.requestDownloadLocation(downloadLocation)
 
+    @RxLogger(RxLogger.Scope.SUMMARY)
     fun getCollections(
         featured: Boolean,
         page: Int,
@@ -82,6 +86,7 @@ class PhotoRepo
         }
     }
 
+    @RxLogger(RxLogger.Scope.SUMMARY)
     fun getPhotos(
         cacheLabel: String,
         page: Int,

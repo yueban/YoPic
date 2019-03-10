@@ -6,6 +6,7 @@ import com.elvishew.xlog.XLog
 import com.elvishew.xlog.printer.AndroidPrinter
 import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator
+import com.quanturium.bouquet.runtime.android.Bouquet
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.yueban.yopic.util.FileUtils
@@ -43,11 +44,12 @@ class App : DaggerApplication() {
 
         super.onCreate()
 
-        initXLog()
+        initLog()
         initWorker()
     }
 
-    private fun initXLog() {
+    private fun initLog() {
+        // XLog
         val config = LogConfiguration.Builder()
             .logLevel(
                 if (BuildConfig.DEBUG)
@@ -78,6 +80,10 @@ class App : DaggerApplication() {
                 androidPrinter
             )
         }
+
+        // RxLogger
+        Bouquet.setEnabled(BuildConfig.DEBUG)
+        Bouquet.setLogger { tag, message -> XLog.nb().tag(tag).d(message) }
     }
 
     private fun initWorker() {
