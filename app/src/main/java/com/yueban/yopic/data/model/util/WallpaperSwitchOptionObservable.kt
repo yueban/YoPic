@@ -17,7 +17,7 @@ class WallpaperSwitchOptionObservable(option: WallpaperSwitchOption) : BaseObser
     var sourceType: Int = option.sourceType
         set(value) {
             field = value
-            notifyPropertyChanged(BR.sourceType)
+            notifyChange()
         }
     var collectionId: String? = option.collectionId
     var collectionName: String? = option.collectionName

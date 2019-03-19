@@ -15,11 +15,14 @@ class SettingVM(
         ?: WallpaperSwitchOption()
     val optionObservable: WallpaperSwitchOptionObservable = WallpaperSwitchOptionObservable(option)
 
-    fun refreshWorkIfNeeded() {
+    fun refreshWorkIfNeeded(): Boolean {
         val newOption = optionObservable.toOption()
-        if (newOption != option) {
+        return if (newOption != option) {
             prefManager.put(PrefKey.WALLPAPER_SWITCH_OPTION, newOption, WallpaperSwitchOption::class.java)
             workerUtil.refreshWallpaperChangeTask(true)
+            true
+        } else {
+            false
         }
     }
 }

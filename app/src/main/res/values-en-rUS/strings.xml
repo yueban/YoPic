@@ -44,5 +44,6 @@
     <string name="about_app_desc">A wallpaper gallery\npowered by Unsplash API</string>
     <string name="about_app">About %s</string>
     <string name="no_more">~ no more ~</string>
+    <string name="setting_has_been_saved">setting has been saved</string>
 
 </resources>

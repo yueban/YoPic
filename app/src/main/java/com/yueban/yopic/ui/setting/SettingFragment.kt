@@ -13,6 +13,7 @@ import com.yueban.yopic.databinding.FragmentSettingBinding
 import com.yueban.yopic.ui.base.BaseViewFragment
 import com.yueban.yopic.ui.setting.vm.SettingVM
 import com.yueban.yopic.ui.setting.vm.SettingVMFactory
+import com.yueban.yopic.util.ToastUtils
 import com.yueban.yopic.util.bottomsheet.SimpleBottomSheetListener
 import javax.inject.Inject
 
@@ -151,6 +152,8 @@ class SettingFragment : BaseViewFragment<FragmentSettingBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        settingVM.refreshWorkIfNeeded()
+        if (settingVM.refreshWorkIfNeeded()) {
+            ToastUtils.show(requireActivity(), R.string.setting_has_been_saved)
+        }
     }
 }

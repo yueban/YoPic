@@ -43,5 +43,6 @@
     <string name="about_app_desc">一款基于 Unsplash API 的壁纸应用</string>
     <string name="about_app">关于 %s</string>
     <string name="no_more">~ 没有更多 ~</string>
+    <string name="setting_has_been_saved">设置已保存</string>
 
 </resources>
