@@ -24,7 +24,7 @@ buildscript {
         recyclerViewVersion = '1.0.0'
         okhttpVersion = '3.12.0'
         retrofitVersion = '2.5.0'
-        smartRefreshLayoutVerison = '1.1.0-andx-2'
+        smartRefreshLayoutVerison = '1.1.0-andx-4'
         moshiVersion = '1.8.0'
         kotshiVersion = '1.0.6'
         rxpermissionsVersion = '0.10.2'
