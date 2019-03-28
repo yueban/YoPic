@@ -1,22 +1,22 @@
 package com.yueban.yopic.util.vm
 
 class LoadState(
-    private val state: State,
+    private val state: UIState,
     private val errorMsg: String?
 ) {
     private var handledError = false
 
     val isRefreshing: Boolean
-        get() = state == State.Refreshing
+        get() = state == UIState.Refreshing
 
     val isLoadingMore: Boolean
-        get() = state == State.LoadingMore
+        get() = state == UIState.LoadingMore
 
     val isRunning: Boolean
-        get() = state == State.Refreshing || state == State.LoadingMore
+        get() = state == UIState.Refreshing || state == UIState.LoadingMore
 
     val isSuccess: Boolean
-        get() = state == State.Success
+        get() = state == UIState.Success
 
     val errorMsgIfNotHandled: String?
         get() {
@@ -27,8 +27,7 @@ class LoadState(
             return errorMsg
         }
 
-    enum class State {
-        Idle,
+    enum class UIState {
         Refreshing,
         LoadingMore,
         Success,

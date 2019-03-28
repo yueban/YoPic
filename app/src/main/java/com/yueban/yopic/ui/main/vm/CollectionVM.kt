@@ -72,16 +72,14 @@ class CollectionVM(app: Application, photoRepo: PhotoRepo) : AndroidViewModel(ap
         private var nextPageDisposable: Disposable? = null
         private val firstPage = 1
         private var _hasMore: Boolean = false
+        private var isRequesting: Boolean = false
         private var nextPage = firstPage
 
         fun reset() {
             unregister()
             nextPage = firstPage
             _hasMore = true
-            loadState.value = LoadState(
-                LoadState.State.Idle,
-                null
-            )
+            isRequesting = false
         }
 
         fun queryNextPage(featured: Boolean) {
@@ -90,9 +88,8 @@ class CollectionVM(app: Application, photoRepo: PhotoRepo) : AndroidViewModel(ap
                 return
             }
 
-            val state = loadState.value
-            if (state != null && state.isRunning) {
-                XLog.d("queryNextPage: isRunning")
+            if (isRequesting) {
+                XLog.d("queryNextPage: isRequesting")
                 return
             }
             unregister()
@@ -101,15 +98,17 @@ class CollectionVM(app: Application, photoRepo: PhotoRepo) : AndroidViewModel(ap
                 photoRepo.getCollections(featured, nextPage, loadCacheOnFirstPage = collections.value.isNullOrEmpty())
                     .compose(AsyncScheduler.create())
                     .doOnSubscribe {
+                        isRequesting = true
                         loadState.value = LoadState(
-                            if (nextPage == firstPage) LoadState.State.Refreshing else LoadState.State.LoadingMore,
+                            if (nextPage == firstPage) LoadState.UIState.Refreshing else LoadState.UIState.LoadingMore,
                             null
                         )
                     }
                     .doOnError {
                         _hasMore = true
+                        isRequesting = false
                         loadState.value = LoadState(
-                            LoadState.State.Error,
+                            LoadState.UIState.Error,
                             ErrorMsgFactory.msg(context, it)
                         )
                     }
@@ -133,9 +132,11 @@ class CollectionVM(app: Application, photoRepo: PhotoRepo) : AndroidViewModel(ap
                                     result.get().size >= PAGE_SIZE
                                 }
 
+                            isRequesting = false
+
                             loadState.value =
                                 LoadState(
-                                    LoadState.State.Success,
+                                    LoadState.UIState.Success,
                                     null
                                 )
 
